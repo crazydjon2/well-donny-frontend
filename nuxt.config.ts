@@ -4,8 +4,7 @@ export default defineNuxtConfig({
   modules: [
     "@nuxtjs/tailwindcss",
     "@nuxt/eslint",
-    "@pinia/nuxt",
-    "@nuxtjs/i18n",
+    "@pinia/nuxt"
   ],
   css: ["./assets/css/tailwind.css", "./assets/css/main.scss"],
   imports: {
@@ -13,19 +12,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      baseURL: process.env.BASE_URL || "https://api.example.com/",
+      baseURL: process.env.BASE_URL,
     },
-  },
-  i18n: {
-    defaultLocale: "ru",
-    langDir: "../locales/",
-    strategy: 'no_prefix',
-    locales: [
-      { code: "en", language: "en-US", file: 'en.js' },
-      { code: "ru", language: "ru-RU", file: 'ru.js' },
-    ],
-  },
-  vite: {
-    assetsInclude: ["**/*.json"],
-  },
+  }
 });

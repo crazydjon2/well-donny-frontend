@@ -1,3 +1,3 @@
 export default {
-  text: "текст"
+  text: "текст 2"
 }
