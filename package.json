@@ -3,24 +3,28 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
+    "build": "node ./utils/fix-svg.js && nuxt build",
+    "fix-svg": "node ./utils/fix-svg.js",
+    "dev": "node ./utils/fix-svg.js && nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
     "@nuxt/eslint": "1.4.1",
+    "@nuxtjs/storybook": "8.4.1",
     "@pinia/nuxt": "0.11.1",
     "eslint": "^9.0.0",
     "nuxt": "^3.17.5",
     "pinia": "^3.0.3",
+    "storybook": "9.0.5",
     "vue": "^3.5.17",
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^7.0.0-beta.0",
     "sass": "^1.89.2",
+    "vite-svg-loader": "^5.1.0",
     "vue-i18n": "^11.1.7"
   }
 }
