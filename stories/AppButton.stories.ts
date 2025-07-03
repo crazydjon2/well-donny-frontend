@@ -1,15 +1,15 @@
-import type { Meta, StoryObj } from "@nuxtjs/storybook";
-import AppButton from "../components/ui/AppButton.vue";
-import { ButtonTypes } from "~/assets/types/ui";
+import type { Meta, StoryObj } from '@nuxtjs/storybook'
+import { ButtonTypes } from '~/assets/types/ui'
+import AppButton from '../components/ui/AppButton.vue'
 
 const meta = {
-  title: "UI",
+  title: 'UI',
   component: AppButton,
-  tags: ["autodocs"],
-} satisfies Meta<typeof AppButton>;
+  tags: ['autodocs'],
+} satisfies Meta<typeof AppButton>
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const AppButtons: Story = {
   render: () => ({
@@ -29,4 +29,4 @@ export const AppButtons: Story = {
       </div>
     `,
   }),
-};
+}

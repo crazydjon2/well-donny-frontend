@@ -1,5 +1,5 @@
-import { useCustomFetch } from "#imports";
+import { useCustomFetch } from '#imports'
 
-export const getCategoryById = async (id: string) => {
+export async function getCategoryById(id: string) {
   return useCustomFetch<unknown>(`/categories/${id}/cards`)
-};
+}

@@ -2,47 +2,90 @@
   <div class="card" :class="[size]" @click="startAnimation">
     <div
       class="relative card__inner bg-light flex items-center justify-center h-full w-full shadow-2xl aspect-square rounded-3xl"
-      :class="[{ 'card--flip': isFlipped }, large ? 'p-8' : 'p-4']">
+      :class="[{ 'card--flip': isFlipped }, large ? 'p-8' : 'p-4']"
+    >
       <div class="card__face card__front">
         <p>{{ textFirst }}</p>
 
-        <div v-if="large" class="absolute" :class="large ? 'left-8 top-8' : 'left-4 top-4'">
+        <div
+          v-if="large"
+          class="absolute"
+          :class="large ? 'left-8 top-8' : 'left-4 top-4'"
+        >
           <span class="card__text">{{ wordMax }}/{{ wordCurrent }}</span>
         </div>
-        <AppIcon v-if="large" icon="star" class="absolute" :class="large ? 'right-8 top-8' : 'right-4 top-4'" small />
-        <AppIcon v-if="large" icon="back" class="absolute" :class="large ? 'left-8 bottom-8' : 'left-4 bottom-4'" small />
-        <AppIcon icon="refresh" class="absolute cursor-pointer" :class="large ? 'right-8 bottom-8' : 'right-4 bottom-4'"
-          small @click.stop="startAnimation" />
+        <AppIcon
+          v-if="large"
+          icon="star"
+          class="absolute"
+          :class="large ? 'right-8 top-8' : 'right-4 top-4'"
+          small
+        />
+        <AppIcon
+          v-if="large"
+          icon="back"
+          class="absolute"
+          :class="large ? 'left-8 bottom-8' : 'left-4 bottom-4'"
+          small
+        />
+        <AppIcon
+          icon="refresh"
+          class="absolute cursor-pointer"
+          :class="large ? 'right-8 bottom-8' : 'right-4 bottom-4'"
+          small
+          @click.stop="startAnimation"
+        />
       </div>
       <div class="card__face card__back">
         <p>{{ textSecond }}</p>
 
-        <div v-if="large" class="absolute" :class="large ? 'left-8 top-8' : 'left-4 top-4'">
+        <div
+          v-if="large"
+          class="absolute"
+          :class="large ? 'left-8 top-8' : 'left-4 top-4'"
+        >
           <span class="card__text">{{ wordMax }}/{{ wordCurrent }}</span>
         </div>
-        <AppIcon v-if="large" icon="star" class="absolute" :class="large ? 'right-8 top-8' : 'right-4 top-4'" small />
-        <AppIcon v-if="large" icon="back" class="absolute" :class="large ? 'left-8 bottom-8' : 'left-4 bottom-4'" small />
-        <AppIcon icon="refresh" class="absolute cursor-pointer" :class="large ? 'right-8 bottom-8' : 'right-4 bottom-4'"
-          small @click.stop="startAnimation" />
+        <AppIcon
+          v-if="large"
+          icon="star"
+          class="absolute"
+          :class="large ? 'right-8 top-8' : 'right-4 top-4'"
+          small
+        />
+        <AppIcon
+          v-if="large"
+          icon="back"
+          class="absolute"
+          :class="large ? 'left-8 bottom-8' : 'left-4 bottom-4'"
+          small
+        />
+        <AppIcon
+          icon="refresh"
+          class="absolute cursor-pointer"
+          :class="large ? 'right-8 bottom-8' : 'right-4 bottom-4'"
+          small
+          @click.stop="startAnimation"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue';
-import AppIcon from './ui/AppIcon.vue';
+import { computed, defineComponent, ref } from 'vue'
+import AppIcon from './ui/AppIcon.vue'
 
 export default defineComponent({
   components: { AppIcon },
   props: {
     textFirst: {
       type: String,
-      required: true
+      required: true,
     },
     textSecond: {
       type: String,
-      required: true
+      required: true,
     },
     large: {
       type: Boolean,
@@ -50,12 +93,12 @@ export default defineComponent({
     },
     wordMax: {
       type: String,
-      default: '0'
+      default: '0',
     },
     wordCurrent: {
       type: String,
-      default: '0'
-    }
+      default: '0',
+    },
   },
   setup(props) {
     const size = computed(() => {
@@ -74,7 +117,7 @@ export default defineComponent({
     }
 
     return { size, startAnimation, isFlipped, paddingConst }
-  }
+  },
 })
 </script>
 

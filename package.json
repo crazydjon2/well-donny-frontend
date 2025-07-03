@@ -1,14 +1,15 @@
 {
   "name": "nuxt-app",
-  "private": true,
   "type": "module",
+  "private": true,
   "scripts": {
-    "build": "node ./utils/fix-svg.js && nuxt build",
+    "build": "yarn lint && node ./utils/fix-svg.js && nuxt build",
     "fix-svg": "node ./utils/fix-svg.js",
     "dev": "node ./utils/fix-svg.js && nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "lint": "eslint . --ext .ts,.js,.vue --config eslint.config.mjs"
   },
   "dependencies": {
     "@nuxt/eslint": "1.4.1",
@@ -22,8 +23,10 @@
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^4.16.2",
     "@nuxtjs/tailwindcss": "^7.0.0-beta.0",
     "sass": "^1.89.2",
+    "typescript-eslint": "^8.35.1",
     "vite-svg-loader": "^5.1.0",
     "vue-i18n": "^11.1.7"
   }

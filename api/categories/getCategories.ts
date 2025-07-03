@@ -1,6 +1,6 @@
-import { useCustomFetch } from "#imports";
-import type { Category } from "~/assets/types/category";
+import type { Category } from '~/assets/types/category'
+import { useCustomFetch } from '#imports'
 
-export const getCategories = async () => {
-  return useCustomFetch<Category[]>("/categories")
-};
+export async function getCategories() {
+  return useCustomFetch<Category[]>('/categories')
+}

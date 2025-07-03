@@ -1,15 +1,17 @@
 <template>
   <div class="text-primary text-2xl">
     <div v-for="(category) in categories" :key="category.id">
-      <NuxtLink :to="`/category/${category.id}`"> {{ category.name }}</NuxtLink>
+      <NuxtLink :to="`/category/${category.id}`">
+        {{ category.name }}
+      </NuxtLink>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 // import { useCustomFetch } from '#imports';
-import { storeToRefs, useCategoriesStore } from '#imports';
-import { getCategories } from '~/api/categories/getCategories';
+import { storeToRefs, useCategoriesStore } from '#imports'
+import { getCategories } from '~/api/categories/getCategories'
 
 export default {
   async setup() {
@@ -24,6 +26,6 @@ export default {
     }
 
     return { categories }
-  }
+  },
 }
 </script>

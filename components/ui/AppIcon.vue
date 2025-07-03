@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineAsyncComponent, defineComponent, ref, watch } from 'vue';
+import { computed, defineAsyncComponent, defineComponent, ref, watch } from 'vue'
 
 export default defineComponent({
   props: {
@@ -15,7 +15,7 @@ export default defineComponent({
     },
     color: {
       type: String,
-      default: ''
+      default: '',
     },
     width: {
       type: Number,
@@ -23,26 +23,25 @@ export default defineComponent({
     },
     height: {
       type: Number,
-      default: 0
+      default: 0,
     },
     small: {
       type: Boolean,
-      default: false
+      default: false,
     },
     big: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   setup(props) {
-    const iconComponent = ref(defineAsyncComponent(() => import(`@/assets/icons/${props.icon}.svg`)))
+    const iconComponent = defineAsyncComponent(() => import(`@/assets/icons/${props.icon}.svg`))
 
-    
     const colorClass = computed(() => props.color)
 
     const sizeStyle = computed(() => ({
       width: props.width ? `${props.width}px` : props.small ? '20px' : props.big ? '40px' : undefined,
-      height: props.height ? `${props.height}px` : props.small ? '20px' : props.big ? '40px' : undefined
+      height: props.height ? `${props.height}px` : props.small ? '20px' : props.big ? '40px' : undefined,
     }))
 
     watch(() => props.icon, () => {
@@ -50,6 +49,6 @@ export default defineComponent({
     })
 
     return { iconComponent, colorClass, sizeStyle }
-  }
+  },
 })
 </script>

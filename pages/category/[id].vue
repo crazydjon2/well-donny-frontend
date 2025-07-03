@@ -6,10 +6,10 @@
 </template>
 
 <script lang="ts">
-import { useCategoryStore } from '#imports';
-import { storeToRefs } from 'pinia';
-import { useRoute } from 'vue-router';
-import { getCategoryById } from '~/api/categories/getCategory';
+import { useCategoryStore } from '#imports'
+import { storeToRefs } from 'pinia'
+import { useRoute } from 'vue-router'
+import { getCategoryById } from '~/api/categories/getCategory'
 
 export default {
   async setup() {
@@ -26,6 +26,6 @@ export default {
     }
 
     return { category }
-  }
+  },
 }
 </script>
