@@ -41,17 +41,17 @@ export const AppIcons: Story = {
         <div class="flex justify-center flex-col gap-2 w-full">
         <AppIcon :icon="selectedIcon" small></AppIcon>
         <AppIcon :icon="selectedIcon"></AppIcon>
-        <AppIcon :icon="selectedIcon" width="60" height="60"></AppIcon>
+        <AppIcon :icon="selectedIcon" :width="60" :height="60"></AppIcon>
         </div>
         <div class="flex justify-center flex-col gap-2 w-full">
           <AppIcon :icon="selectedIcon" small color="text-primary"></AppIcon>
           <AppIcon :icon="selectedIcon" color="text-primary"></AppIcon>
-          <AppIcon :icon="selectedIcon" width="60" height="60" color="text-primary"></AppIcon>
+          <AppIcon :icon="selectedIcon" :width="60" :height="60" color="text-primary"></AppIcon>
         </div>
           <div class="flex justify-center flex-col gap-2 w-full">
           <AppIcon :icon="selectedIcon" small color="text-secondary"></AppIcon>
           <AppIcon :icon="selectedIcon" color="text-secondary"></AppIcon>
-          <AppIcon :icon="selectedIcon" width="60" height="60" color="text-secondary"></AppIcon>
+          <AppIcon :icon="selectedIcon" :width="60" :height="60" color="text-secondary"></AppIcon>
         </div>
       </div>
     `,

@@ -40,8 +40,8 @@ fs.readdirSync(svgDir).forEach((file) => {
   }
 
   // Replace all fill="#..." or fill="none" in <path>, <circle>, etc. with fill="currentColor"
-  content = content.replace(/fill="(#\w{3,6})"/gi, 'fill="currentColor"')
-  content = content.replace(/stroke="(#\w{3,6})"/gi, 'stroke="currentColor"')
+  content = content.replace(/fill="((#\w{3,6})|(?!none)\w+)"/gi, 'fill="currentColor"')
+  content = content.replace(/stroke="((#\w{3,6})|(?!none)\w+)"/gi, 'stroke="currentColor"')
 
   fs.writeFileSync(filePath, content, 'utf-8')
   console.log(`✔ Updated ${file}`)

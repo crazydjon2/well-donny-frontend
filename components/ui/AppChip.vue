@@ -1,10 +1,6 @@
 <template>
-  <div>
-    <span>{{ text }}</span>
-
-    <Transition name="fade">
-      <div v-if="active" class="h-[1px] w-full bg-secondary" />
-    </Transition>
+  <div class="cursor-pointer">
+    <span :class="{ 'chip--active': active }">{{ text }}</span>
   </div>
 </template>
 
@@ -30,17 +26,24 @@ export default defineComponent({
 
 <style scoped>
 span {
-    font-weight: 400;
-    font-style: Regular;
-    font-size: 12px;
-    leading-trim: NONE;
-    line-height: 21px;
-    letter-spacing: -0.32px;
-    text-align: center;
-    text-transform: uppercase;
-    color: var(--color-dark);
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 12px;
+  line-height: 21px;
+  letter-spacing: -0.32px;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--color-dark);
 
-    word-break: keep-all;
-    white-space: nowrap;
+  word-break: keep-all;
+  white-space: nowrap;
+
+  text-decoration: underline rgba(255, 255, 255, 0);
+  transition: text-decoration-color 300ms;
+  text-underline-offset: 4px;
+}
+
+.chip--active {
+  text-decoration-color: var(--color-secondary);
 }
 </style>
