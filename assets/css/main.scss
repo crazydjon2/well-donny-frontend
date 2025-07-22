@@ -4,3 +4,11 @@
 body {
   font-family: 'Evolventa', sans-serif;
 }
+
+input:focus {
+    outline:none;
+}
+
+select:focus {
+    outline:none;
+}

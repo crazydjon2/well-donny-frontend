@@ -1,5 +1,5 @@
 <template>
-  <div class="py-7 px-5">
+  <div class="py-7 px-5 pb-[150px]">
     <slot />
     <MobileMenu />
   </div>

@@ -11,10 +11,10 @@
       <AppIcon icon="plus" color="text-dark" :width="16" :height="16" />
     </div>
 
-    <div class="text-primary text-2xl">
-      <div v-for="(category) in categories" :key="category.id">
-        <NuxtLink :to="`/category/${category.id}`">
-          {{ category.name }}
+    <div class="flex gap-5">
+      <div v-for="(category) in categories" :key="category.id" class="w-1/2">
+        <NuxtLink :to="`/category/${category.category.id}`">
+          <AppCategoryCard :category="category.category" :author="category.user" />
         </NuxtLink>
       </div>
     </div>
@@ -22,12 +22,13 @@
 </template>
 
 <script lang="ts">
-import { ref, storeToRefs, useCategoriesStore } from '#imports'
+import { defineComponent, ref, storeToRefs, useCategoriesStore } from '#imports'
 import { getCategories } from '~/api/categories/getCategories'
+import AppCategoryCard from '~/components/AppCategoryCard.vue'
 import { AppChip, AppIcon } from '~/components/ui'
 
-export default {
-  components: { AppIcon, AppChip },
+export default defineComponent({
+  components: { AppIcon, AppChip, AppCategoryCard },
   async setup() {
     const { categories } = storeToRefs(useCategoriesStore())
     const { setCategories } = useCategoriesStore()
@@ -43,5 +44,5 @@ export default {
 
     return { categories, chips, activeChip }
   },
-}
+})
 </script>

@@ -1,6 +1,6 @@
-import type { Category } from '~/assets/types/category'
+import type { UsersCategories } from '~/assets/types/usersCategories'
 import { useCustomFetch } from '#imports'
 
 export async function getCategories() {
-  return useCustomFetch<Category[]>('/categories')
+  return useCustomFetch<UsersCategories[]>('/categories')
 }

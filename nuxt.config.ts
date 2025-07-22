@@ -17,6 +17,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       baseURL: process.env.BASE_URL,
+      userTgId: process.env.USER_TG_ID,
     },
   },
   storybook: {

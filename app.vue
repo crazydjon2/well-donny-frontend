@@ -5,22 +5,26 @@
 </template>
 
 <script lang="ts">
-import { ref } from 'vue'
+import { useCookie } from '#app'
 import { useI18n } from 'vue-i18n'
+import { signIn } from './api/auth/signIn'
 
 export default {
   components: {
 
   },
-  setup() {
+  async setup() {
     const { locale } = useI18n()
-    const bool = ref(false)
+    const token = useCookie('token')
+
+    const { data } = await signIn()
+    token.value = data.value.token
 
     const onClick = () => {
       locale.value = locale.value === 'ru' ? 'en' : 'ru'
     }
 
-    return { locale, onClick, bool }
+    return { locale, onClick }
   },
 }
 </script>
