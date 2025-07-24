@@ -18,7 +18,9 @@ export default {
     const token = useCookie('token')
 
     const { data } = await signIn()
-    token.value = data.value.token
+    if (data.value && data.value.token) {
+      token.value = data.value.token
+    }
 
     const onClick = () => {
       locale.value = locale.value === 'ru' ? 'en' : 'ru'

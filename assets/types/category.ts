@@ -1,4 +1,5 @@
 import type { User } from './user'
+import type { CreateWordDTO } from './word'
 
 export interface Category {
   id: string
@@ -7,4 +8,11 @@ export interface Category {
   description: string
   createdAt: string
   updatedAt: string
+}
+
+export interface CreateCategoryDTO {
+  name: string
+  description?: string
+  type: string
+  words: CreateWordDTO[]
 }

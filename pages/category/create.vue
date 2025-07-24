@@ -6,21 +6,29 @@
       <AppInput v-model="category.description" placeholder="Описание" />
     </div>
     <div class="mt-8 flex flex-col gap-4 items-center w-full">
-      <p class="text-small self-start">Термины</p>
+      <p class="text-small self-start">
+        Термины
+      </p>
       <div class="w-full flex flex-col gap-4">
-      <CreateWordCard v-for="(word, index) in words" :key="index" :word="word"></CreateWordCard>
+        <TransitionGroup name="fade">
+          <CreateWordCard v-for="(word, index) in words" :key="index" v-model:original="word.original" v-model:translated="word.translated" />
+        </TransitionGroup>
       </div>
-      <AppIcon icon="add" color="text-dark" @click="addWord"/>
+      <AppIcon icon="add" color="text-dark" @click="addWord" />
     </div>
+    <AppButton @click="onCategoryCreate">
+      AAAAAAAAAAAAAAAAA
+    </AppButton>
   </div>
 </template>
 
 <script lang="ts">
 import type { CategoryType } from '~/assets/types/categoriesTypes'
-import { useCategoriesStore } from '#imports'
-import { defineComponent, reactive, ref } from 'vue'
-import { AppInput, AppSelect, AppIcon } from '~/components/ui'
+import type { CreateWordDTO } from '~/assets/types/word'
 import { CreateWordCard } from '#components'
+import { useCategoriesStore, useCategoryStore } from '#imports'
+import { defineComponent, reactive, ref } from 'vue'
+import { AppButton, AppIcon, AppInput, AppSelect } from '~/components/ui'
 
 export default defineComponent({
   components: {
@@ -28,27 +36,37 @@ export default defineComponent({
     AppSelect,
     CreateWordCard,
     AppIcon,
+    AppButton,
   },
   async setup() {
-    const { getCategoriesTypes } = useCategoriesStore()
+    const { getCategoriesTypes, createCategory } = useCategoryStore()
     const { categoriesTypes } = useCategoriesStore()
     await getCategoriesTypes()
-    const category: { name: string, description: string, category: string, type: CategoryType | null } = reactive({
+    const category: { name: string, description: string, type: CategoryType | null } = reactive({
       name: '',
       description: '',
-      category: '',
       type: null,
     })
 
-    const words = ref<{ original: string, translated: string }[]>([{ original: '', translated: '' }])
+    const words = ref<CreateWordDTO[]>([{ original: '', translated: '' }])
     const addWord = () => {
       words.value.push({
         original: '',
-        translated: ''
+        translated: '',
       })
     }
 
-    return { category, categoriesTypes, words, addWord }
+    const onCategoryCreate = () => {
+      if (category.type) {
+        createCategory({
+          ...category,
+          type: category.type.id,
+          words: words.value,
+        })
+      }
+    }
+
+    return { category, categoriesTypes, words, addWord, onCategoryCreate }
   },
 })
 </script>

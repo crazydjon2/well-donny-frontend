@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineAsyncComponent, defineComponent, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, defineComponent, watch } from 'vue'
 
 export default defineComponent({
   props: {

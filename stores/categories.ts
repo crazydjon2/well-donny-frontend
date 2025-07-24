@@ -2,7 +2,6 @@ import type { CategoryType } from '~/assets/types/categoriesTypes'
 import type { UsersCategories } from '~/assets/types/usersCategories'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { getCategoriesTypesApi } from '~/api/categories/getCategoriesTypes'
 
 export const useCategoriesStore = defineStore('categories', () => {
   const categories = ref<UsersCategories[]>([])
@@ -18,10 +17,5 @@ export const useCategoriesStore = defineStore('categories', () => {
     categories.value = data
   }
 
-  const getCategoriesTypes = async () => {
-    const { data } = await getCategoriesTypesApi()
-    categoriesTypes.value = data
-  }
-
-  return { categories, setCategories, getCategoriesTypes, categoriesTypes }
+  return { categories, setCategories, categoriesTypes }
 })

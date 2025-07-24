@@ -44,5 +44,6 @@ fs.readdirSync(svgDir).forEach((file) => {
   content = content.replace(/stroke="((#\w{3,6})|(?!none)\w+)"/gi, 'stroke="currentColor"')
 
   fs.writeFileSync(filePath, content, 'utf-8')
+  // eslint-disable-next-line no-console
   console.log(`✔ Updated ${file}`)
 })

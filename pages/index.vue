@@ -11,8 +11,8 @@
       <AppIcon icon="plus" color="text-dark" :width="16" :height="16" />
     </div>
 
-    <div class="flex gap-5">
-      <div v-for="(category) in categories" :key="category.id" class="w-1/2">
+    <div class="grid grid-cols-2 gap-6">
+      <div v-for="(category) in categories" :key="category.id">
         <NuxtLink :to="`/category/${category.category.id}`">
           <AppCategoryCard :category="category.category" :author="category.user" />
         </NuxtLink>

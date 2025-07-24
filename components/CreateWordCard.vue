@@ -1,19 +1,13 @@
 <template>
   <div class="border-primary border-2 py-5 px-3 gap-1 rounded-xl">
-    <AppInput v-model="props.word.original"></AppInput>
-    <AppInput v-model="props.word.translated"></AppInput>
+    <AppInput v-model="original" />
+    <AppInput v-model="translated" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { AppInput } from './ui';
-const props = defineProps<{
-  word: { original: string, translated: string }
-}>()
-</script>
+import { AppInput } from './ui'
 
-<style scoped>
-.card {
-  
-}
-</style>
+const original = defineModel('original')
+const translated = defineModel('translated')
+</script>
