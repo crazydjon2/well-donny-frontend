@@ -1,7 +1,8 @@
+import type { ResultType } from '../resultType'
 import type { CategoryType } from '~/assets/types/categoriesTypes'
-import { useCustomFetch } from '#imports'
+import { useCustomFetch } from '~/composables/useApi'
 
-export async function getCategoriesTypesApi(): Promise<CategoryType[] | null> {
-  const { data } = await useCustomFetch<CategoryType[]>('/categories-types')
-  return data.value
+export async function getCategoriesTypesApi(): Promise<ResultType<CategoryType[]>> {
+  const { data, status, error } = await useCustomFetch<CategoryType[]>('/categories-types')
+  return { data, status, error }
 }

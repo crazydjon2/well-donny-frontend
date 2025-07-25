@@ -30,9 +30,9 @@ export const useCategoryStore = defineStore('category', () => {
   }
 
   const getCategoriesTypes = async () => {
-    const types = await getCategoriesTypesApi()
-    if (types) {
-      categoriesTypes.value = types
+    const { data: types } = await getCategoriesTypesApi()
+    if (types.value) {
+      categoriesTypes.value = types.value
     }
   }
 

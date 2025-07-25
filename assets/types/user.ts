@@ -1,5 +1,5 @@
 export interface User {
   id: string
-  tg_id: number
+  tgId: number
   name: string
 }

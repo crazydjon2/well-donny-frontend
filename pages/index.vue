@@ -22,10 +22,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, storeToRefs, useCategoriesStore } from '#imports'
+import { storeToRefs } from 'pinia'
+import { defineComponent, ref } from 'vue'
 import { getCategories } from '~/api/categories/getCategories'
 import AppCategoryCard from '~/components/AppCategoryCard.vue'
 import { AppChip, AppIcon } from '~/components/ui'
+import { useCategoriesStore } from '~/stores/categories'
 
 export default defineComponent({
   components: { AppIcon, AppChip, AppCategoryCard },

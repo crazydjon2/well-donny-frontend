@@ -1,5 +1,6 @@
 import { useCookie, useFetch, useRuntimeConfig } from '#app'
 
+// TODO Add types!
 export const useCustomFetch: typeof useFetch = (path, options = {}) => {
   // options.onResponse = ({ response }) => {
 

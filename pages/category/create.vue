@@ -26,9 +26,10 @@
 import type { CategoryType } from '~/assets/types/categoriesTypes'
 import type { CreateWordDTO } from '~/assets/types/word'
 import { CreateWordCard } from '#components'
-import { useCategoriesStore, useCategoryStore } from '#imports'
 import { defineComponent, reactive, ref } from 'vue'
 import { AppButton, AppIcon, AppInput, AppSelect } from '~/components/ui'
+import { useCategoriesStore } from '~/stores/categories'
+import { useCategoryStore } from '~/stores/category'
 
 export default defineComponent({
   components: {
