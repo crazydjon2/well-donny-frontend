@@ -1,6 +1,17 @@
-// @ts-check
-import withNuxt from './.nuxt/eslint.config.mjs'
+import antfu from '@antfu/eslint-config'
+import globals from 'globals'
 
-export default withNuxt(
-  // Your custom configs here
-)
+export default antfu({
+  rules: {
+    'vue/block-order': 'off',
+  },
+  overrides: [
+    {
+      languageOptions: {
+        globals: {
+          ...globals.node,
+        },
+      },
+    },
+  ],
+})

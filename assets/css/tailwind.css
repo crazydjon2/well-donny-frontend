@@ -9,5 +9,11 @@
   --color-dark: #212121;
   --color-grey: #E4E4E4;
   --color-dark: #212121;
-  --color-light: #F5F5F5
+  --color-light: #F5F5F5;
+  --color-hint-gray: #B3B3B3;
+
+  --text-small: 1.25rem;
+  --text-small--font-weight: 700;
+  --text-small--line-height: 1.25rem;
+  --text-small--letter-spacing: -0.32px;
 }

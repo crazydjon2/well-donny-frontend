@@ -1,3 +1,6 @@
 export { default as AppButton } from './AppButton.vue'
-export { default as AppIcon } from './AppIcon.vue'
 export { default as AppCheckbox } from './AppCheckbox.vue'
+export { default as AppChip } from './AppChip.vue'
+export { default as AppIcon } from './AppIcon.vue'
+export { default as AppInput } from './AppInput.vue'
+export { default as AppSelect } from './AppSelect.vue'

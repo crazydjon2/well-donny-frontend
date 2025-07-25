@@ -7,26 +7,26 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, type PropType } from 'vue'
+import type { PropType } from 'vue'
+import { computed, defineComponent } from 'vue'
 import { ButtonTypes } from '~/assets/types/ui'
 
 export default defineComponent({
   props: {
     full: {
       type: Boolean,
-      default: false
+      default: false,
     },
     type: {
       type: String as PropType<ButtonTypes>,
-      default: ButtonTypes.PRIMARY
+      default: ButtonTypes.PRIMARY,
     },
     disabled: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   setup(props) {
-
     const buttonClasses = computed(() => {
       return {
         'bg-primary active:bg-primary-2': props.type === ButtonTypes.PRIMARY,
@@ -38,9 +38,9 @@ export default defineComponent({
     })
 
     return {
-      buttonClasses
+      buttonClasses,
     }
-  }
+  },
 })
 </script>
 

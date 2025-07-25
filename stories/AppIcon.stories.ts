@@ -1,34 +1,34 @@
-import type { Meta, StoryObj } from "@nuxtjs/storybook";
-import AppIcon from "../components/ui/AppIcon.vue";
-import { ref } from "vue";
+import type { Meta, StoryObj } from '@nuxtjs/storybook'
+import { ref } from 'vue'
+import AppIcon from '../components/ui/AppIcon.vue'
 
 const meta = {
-  title: "UI",
+  title: 'UI',
   component: AppIcon,
-  tags: ["autodocs"],
-} satisfies Meta<typeof AppIcon>;
+  tags: ['autodocs'],
+} satisfies Meta<typeof AppIcon>
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const AppIcons: Story = {
   args: {
-    icon: "refresh",
+    icon: 'refresh',
   },
-  render: (args) => ({
+  render: args => ({
     components: { AppIcon },
     setup() {
-      const icons = import.meta.glob("@/assets/icons/*.svg", { eager: true });
+      const icons = import.meta.glob('@/assets/icons/*.svg', { eager: true })
       const iconFileNames = Object.keys(icons)
         .map((path) => {
-          return path.split("/").pop(); // get filename from path
+          return path.split('/').pop() // get filename from path
         })
-        .map((fileName) => fileName?.replace(".svg", ""));
+        .map(fileName => fileName?.replace('.svg', ''))
 
-      const selectedIcon = ref(args.icon);
-      selectedIcon.value = args.icon;
+      const selectedIcon = ref(args.icon)
+      selectedIcon.value = args.icon
 
-      return { iconFileNames, selectedIcon };
+      return { iconFileNames, selectedIcon }
     },
     template: `
       <div>
@@ -41,19 +41,19 @@ export const AppIcons: Story = {
         <div class="flex justify-center flex-col gap-2 w-full">
         <AppIcon :icon="selectedIcon" small></AppIcon>
         <AppIcon :icon="selectedIcon"></AppIcon>
-        <AppIcon :icon="selectedIcon" width="60" height="60"></AppIcon>
+        <AppIcon :icon="selectedIcon" :width="60" :height="60"></AppIcon>
         </div>
         <div class="flex justify-center flex-col gap-2 w-full">
           <AppIcon :icon="selectedIcon" small color="text-primary"></AppIcon>
           <AppIcon :icon="selectedIcon" color="text-primary"></AppIcon>
-          <AppIcon :icon="selectedIcon" width="60" height="60" color="text-primary"></AppIcon>
+          <AppIcon :icon="selectedIcon" :width="60" :height="60" color="text-primary"></AppIcon>
         </div>
           <div class="flex justify-center flex-col gap-2 w-full">
           <AppIcon :icon="selectedIcon" small color="text-secondary"></AppIcon>
           <AppIcon :icon="selectedIcon" color="text-secondary"></AppIcon>
-          <AppIcon :icon="selectedIcon" width="60" height="60" color="text-secondary"></AppIcon>
+          <AppIcon :icon="selectedIcon" :width="60" :height="60" color="text-secondary"></AppIcon>
         </div>
       </div>
     `,
   }),
-};
+}

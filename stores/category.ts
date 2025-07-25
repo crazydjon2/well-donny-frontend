@@ -1,9 +1,15 @@
-import { defineStore } from "pinia";
-import { ref } from "vue";
-import type { Category } from "~/assets/types/category";
+import type { Card } from '~/assets/types/card'
+import type { CategoryType } from '~/assets/types/categoriesTypes'
+import type { Category, CreateCategoryDTO } from '~/assets/types/category'
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
+import { createCategoriesApi } from '~/api/category/createCategory'
+import { getCategoriesTypesApi } from '~/api/category/getCategoriesTypes'
 
 export const useCategoryStore = defineStore('category', () => {
   const category = ref<Category | null>(null)
+  const cards = ref<Card | null>(null)
+  const categoriesTypes = ref<CategoryType[]>([])
 
   // const fetchCategories = async () => {
   //   const categoriesData: Category[] = await getCategories()
@@ -15,5 +21,20 @@ export const useCategoryStore = defineStore('category', () => {
     category.value = data
   }
 
-  return { category, setCategory }
+  const setCategoryCards = (data: Card) => {
+    cards.value = data
+  }
+
+  const createCategory = (data: CreateCategoryDTO) => {
+    createCategoriesApi(data)
+  }
+
+  const getCategoriesTypes = async () => {
+    const { data: types } = await getCategoriesTypesApi()
+    if (types.value) {
+      categoriesTypes.value = types.value
+    }
+  }
+
+  return { category, setCategory, cards, setCategoryCards, createCategory, getCategoriesTypes }
 })

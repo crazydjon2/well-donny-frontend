@@ -1,31 +1,38 @@
 <template>
   <div>
-    <div>{{ category }}</div>
+    {{ category }}
+    <div>{{ cards }}</div>
     <div>{{ $t('text') }}</div>
   </div>
 </template>
 
 <script lang="ts">
-import { useCategoryStore } from '#imports';
-import { storeToRefs } from 'pinia';
-import { useRoute } from 'vue-router';
-import { getCategoryById } from '~/api/categories/getCategory';
+import { storeToRefs } from 'pinia'
+import { useRoute } from 'vue-router'
+import { getCategoryApi } from '~/api/category/getCategory'
+import { getCategoryCardsApi } from '~/api/category/getCategoryCards'
+import { useCategoryStore } from '~/stores/category'
 
 export default {
   async setup() {
     const route = useRoute()
     const categoryId: string = route.params?.id as string
 
-    const { category } = storeToRefs(useCategoryStore())
-    const { setCategory } = useCategoryStore()
+    const { cards, category } = storeToRefs(useCategoryStore())
+    const { setCategoryCards, setCategory } = useCategoryStore()
 
-    const { data } = await getCategoryById(categoryId)
-
-    if (data.value && !category.value) {
-      setCategory(data.value)
+    const [{ data: categoryData }, { data: cardsData }] = await Promise.all([
+      getCategoryApi(categoryId),
+      getCategoryCardsApi(categoryId),
+    ])
+    if (categoryData.value) {
+      setCategory(categoryData.value)
+    }
+    if (cardsData.value) {
+      setCategoryCards(cardsData.value)
     }
 
-    return { category }
-  }
+    return { cards, category }
+  },
 }
 </script>
