@@ -20,6 +20,7 @@
     "pinia": "^3.0.3",
     "storybook": "9.0.5",
     "vue": "^3.5.17",
+    "vue-final-modal": "^4.5.5",
     "vue-router": "^4.5.1"
   },
   "devDependencies": {

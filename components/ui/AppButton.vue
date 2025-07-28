@@ -1,5 +1,5 @@
 <template>
-  <button class="flex justify-center text-white rounded-xl px-11 py-5" :class="buttonClasses">
+  <button class="flex justify-center text-white rounded-xl py-5 cursor-pointer" :class="[buttonClasses, customClass]">
     <span>
       <slot>{{ $t('ui.button') }}</slot>
     </span>
@@ -25,15 +25,24 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    customClass: {
+      type: String,
+      default: '',
+    },
+    outline: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup(props) {
     const buttonClasses = computed(() => {
       return {
-        'bg-primary active:bg-primary-2': props.type === ButtonTypes.PRIMARY,
-        'bg-secondary active:bg-secondary-2': props.type === ButtonTypes.SECONDARY,
+        'bg-primary border-primary border-[2px] shadow-primary active:bg-primary-2 active:border-primary-2': props.type === ButtonTypes.PRIMARY,
+        'bg-secondary border-secondary border-[2px] shadow-secondary active:bg-secondary-2 active:border-secondary-2': props.type === ButtonTypes.SECONDARY,
         'w-full': props.full,
-        'max-w-[165px]': !props.full,
+        'w-min-[165px]': !props.full,
         '!bg-light !text-dark button--disabled': props.disabled,
+        '!bg-white !text-dark': props.outline,
       }
     })
 

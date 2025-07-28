@@ -10,9 +10,6 @@ import { useI18n } from 'vue-i18n'
 import { signIn } from './api/auth/signIn'
 
 export default {
-  components: {
-
-  },
   async setup() {
     const { locale } = useI18n()
     const token = useCookie('token')
