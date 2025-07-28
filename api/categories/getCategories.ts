@@ -3,7 +3,7 @@ import type { UsersCategories } from '~/assets/types/usersCategories'
 import { useCustomFetch } from '~/composables/useApi'
 
 export async function getCategories(): Promise<ResultType<UsersCategories[]>> {
-  const { data, status, error } = await useCustomFetch<UsersCategories[]>('/categories')
+  const { data, status, error, refresh } = await useCustomFetch<UsersCategories[]>('/categories')
 
-  return { data, status, error }
+  return { data, status, error, refresh }
 }

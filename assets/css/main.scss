@@ -6,9 +6,27 @@ body {
 }
 
 input:focus {
-    outline:none;
+  outline: none;
 }
 
 select:focus {
-    outline:none;
+  outline: none;
+}
+
+.shadow-primary {
+  box-shadow: -4px 4px 0px 0px var(--color-primary-2);
+  transition: 0.3s;
+  &:active {
+    box-shadow: -2px 2px 0px 0px var(--color-primary-2);
+    transform: translateX(-2px) translateY(2px);
+  }
+}
+
+.shadow-secondary {
+  box-shadow: -4px 4px 0px 0px var(--color-secondary-2);
+    transition: 0.3s;
+  &:active {
+    box-shadow: -2px 2px 0px 0px var(--color-secondary-2);
+    transform: translateX(-2px) translateY(2px);
+  }
 }

@@ -1,7 +1,9 @@
 <template>
-  <div class="flex flex-col border-primary border-2 rounded-xl p-4 aspect-square category">
+  <div class="flex flex-col border-primary relative border-2 rounded-xl p-4 aspect-square category">
     <span class="category__name">{{ category.name }}</span>
     <span class="category__author mt-auto">@{{ author.name }}</span>
+
+    <slot />
   </div>
 </template>
 
@@ -31,7 +33,7 @@ font-style: Regular;
 font-size: 12px;
 line-height: 21px;
 letter-spacing: -0.32px;
-color: var(--color-primary-2);
+color: var(--color-primary);
 
 }
 .category {
