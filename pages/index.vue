@@ -1,9 +1,10 @@
 <template>
   <div>
-    <div class="bg-secondary py-1.5 px-10 relative flex items-center justify-center rounded-3xl">
-      <span class="text-small text-white">Мои курсы</span>
-      <AppIcon icon="plus" :width="24" :height="24" color="text-white" class="absolute right-3" />
-    </div>
+    <AppPageHeader title="Мои курсы">
+      <template #default>
+        <AppIcon icon="plus" :width="24" :height="24" color="text-white" class="absolute right-3" />
+      </template>
+    </AppPageHeader>
 
     <div class="flex my-5 gap-4 overflow-auto items-center">
       <AppChip
@@ -40,14 +41,18 @@
 import { useCategoryStore } from '#imports'
 import { storeToRefs } from 'pinia'
 import { defineComponent, ref } from 'vue'
+
 import { getCategories } from '~/api/categories/getCategories'
+
 import AppCategoryCard from '~/components/AppCategoryCard.vue'
+import AppPageHeader from '~/components/AppPageHeader.vue'
 import ConfirmModal from '~/components/modals/ConfirmModal.vue'
 import { AppChip, AppIcon } from '~/components/ui'
+
 import { useCategoriesStore } from '~/stores/categories'
 
 export default defineComponent({
-  components: { AppIcon, AppChip, AppCategoryCard, ConfirmModal },
+  components: { AppIcon, AppChip, AppCategoryCard, ConfirmModal, AppPageHeader },
   async setup() {
     const { categories } = storeToRefs(useCategoriesStore())
     const { setCategories } = useCategoriesStore()

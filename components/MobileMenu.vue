@@ -1,21 +1,17 @@
 <template>
-  <div class="fixed w-full bottom-5 left-0">
-    <div class="flex justify-between bg-primary py-2.5 px-4 rounded-3xl mx-5">
+  <div class="fixed inset-x-0 mx-auto w-fit bottom-5 z-50">
+    <div class="flex gap-8 justify-between bg-primary shadow-small-primary py-2.5 px-4 rounded-3xl mx-5">
       <div class="flex flex-col items-center w-fit">
         <AppIcon icon="hat" color="text-white" :width="36" :height="36" />
-        <span>мои курсы</span>
+        <span>библиотека</span>
       </div>
       <div class="flex flex-col items-center w-fit">
         <AppIcon icon="book" color="text-white" :width="36" :height="36" />
         <span>мои курсы</span>
       </div>
       <div class="flex flex-col items-center w-fit">
-        <AppIcon icon="add" color="text-white" :width="36" :height="36" />
-        <span>мои курсы</span>
-      </div>
-      <div class="flex flex-col items-center w-fit">
         <AppIcon icon="anchor" color="text-white" :width="36" :height="36" />
-        <span>мои курсы</span>
+        <span>профиль</span>
       </div>
     </div>
   </div>

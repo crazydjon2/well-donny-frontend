@@ -16,8 +16,8 @@
       </div>
       <AppIcon icon="add" color="text-dark" @click="addWord" />
     </div>
-    <AppButton @click="onCategoryCreate">
-      AAAAAAAAAAAAAAAAA
+    <AppButton @click="onCategoryCreate" full outline class="mt-8">
+      добавить курс
     </AppButton>
   </div>
 </template>
@@ -26,9 +26,9 @@
 import type { CategoryType } from '~/assets/types/categoriesTypes'
 import type { CreateWordDTO } from '~/assets/types/word'
 import { CreateWordCard } from '#components'
+import { storeToRefs } from 'pinia'
 import { defineComponent, reactive, ref } from 'vue'
 import { AppButton, AppIcon, AppInput, AppSelect } from '~/components/ui'
-import { useCategoriesStore } from '~/stores/categories'
 import { useCategoryStore } from '~/stores/category'
 
 export default defineComponent({
@@ -41,7 +41,8 @@ export default defineComponent({
   },
   async setup() {
     const { getCategoriesTypes, createCategory } = useCategoryStore()
-    const { categoriesTypes } = useCategoriesStore()
+    const { categoriesTypes } = storeToRefs(useCategoryStore())
+
     await getCategoriesTypes()
     const category: { name: string, description: string, type: CategoryType | null } = reactive({
       name: '',

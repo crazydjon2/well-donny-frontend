@@ -1,4 +1,5 @@
 @use '../fonts/evolventa.scss';
+@use '../fonts//nozhik.scss';
 @use './animations.scss';
 
 body {
@@ -16,6 +17,7 @@ select:focus {
 .shadow-primary {
   box-shadow: -4px 4px 0px 0px var(--color-primary-2);
   transition: 0.3s;
+
   &:active {
     box-shadow: -2px 2px 0px 0px var(--color-primary-2);
     transform: translateX(-2px) translateY(2px);
@@ -24,9 +26,45 @@ select:focus {
 
 .shadow-secondary {
   box-shadow: -4px 4px 0px 0px var(--color-secondary-2);
-    transition: 0.3s;
+  transition: 0.3s;
+
   &:active {
     box-shadow: -2px 2px 0px 0px var(--color-secondary-2);
     transform: translateX(-2px) translateY(2px);
   }
+}
+
+.shadow-small-primary {
+  box-shadow: -2px 2px 0px 0px var(--color-primary-2);
+  transition: 0.3s;
+
+  &:active {
+    box-shadow: -1px 1px 0px 0px var(--color-primary-2);
+    transform: translateX(-1px) translateY(1px);
+  }
+}
+
+
+.shadow-small-fliped-primary {
+  box-shadow: 2px 2px 0px 0px var(--color-primary-2);
+  transition: 0.3s;
+
+  &:active {
+    box-shadow: 1px 1px 0px 0px var(--color-primary-2);
+    transform: translateX(1px) translateY(-1px);
+  }
+}
+
+.shadow-small-secondary {
+  box-shadow: -2px 2px 0px 0px var(--color-secondary-2);
+  transition: 0.3s;
+
+  &:active {
+    box-shadow: -1px 1px 0px 0px var(--color-secondary-2);
+    transform: translateX(-1px) translateY(1px);
+  }
+}
+
+.carousel__viewport {
+  padding: 4px !important;
 }

@@ -1,18 +1,20 @@
 <template>
-  <div class="card" :class="[size]" @click="startAnimation">
+  <div class="card rounded-3xl select-none aspect-square bg-white h-full" :class="[size]" :style="cardStyle" @click="startAnimation">
     <div
-      class="relative card__inner bg-light flex items-center justify-center h-full w-full shadow-2xl aspect-square rounded-3xl"
-      :class="[{ 'card--flip': isFlipped }, large ? 'p-8' : 'p-4']"
+      class="relative card__inner shadow-small-primary border-2 border-primary flex items-center justify-center h-full w-full aspect-square rounded-3xl"
+      :class="[{ 'card--flip shadow-small-fliped-primary': isFlipped }, large ? 'p-8' : 'p-4']"
     >
       <div class="card__face card__front">
-        <p>{{ textFirst }}</p>
+        <p :class="{ 'font-bold': large }" @click.prevent>
+          {{ textFirst }}
+        </p>
 
         <div
           v-if="large"
           class="absolute"
           :class="large ? 'left-8 top-8' : 'left-4 top-4'"
         >
-          <span class="card__text">{{ wordMax }}/{{ wordCurrent }}</span>
+          <span class="card__text">{{ wordCurrent }}/{{ wordMax }}</span>
         </div>
         <AppIcon
           v-if="large"
@@ -24,9 +26,10 @@
         <AppIcon
           v-if="large"
           icon="back"
-          class="absolute"
+          class="absolute cursor-pointer"
           :class="large ? 'left-8 bottom-8' : 'left-4 bottom-4'"
           small
+          @click.stop="$emit('onBackPressed')"
         />
         <AppIcon
           icon="refresh"
@@ -37,14 +40,16 @@
         />
       </div>
       <div class="card__face card__back">
-        <p>{{ textSecond }}</p>
+        <p :class="{ 'font-bold': large }" @click.prevent>
+          {{ textSecond }}
+        </p>
 
         <div
           v-if="large"
           class="absolute"
           :class="large ? 'left-8 top-8' : 'left-4 top-4'"
         >
-          <span class="card__text">{{ wordMax }}/{{ wordCurrent }}</span>
+          <span class="card__text">{{ wordCurrent }}/{{ wordMax }}</span>
         </div>
         <AppIcon
           v-if="large"
@@ -56,9 +61,10 @@
         <AppIcon
           v-if="large"
           icon="back"
-          class="absolute"
+          class="absolute cursor-pointer"
           :class="large ? 'left-8 bottom-8' : 'left-4 bottom-4'"
           small
+          @click.stop="$emit('onBackPressed')"
         />
         <AppIcon
           icon="refresh"
@@ -92,31 +98,42 @@ export default defineComponent({
       default: false,
     },
     wordMax: {
-      type: String,
-      default: '0',
+      type: Number,
+      default: 0,
     },
     wordCurrent: {
-      type: String,
-      default: '0',
+      type: Number,
+      default: 0,
+    },
+    height: {
+      type: Number,
     },
   },
-  setup(props) {
+  emits: ['flipStarted', 'flipEnded', 'onBackPressed'],
+  setup(props, ctx) {
     const size = computed(() => {
-      return {
-        'min-w-[350px] min-h-[350px]': props.large,
-        'min-w-[225px] min-h-[225px]': !props.large,
-      }
+      return props.height ? `h-[${props.height}px]` : ''
     })
 
     const paddingConst = props.large ? 8 : 4
 
+    const animationDuration = 500
+    const cardStyle = computed(() => {
+      return {
+        '--animation-delay': `${animationDuration}ms`
+      }
+    })
     const isFlipped = ref(false)
 
     const startAnimation = () => {
+      ctx.emit('flipStarted')
       isFlipped.value = !isFlipped.value
+      setTimeout(() => {
+        ctx.emit('flipEnded')
+      }, animationDuration)
     }
 
-    return { size, startAnimation, isFlipped, paddingConst }
+    return { size, cardStyle, startAnimation, isFlipped, paddingConst }
   },
 })
 </script>
@@ -131,7 +148,7 @@ export default defineComponent({
 }
 
 .card__inner {
-  transition: transform 0.6s;
+  transition: var(--animation-delay);
   transform-style: preserve-3d;
 }
 

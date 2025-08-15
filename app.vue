@@ -1,6 +1,7 @@
 <template>
   <NuxtLayout name="mobile">
     <NuxtPage />
+    <LightHouseLoading />
   </NuxtLayout>
 </template>
 
@@ -8,6 +9,7 @@
 import { useCookie } from '#app'
 import { useI18n } from 'vue-i18n'
 import { signIn } from './api/auth/signIn'
+import LightHouseLoading from './components/LightHouseLoading.vue'
 
 export default {
   async setup() {

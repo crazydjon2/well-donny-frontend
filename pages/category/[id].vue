@@ -1,38 +1,40 @@
 <template>
-  <div>
-    {{ category }}
-    <div>{{ cards }}</div>
-    <div>{{ $t('text') }}</div>
-  </div>
+  <NuxtPage />
 </template>
 
-<script lang="ts">
-import { storeToRefs } from 'pinia'
+<script lang="ts" setup>
+import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { getCategoryApi } from '~/api/category/getCategory'
+
 import { getCategoryCardsApi } from '~/api/category/getCategoryCards'
+
 import { useCategoryStore } from '~/stores/category'
+import { useGlobalStore } from '~/stores/global'
 
-export default {
-  async setup() {
-    const route = useRoute()
-    const categoryId: string = route.params?.id as string
+const route = useRoute()
+const categoryId: string = route.params?.id as string
+const { setCategoryCards, setCategory } = useCategoryStore()
+const { setLightHouseState } = useGlobalStore()
 
-    const { cards, category } = storeToRefs(useCategoryStore())
-    const { setCategoryCards, setCategory } = useCategoryStore()
-
-    const [{ data: categoryData }, { data: cardsData }] = await Promise.all([
-      getCategoryApi(categoryId),
-      getCategoryCardsApi(categoryId),
-    ])
-    if (categoryData.value) {
-      setCategory(categoryData.value)
-    }
-    if (cardsData.value) {
-      setCategoryCards(cardsData.value)
-    }
-
-    return { cards, category }
-  },
+setLightHouseState(true)
+const { data: categoryData } = await getCategoryApi(categoryId)
+if (categoryData.value) {
+  setCategory(categoryData.value)
 }
+
+onMounted(async () => {
+  getCategoryCardsApi(categoryId)
+    .then(({ data: cardsData }) => {
+      if (cardsData.value) {
+        setCategoryCards(cardsData.value)
+      }
+    })
+    .finally(() => {
+      setTimeout(() => {
+        setLightHouseState(false)
+      }, 1000)
+    })
+})
+
 </script>

@@ -6,7 +6,6 @@ import { getCategories } from '~/api/categories/getCategories'
 
 export const useCategoriesStore = defineStore('categories', () => {
   const categories = ref<UsersCategories[]>([])
-  const categoriesTypes = ref<CategoryType[]>([])
 
   // const fetchCategories = async () => {
   //   const categoriesData: Category[] = await getCategories()
@@ -25,5 +24,5 @@ export const useCategoriesStore = defineStore('categories', () => {
     }
   }
 
-  return { categories, setCategories, categoriesTypes, refetchCategories }
+  return { categories, setCategories, refetchCategories }
 })

@@ -10,7 +10,7 @@ import { getCategoriesTypesApi } from '~/api/category/getCategoriesTypes'
 
 export const useCategoryStore = defineStore('category', () => {
   const category = ref<Category | null>(null)
-  const cards = ref<Card | null>(null)
+  const cards = ref<Card[] | null>(null)
   const categoriesTypes = ref<CategoryType[]>([])
   const { refetchCategories } = useCategoriesStore()
 
@@ -24,7 +24,7 @@ export const useCategoryStore = defineStore('category', () => {
     category.value = data
   }
 
-  const setCategoryCards = (data: Card) => {
+  const setCategoryCards = (data: Card[]) => {
     cards.value = data
   }
 
@@ -46,5 +46,5 @@ export const useCategoryStore = defineStore('category', () => {
     }
   }
 
-  return { category, setCategory, cards, setCategoryCards, createCategory, getCategoriesTypes, deleteCategory }
+  return { category, setCategory, cards, setCategoryCards, createCategory, getCategoriesTypes, deleteCategory, categoriesTypes }
 })
