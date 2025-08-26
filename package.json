@@ -5,7 +5,7 @@
   "scripts": {
     "build": "yarn lint && node ./utils/fix-svg.js && nuxt build",
     "fix-svg": "node ./utils/fix-svg.js",
-    "dev": "node ./utils/fix-svg.js && nuxt dev",
+    "dev": "node ./utils/fix-svg.js && nuxt dev --host 0.0.0.0",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",

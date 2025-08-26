@@ -8,15 +8,18 @@
         </FlashCardsItem>
       </slot>
     </div>
-    <slot name="actions" :onRejectPressed="onRejectPressed" :onAcceptPressed="onAcceptPressed" />
+    <slot name="actions" :on-reject-pressed="onRejectPressed" :on-accept-pressed="onAcceptPressed" />
   </div>
 </template>
 
 <script setup lang="ts">
+import type { CardMethods, MoveEventRegister } from './types'
 import { computed, onUnmounted, provide, ref } from 'vue'
 import FlashCardsItem from './FlashCardsItem.vue'
-import type { CardMethods, MoveEventRegister } from './types'
 
+const props = withDefaults(defineProps<{ allowSwipe?: boolean }>(), {
+  allowSwipe: true,
+})
 const model = defineModel<number>({ default: 0 })
 
 const items = ref<string[]>([])
@@ -34,7 +37,8 @@ function unregisterItem(uid: string) {
 function setSlide(index: number) {
   if (index > 0 && index < items.value.length) {
     model.value = index
-  } else {
+  }
+  else {
     model.value = index - 1
   }
 }
@@ -48,7 +52,7 @@ provide('flashCardsContext', {
 })
 
 provide('onMouseUp', (callback: () => void) => {
-  if (document) {
+  if (document && props.allowSwipe) {
     document.addEventListener('mouseup', callback)
     document.addEventListener('touchend', callback)
     document.addEventListener('touchcancel', callback)
@@ -62,26 +66,25 @@ provide('onMouseUp', (callback: () => void) => {
 
 const registerMoveHandler: MoveEventRegister = (callback) => {
   const handleMove = (e: Event) => {
-    callback(e as MouseEvent | TouchEvent);
-  };
+    callback(e as MouseEvent | TouchEvent)
+  }
 
-  if (document) {
-    document.addEventListener('mousemove', handleMove);
-    document.addEventListener('touchmove', handleMove, { passive: false });
+  if (document && props.allowSwipe) {
+    document.addEventListener('mousemove', handleMove)
+    document.addEventListener('touchmove', handleMove, { passive: false })
   }
 
   onUnmounted(() => {
-    document.removeEventListener('mousemove', handleMove);
-    document.removeEventListener('touchmove', handleMove);
-  });
-};
+    document.removeEventListener('mousemove', handleMove)
+    document.removeEventListener('touchmove', handleMove)
+  })
+}
 
-provide('onMove', registerMoveHandler);
-
+provide('onMove', registerMoveHandler)
 
 const currentCardMethods = ref<CardMethods>({
   accept: () => { },
-  reject: () => { }
+  reject: () => { },
 })
 
 provide('cardMethods', currentCardMethods)

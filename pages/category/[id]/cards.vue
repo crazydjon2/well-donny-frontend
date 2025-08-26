@@ -14,19 +14,23 @@
       <FlashCardsContainer v-model="slide">
         <template v-for="(card, index) in cards" :key="card.id">
           <FlashCardsItem v-show="isFlipping ? slide === index : true">
-            <AppCard :text-first="card.word.original" :text-second="card.word.translated" large :word-max="cards.length"
+            <AppCard
+              :text-first="card.word.original" :text-second="card.word.translated" large :word-max="cards.length"
               :word-current="index + 1" @flip-started="isFlipping = true" @flip-ended="isFlipping = false"
-              @on-back-pressed="slide--" />
+              @on-back-pressed="slide--"
+            />
           </FlashCardsItem>
         </template>
 
         <template #actions="{ onAcceptPressed, onRejectPressed }">
           <div class="w-full flex justify-center gap-5 mt-7">
-            <AppButton full outline :disabled="slide === cards.length - 1" :type="ButtonTypes.SECONDARY"
-              @click="onRejectPressed">
+            <AppButton
+              full outline :disabled="slide === cards.length" :type="ButtonTypes.SECONDARY"
+              @click="onRejectPressed"
+            >
               не знаю
             </AppButton>
-            <AppButton full outline :disabled="slide === cards.length - 1" @click="onAcceptPressed">
+            <AppButton full outline :disabled="slide === cards.length" @click="onAcceptPressed">
               Знаю
             </AppButton>
           </div>

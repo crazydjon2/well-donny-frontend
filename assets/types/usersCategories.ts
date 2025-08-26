@@ -1,7 +1,7 @@
 import type { Category } from './category'
 import type { User } from './user'
 
-export interface UsersCategories {
+export interface UsersCategory {
   id: string
   role: 'creator' | 'viewer'
   user: User

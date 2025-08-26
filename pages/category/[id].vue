@@ -5,9 +5,8 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { getCategoryApi } from '~/api/category/getCategory'
 
-import { getCategoryCardsApi } from '~/api/category/getCategoryCards'
+import { categoryService } from '~/services/categoryService'
 
 import { useCategoryStore } from '~/stores/category'
 import { useGlobalStore } from '~/stores/global'
@@ -15,26 +14,16 @@ import { useGlobalStore } from '~/stores/global'
 const route = useRoute()
 const categoryId: string = route.params?.id as string
 const { setCategoryCards, setCategory } = useCategoryStore()
-const { setLightHouseState } = useGlobalStore()
 
-setLightHouseState(true)
-const { data: categoryData } = await getCategoryApi(categoryId)
+const [{ data: categoryData }, { data: categoryCards }] = await Promise.all([
+  categoryService.getCategory(categoryId),
+  categoryService.getCategoryCards(categoryId),
+])
+
 if (categoryData.value) {
   setCategory(categoryData.value)
 }
-
-onMounted(async () => {
-  getCategoryCardsApi(categoryId)
-    .then(({ data: cardsData }) => {
-      if (cardsData.value) {
-        setCategoryCards(cardsData.value)
-      }
-    })
-    .finally(() => {
-      setTimeout(() => {
-        setLightHouseState(false)
-      }, 1000)
-    })
-})
-
+if (categoryCards.value) {
+  setCategoryCards(categoryCards.value)
+}
 </script>

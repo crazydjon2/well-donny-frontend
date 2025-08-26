@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div v-if="category">
     <AppPageHeader :title="category?.name">
       <template #default>
         <AppIcon icon="trash" :width="24" :height="24" color="text-white" class="absolute right-3" />
       </template>
     </AppPageHeader>
     <NuxtLink to="/">
-      <p class="mt-[2px] text-extra-small text-primary text-center">
+      <p v-if="category?.users" class="mt-[2px] text-extra-small text-primary text-center">
         @{{ category?.users[0].name }}
       </p>
     </NuxtLink>
@@ -19,7 +19,7 @@
       </Carousel>
     </div>
 
-    <div class="flex justify-between mt-5">
+    <div v-if="category.type" class="flex justify-between mt-5">
       <span class="text-regular">{{ cards?.length }} слов</span>
       <span class="text-regular">{{ category?.type.type }}</span>
     </div>
@@ -57,7 +57,8 @@ import { AppIcon } from '~/components/ui'
 import { useCategoryStore } from '~/stores/category'
 
 const route = useRoute()
-const { cards, category } = storeToRefs(useCategoryStore())
+const { category } = storeToRefs(useCategoryStore())
+const { cards } = useCategoryStore()
 
 const carouselConfig = {
   itemsToShow: 2.5,

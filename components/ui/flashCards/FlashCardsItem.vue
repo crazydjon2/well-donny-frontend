@@ -1,14 +1,17 @@
 <template>
-  <div v-if="isActive || isNext || isPrev" class="flash-card z-10"
+  <div
+    v-if="isActive || isNext || isPrev" class="flash-card z-10"
     :class="{ 'flash-card-no-click': !allowClick, 'absolute w-full h-full': isNext || isPrev, 'z-[1]': isNext, 'z-[20]': isPrev }"
-    :style="cardStyle" @mousedown="startDrag" @touchstart="startDrag" @click.self="handleClick">
+    :style="cardStyle" @mousedown="startDrag" @touchstart="startDrag" @click.self="handleClick"
+  >
     <slot />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, getCurrentInstance, inject, onUnmounted, ref, shallowRef, watch, watchEffect, type Ref } from 'vue'
+import type { Ref } from 'vue'
 import type { CardMethods, FlashCardsContext, MouseUpEvent, MoveEventRegister } from './types'
+import { computed, getCurrentInstance, inject, onUnmounted, ref, shallowRef, watch, watchEffect } from 'vue'
 
 const startPos = ref({ x: 0, y: 0 })
 const currentPos = shallowRef({ x: 0, y: 0 })
@@ -17,17 +20,36 @@ const allowClick = ref(true)
 const cardStyle = computed(() => {
   return {
     transform: `translate(${currentPos.value.x / 2}px, ${currentPos.value.y / 4}px) rotate(${currentPos.value.x / 100}deg)`,
-    transition: isDragging.value ? 'none' : 'transform 0.3s ease',
+    transition: isDragging.value ? 'none' : 'transform 0.7s ease',
   }
 })
+
+const cardContext = inject<FlashCardsContext>('flashCardsContext')
+if (!cardContext) {
+  throw new Error('FlashCardsContext не был предоставлен')
+}
+const { currentSlide, items, registerItem, unregisterItem, setSlide } = cardContext
+const instance = getCurrentInstance()
+const localIndex = ref<number>(0)
+const isActive = computed(() => (
+  localIndex.value !== null && currentSlide.value === localIndex.value
+))
+
+const isNext = computed(() => (
+  localIndex.value !== null && currentSlide.value + 1 === localIndex.value
+))
+
+const isPrev = computed(() => (
+  localIndex.value !== null && currentSlide.value - 1 === localIndex.value
+))
 
 const isRightState = ref(false)
 const isLeftState = ref(false)
 
 function startDrag(e: MouseEvent | TouchEvent) {
   isDragging.value = true
-  const clientX = 'clientX' in e ? e.clientX : e.touches[0].clientX;
-  const clientY = 'clientY' in e ? e.clientY : e.touches[0].clientY;
+  const clientX = 'clientX' in e ? e.clientX : e.touches[0].clientX
+  const clientY = 'clientY' in e ? e.clientY : e.touches[0].clientY
 
   startPos.value = { x: clientX, y: clientY }
   currentPos.value = { x: 0, y: 0 }
@@ -38,15 +60,14 @@ function startDrag(e: MouseEvent | TouchEvent) {
   }
 }
 
-
-const onMove = inject<MoveEventRegister>('onMove');
+const onMove = inject<MoveEventRegister>('onMove')
 if (onMove) {
   onMove(onDrag)
 }
 function onDrag(e: MouseEvent | TouchEvent) {
   if (isDragging.value) {
-    const clientX = 'clientX' in e ? e.clientX : e.touches[0].clientX;
-    const clientY = 'clientY' in e ? e.clientY : e.touches[0].clientY;
+    const clientX = 'clientX' in e ? e.clientX : e.touches[0].clientX
+    const clientY = 'clientY' in e ? e.clientY : e.touches[0].clientY
 
     if (Math.abs(clientX - startPos.value.x) > 10) {
       allowClick.value = false
@@ -55,11 +76,11 @@ function onDrag(e: MouseEvent | TouchEvent) {
   }
 }
 
-const cardContext = inject<FlashCardsContext>('flashCardsContext')
-if (!cardContext) {
-  throw new Error('FlashCardsContext не был предоставлен');
+const onMouseUp = inject<MouseUpEvent>('onMouseUp')
+if (onMouseUp) {
+  onMouseUp(endDrag)
 }
-const { currentSlide, items, registerItem, unregisterItem, setSlide } = cardContext
+
 function endDrag() {
   if (isActive.value) {
     isDragging.value = false
@@ -70,10 +91,12 @@ function endDrag() {
     else if (currentPos.value.x > 150) {
       setSlide(currentSlide.value + 1)
       markState('right')
-    } else if (currentPos.value.x < -150) {
+    }
+    else if (currentPos.value.x < -150) {
       setSlide(currentSlide.value + 1)
       markState('left')
-    } else {
+    }
+    else {
       currentPos.value = { x: 0, y: 0 }
     }
 
@@ -88,16 +111,12 @@ function markState(state: 'left' | 'right' = 'left') {
     if (state === 'left') {
       isLeftState.value = true
       isRightState.value = false
-    } else if (state === 'right') {
+    }
+    else if (state === 'right') {
       isRightState.value = true
       isLeftState.value = false
     }
   }
-}
-
-const onMouseUp = inject<MouseUpEvent>('onMouseUp')
-if (onMouseUp) {
-  onMouseUp(endDrag)
 }
 
 function handleClick(e: MouseEvent) {
@@ -107,10 +126,6 @@ function handleClick(e: MouseEvent) {
   return false
 }
 
-const instance = getCurrentInstance()
-const localIndex = ref<number>(0)
-
-// Автоматическая регистрация
 if (instance) {
   localIndex.value = registerItem(instance.uid)
 }
@@ -121,24 +136,12 @@ onUnmounted(() => {
   }
 })
 
-// Вычисляемые свойства
-const isActive = computed(() => (
-  localIndex.value !== null && currentSlide.value === localIndex.value
-))
-
-const isNext = computed(() => (
-  localIndex.value !== null && currentSlide.value + 1 === localIndex.value
-))
-
-const isPrev = computed(() => (
-  localIndex.value !== null && currentSlide.value - 1 === localIndex.value
-))
-
 watch(currentSlide, (newValue, oldValue) => {
   if (newValue !== oldValue) {
     if (newValue > oldValue && isPrev.value) {
       currentPos.value = { x: Math.sign(isLeftState.value ? -1 : 1) * window.innerWidth * 3, y: 300 }
-    } else if (newValue < oldValue && isActive.value) {
+    }
+    else if (newValue < oldValue && isActive.value) {
       currentPos.value = { x: 0, y: 0 }
     }
   }
@@ -146,7 +149,8 @@ watch(currentSlide, (newValue, oldValue) => {
 
 const currentCardMethods = inject<Ref<CardMethods>>('cardMethods')
 watchEffect(() => {
-  if (!currentCardMethods?.value) return
+  if (!currentCardMethods?.value)
+    return
 
   if (isActive.value) {
     currentCardMethods.value.accept = () => markState('right')

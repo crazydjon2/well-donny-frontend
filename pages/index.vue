@@ -15,7 +15,7 @@
       <AppIcon icon="plus" color="text-dark" :width="16" :height="16" />
     </div>
 
-    <div class="grid grid-cols-2 gap-6">
+    <div v-if="categories.length" class="grid grid-cols-2 gap-6">
       <div v-for="(category) in categories" :key="category.id">
         <NuxtLink :to="`/category/${category.category.id}`">
           <AppCategoryCard :category="category.category" :author="category.user">
@@ -42,12 +42,11 @@ import { useCategoryStore } from '#imports'
 import { storeToRefs } from 'pinia'
 import { defineComponent, ref } from 'vue'
 
-import { getCategories } from '~/api/categories/getCategories'
-
 import AppCategoryCard from '~/components/AppCategoryCard.vue'
 import AppPageHeader from '~/components/AppPageHeader.vue'
 import ConfirmModal from '~/components/modals/ConfirmModal.vue'
 import { AppChip, AppIcon } from '~/components/ui'
+import { categoriesService } from '~/services/categoriesService'
 
 import { useCategoriesStore } from '~/stores/categories'
 
@@ -56,7 +55,7 @@ export default defineComponent({
   async setup() {
     const { categories } = storeToRefs(useCategoriesStore())
     const { setCategories } = useCategoriesStore()
-    const { data } = await getCategories()
+    const { data } = await categoriesService.getCategories()
     const { deleteCategory: deleteCategoryMethod } = useCategoryStore()
 
     const modalOpen = ref<boolean>(false)
