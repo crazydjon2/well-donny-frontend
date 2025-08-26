@@ -1,11 +1,16 @@
-import type { User } from './user'
+import type { User, UserRoles } from './user'
 import type { CreateWordDTO } from './word'
 
 export interface Category {
   id: string
   name: string
-  user: User
+  users: (User & { role: UserRoles })[]
   description: string
+  // TODO ADD ENUM!!!!!!!!!!!
+  type: {
+    id: string
+    type: 'language' | 'science'
+  }
   createdAt: string
   updatedAt: string
 }

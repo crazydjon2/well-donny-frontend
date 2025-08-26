@@ -4,13 +4,11 @@ import type { Category, CreateCategoryDTO } from '~/assets/types/category'
 import { useCategoriesStore } from '#imports'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { createCategoriesApi } from '~/api/category/createCategory'
-import { deleteCategoryApi } from '~/api/category/deleteCategory'
-import { getCategoriesTypesApi } from '~/api/category/getCategoriesTypes'
+import { categoryService } from '~/services/categoryService'
 
 export const useCategoryStore = defineStore('category', () => {
   const category = ref<Category | null>(null)
-  const cards = ref<Card | null>(null)
+  const cards = ref<Card[] | null>(null)
   const categoriesTypes = ref<CategoryType[]>([])
   const { refetchCategories } = useCategoriesStore()
 
@@ -24,27 +22,27 @@ export const useCategoryStore = defineStore('category', () => {
     category.value = data
   }
 
-  const setCategoryCards = (data: Card) => {
+  const setCategoryCards = (data: Card[]) => {
     cards.value = data
   }
 
   const createCategory = (data: CreateCategoryDTO) => {
-    createCategoriesApi(data)
+    categoryService.createCategory(data)
   }
 
   const deleteCategory = async (id: string) => {
-    return await deleteCategoryApi(id)
+    return await categoryService.deleteCategory(id)
       .then(() => {
         refetchCategories()
       })
   }
 
   const getCategoriesTypes = async () => {
-    const { data: types } = await getCategoriesTypesApi()
+    const { data: types } = await categoryService.getCategoriesTypes()
     if (types.value) {
       categoriesTypes.value = types.value
     }
   }
 
-  return { category, setCategory, cards, setCategoryCards, createCategory, getCategoriesTypes, deleteCategory }
+  return { category, setCategory, cards, setCategoryCards, createCategory, getCategoriesTypes, deleteCategory, categoriesTypes }
 })

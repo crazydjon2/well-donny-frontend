@@ -1,5 +1,7 @@
 <template>
-  <button class="flex justify-center text-white rounded-xl py-5 cursor-pointer" :class="[buttonClasses, customClass]">
+  <button
+    class="flex justify-center text-white rounded-xl py-5 cursor-pointer" :class="[buttonClasses, [customClass]]"
+  >
     <span>
       <slot>{{ $t('ui.button') }}</slot>
     </span>
@@ -42,7 +44,7 @@ export default defineComponent({
         'w-full': props.full,
         'w-min-[165px]': !props.full,
         '!bg-light !text-dark button--disabled': props.disabled,
-        '!bg-white !text-dark': props.outline,
+        'bg-white !text-dark': props.outline,
       }
     })
 
@@ -66,5 +68,7 @@ span {
 
 .button--disabled {
   opacity: 0.5;
+  pointer-events: none;
+  touch-action: none;
 }
 </style>

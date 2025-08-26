@@ -3,3 +3,5 @@ export interface User {
   tgId: number
   name: string
 }
+
+export type UserRoles = 'creator' | 'viewer'

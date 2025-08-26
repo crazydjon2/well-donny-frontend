@@ -10,7 +10,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxtjs/storybook',
   ],
-  css: ['./assets/css/tailwind.css', './assets/css/main.scss', 'vue-final-modal/style.css'],
+  css: ['./assets/css/tailwind.css', './assets/css/main.scss', 'vue-final-modal/style.css', 'vue3-carousel/carousel.css'],
   imports: {
     autoImport: false,
   },
