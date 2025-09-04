@@ -1,11 +1,16 @@
 <template>
-  <div>
-    <AppPageHeader title="Тест">
-      <template #default>
-        <AppIcon icon="trash" :width="24" :height="24" color="text-white" class="absolute right-3" />
+  <div class="container">
+    <PageTop type="primary">
+      <template #left>
+        <AppIcon icon="tuning" :width="22" :height="26" color="text-white" />
       </template>
-    </AppPageHeader>
-
+      <template #default>
+        Тест
+      </template>
+      <template #right>
+        <AppIcon icon="close" color="text-white" :width="16" :height="16" @click="goBack" />
+      </template>
+    </PageTop>
     <ShipProgress v-if="cards" :length="cards.length" :position="slide + 1" class="mt-5" />
     <div v-if="cards" class="mt-6">
       <FlashCardsContainer v-model="slide" :allow-swipe="false">
@@ -36,17 +41,18 @@
 
 <script lang="ts" setup>
 import type { Word } from '~/assets/types/word'
-import { pickWords } from '#imports'
+import { pickWords, useRouterUtility } from '#imports'
 import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
-import AppPageHeader from '~/components/AppPageHeader.vue'
+import PageTop from '~/components/PageTop.vue'
 import ShipProgress from '~/components/ShipProgress.vue'
-import AppButton from '~/components/ui/AppButton.vue'
+import { AppButton, AppIcon } from '~/components/ui'
 import FlashCardsContainer from '~/components/ui/flashCards/FlashCardsContainer.vue'
 import FlashCardsItem from '~/components/ui/flashCards/FlashCardsItem.vue'
 import { useCategoryStore } from '~/stores/category'
 
 const { cards } = storeToRefs(useCategoryStore())
+const { goBack } = useRouterUtility()
 
 const slide = ref(0)
 

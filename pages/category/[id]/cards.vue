@@ -1,13 +1,16 @@
 <template>
-  <div>
-    <AppPageHeader title="Карточки">
+  <div class="container">
+    <PageTop type="primary">
       <template #default>
-        <AppIcon icon="trash" :width="24" :height="24" color="text-white" class="absolute right-3" />
+        Карточки
       </template>
-    </AppPageHeader>
+      <template #right>
+        <AppIcon icon="close" color="text-white" :width="16" :height="16" @click="goBack" />
+      </template>
+    </PageTop>
 
     <template v-if="cards">
-      <ShipProgress :length="cards.length" :position="slide + 1" class="mt-5" />
+      <ShipProgress :length="cards.length" :position="slide + 1" class="mt-1" />
     </template>
 
     <div v-if="cards" class="!mt-3">
@@ -41,9 +44,11 @@
 </template>
 
 <script setup lang="ts">
+import { useRouterUtility } from '#imports'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { ButtonTypes } from '~/assets/types/ui'
+import PageTop from '~/components/PageTop.vue'
 import ShipProgress from '~/components/ShipProgress.vue'
 import { AppButton, AppIcon } from '~/components/ui'
 // import { Carousel, Slide } from 'vue3-carousel'
@@ -52,6 +57,7 @@ import FlashCardsItem from '~/components/ui/flashCards/FlashCardsItem.vue'
 import { useCategoryStore } from '~/stores/category'
 
 const { cards } = storeToRefs(useCategoryStore())
+const { goBack } = useRouterUtility()
 
 const slide = ref(0)
 

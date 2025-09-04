@@ -22,7 +22,8 @@ export const useModalStore = defineStore('modal', () => {
   function close(id?: number) {
     if (id != null) {
       modals.value = modals.value.filter(m => m.id !== id)
-    } else {
+    }
+    else {
       modals.value.pop()
     }
   }
