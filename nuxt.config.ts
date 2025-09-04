@@ -1,6 +1,7 @@
 import process from 'node:process'
 import viteConfig from './vite.config'
 
+console.log(process.env)
 export default defineNuxtConfig({
   compatibilityDate: '2025-05-15',
   devtools: { enabled: true },
