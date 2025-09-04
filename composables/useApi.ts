@@ -13,16 +13,10 @@ export function useApi<T = unknown>(url: string | (() => string), userOptions: F
   const config = useRuntimeConfig()
   const token = useCookie('token').value
 
-  const controller = new AbortController()
-  const timeoutId = setTimeout(() => {
-    controller.abort(createError({ statusCode: 408, statusMessage: 'aborted', message: 'This request has been automatically aborted.' }))
-  }, userOptions.timeout)
-
   const defaultOptions: FetchOptions<T> = {
     baseURL: `${config.public.baseURL}`,
     method: 'GET',
     retry: 3,
-    signal: userOptions.timeout ? controller.signal : undefined,
 
     // cache request
     key: typeof url === 'string' ? url : url(),
@@ -42,7 +36,6 @@ export function useApi<T = unknown>(url: string | (() => string), userOptions: F
     },
 
     onResponse({ response }) {
-      // const token = response._data?.user?.token
       const hasError = !response.status.toString().startsWith('2') || response._data.status === 'error'
 
       if (hasError) {
@@ -52,10 +45,6 @@ export function useApi<T = unknown>(url: string | (() => string), userOptions: F
           message: response._data?.message || JSON.stringify(response._data?.errors),
         })
       }
-
-      // if (token) {
-      //   userToken.set(token)
-      // }
     },
 
     onResponseError({ response }) {
@@ -75,9 +64,5 @@ export function useApi<T = unknown>(url: string | (() => string), userOptions: F
 
   const options = defu(userOptions, defaultOptions) as UseFetchOptions<T>
 
-  return useFetch(url, { ...options }).finally(() => {
-    if (userOptions.timeout && timeoutId) {
-      clearTimeout(timeoutId)
-    }
-  })
+  return useFetch(url, options)
 }

@@ -17,9 +17,12 @@ export const useCategoriesStore = defineStore('categories', () => {
   }
 
   const refetchCategories = async () => {
-    const { data } = await categoriesService.getCategories()
+    const { data, error } = await categoriesService.getCategories()
     if (data.value) {
       setCategories(data.value)
+    }
+    else if (!data.value && !error.value) {
+      setCategories([])
     }
   }
 

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="container relative">
+  <div class="p-2 -mx-5 overflow-x-hidden">
+    <div class="cards-container relative">
       <slot />
       <slot name="end-slide">
         <FlashCardsItem class="a aspect-square flex items-center justify-center select-none">
@@ -99,7 +99,7 @@ function onAcceptPressed() {
 </script>
 
 <style scoped>
-.container {
+.cards-container {
   display: grid;
   grid-template-columns: 1fr;
   grid-auto-rows: auto;

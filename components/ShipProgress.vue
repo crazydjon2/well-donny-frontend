@@ -22,7 +22,7 @@ watch(() => props.position, () => {
   }, 4000)
 })
 </script>
-  
+
 <style scoped>
 .ship-img {
   transition: 1s;

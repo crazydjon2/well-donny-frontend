@@ -5,7 +5,7 @@
       :class="[{ 'card--flip shadow-small-fliped-primary': isFlipped }, large ? 'p-8' : 'p-4']"
     >
       <div class="card__face card__front">
-        <p :class="{ 'font-bold': large }" @click.prevent>
+        <p :class="{ 'font-bold': large }" class="text-center" @click.prevent>
           {{ textFirst }}
         </p>
 
@@ -40,7 +40,7 @@
         />
       </div>
       <div class="card__face card__back">
-        <p :class="{ 'font-bold': large }" @click.prevent>
+        <p :class="{ 'font-bold': large }" class="text-center" @click.prevent>
           {{ textSecond }}
         </p>
 
@@ -120,7 +120,7 @@ export default defineComponent({
     const animationDuration = 500
     const cardStyle = computed(() => {
       return {
-        '--animation-delay': `${animationDuration}ms`
+        '--animation-delay': `${animationDuration}ms`,
       }
     })
     const isFlipped = ref(false)

@@ -1,6 +1,8 @@
 <template>
   <div class="cursor-pointer">
-    <span :class="{ 'chip--active': active }">{{ text }}</span>
+    <span :class="{ 'chip--active': active }">{{ text }}
+      <slot />
+    </span>
   </div>
 </template>
 
@@ -11,7 +13,7 @@ export default defineComponent({
   props: {
     text: {
       type: String,
-      required: true,
+      required: false,
     },
     active: {
       type: Boolean,

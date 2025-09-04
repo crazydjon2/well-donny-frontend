@@ -4,6 +4,7 @@ import viteConfig from './vite.config'
 export default defineNuxtConfig({
   compatibilityDate: '2025-05-15',
   devtools: { enabled: true },
+  ssr: false,
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxt/eslint',
@@ -16,7 +17,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      baseURL: process.env.BASE_URL,
+      baseURL: process.env.BASE_URL || 'https://localhost:8080',
       userTgId: process.env.USER_TG_ID,
     },
   },

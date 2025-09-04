@@ -26,8 +26,8 @@ export const useCategoryStore = defineStore('category', () => {
     cards.value = data
   }
 
-  const createCategory = (data: CreateCategoryDTO) => {
-    categoryService.createCategory(data)
+  const createCategory = async (data: CreateCategoryDTO) => {
+    return await categoryService.createCategory(data)
   }
 
   const deleteCategory = async (id: string) => {
@@ -44,5 +44,12 @@ export const useCategoryStore = defineStore('category', () => {
     }
   }
 
-  return { category, setCategory, cards, setCategoryCards, createCategory, getCategoriesTypes, deleteCategory, categoriesTypes }
+  const getCategory = async (id: string) => {
+    const { data } = await categoryService.getCategory(id)
+    if (data.value) {
+      setCategory(data.value)
+    }
+  }
+
+  return { category, setCategory, cards, setCategoryCards, createCategory, getCategoriesTypes, deleteCategory, categoriesTypes, getCategory }
 })

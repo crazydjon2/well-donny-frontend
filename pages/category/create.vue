@@ -1,5 +1,13 @@
 <template>
-  <div>
+  <div class="container">
+    <PageTop type="secondary" with-decoration class="mb-5 sticky top-5">
+      <template #default>
+        <span class="font-accent text-white text-meduim">новый курс</span>
+      </template>
+      <template #right>
+        <AppIcon icon="close" color="text-white" :width="16" :height="16" />
+      </template>
+    </PageTop>
     <div class="flex flex-col gap-4">
       <AppInput v-model="category.name" placeholder="Название курса" />
       <AppSelect v-model="category.type" :options="categoriesTypes" placeholder="Категория" />
@@ -16,7 +24,7 @@
       </div>
       <AppIcon icon="add" color="text-dark" @click="addWord" />
     </div>
-    <AppButton @click="onCategoryCreate" full outline class="mt-8">
+    <AppButton full outline class="mt-8" @click="onCategoryCreate">
       добавить курс
     </AppButton>
   </div>
@@ -28,6 +36,7 @@ import type { CreateWordDTO } from '~/assets/types/word'
 import { CreateWordCard } from '#components'
 import { storeToRefs } from 'pinia'
 import { defineComponent, reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { AppButton, AppIcon, AppInput, AppSelect } from '~/components/ui'
 import { useCategoryStore } from '~/stores/category'
 
@@ -42,6 +51,7 @@ export default defineComponent({
   async setup() {
     const { getCategoriesTypes, createCategory } = useCategoryStore()
     const { categoriesTypes } = storeToRefs(useCategoryStore())
+    const router = useRouter()
 
     await getCategoriesTypes()
     const category: { name: string, description: string, type: CategoryType | null } = reactive({
@@ -64,6 +74,8 @@ export default defineComponent({
           ...category,
           type: category.type.id,
           words: words.value,
+        }).then(() => {
+          router.push('/')
         })
       }
     }

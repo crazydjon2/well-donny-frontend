@@ -5,6 +5,8 @@
   --color-primary-2: #00B0B4;
   --color-secondary: #FF5722;
   --color-secondary-2: #EA4E1D;
+  --color-secondary-3: #EB4A19;
+  --color-secondary-4: #D13E11;
   --color-white: #FFFFFF;
   --color-dark: #212121;
   --color-grey: #E4E4E4;
@@ -13,6 +15,7 @@
   --color-hint-gray: #B3B3B3;
   --color-green: #2FD002;
   --color-red: #F53333;
+  --color-secondary-dark: #BF2D00;
 
   --color-link-active: #008285;
 
@@ -26,6 +29,11 @@
   --text-small--font-weight: 700;
   --text-small--line-height: 1.25rem;
   --text-small--letter-spacing: -0.32px;
+
+  --text-meduim: 2rem;
+  --text-meduim--font-weight: 700;
+  --text-meduim--line-height: 2rem;
+  --text-meduim--letter-spacing: -0.32px;
 
   --font-accent: 'Nozhik'
 }
