@@ -18,7 +18,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      baseURL: process.env.BASE_URL || 'https://localhost:8080',
+      baseURL: process.env.BASE_URL || 'http://35.223.102.131:8080/',
       userTgId: process.env.USER_TG_ID,
     },
   },
