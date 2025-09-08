@@ -1,5 +1,6 @@
 import process from 'node:process'
 import viteConfig from './vite.config'
+import 'dotenv/config'
 
 console.log(process.env)
 export default defineNuxtConfig({
