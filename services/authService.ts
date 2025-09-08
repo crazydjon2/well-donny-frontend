@@ -1,13 +1,16 @@
 import type { User } from '~/assets/types/user'
-import { useRuntimeConfig } from '#app'
+// import { useRuntimeConfig } from '#app'
 import { useApi } from '~/composables/useApi'
 
 export const authService = {
-  signIn() {
-    const config = useRuntimeConfig()
+  async signIn() {
+    const { userTgId } = await $fetch<{ baseURL: string, userTgId: string }>('/api/config')
+    // const config = useRuntimeConfig()
+
     return useApi<{ token: string }>('/signIn', {
       headers: {
-        'x-tg-id': config.public.userTgId,
+
+        'x-tg-id': userTgId || '',
       },
     })
   },

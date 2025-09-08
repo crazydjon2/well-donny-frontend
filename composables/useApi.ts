@@ -1,6 +1,6 @@
 import type { UseFetchOptions } from '#app'
 
-import { createError, useCookie, useFetch, useRuntimeConfig } from '#imports'
+import { createError, useCookie, useFetch } from '#imports'
 import { defu } from 'defu'
 
 interface ErrorType {
@@ -9,12 +9,14 @@ interface ErrorType {
 
 type FetchOptions<T> = UseFetchOptions<T> & { timeout?: number }
 
-export function useApi<T = unknown>(url: string | (() => string), userOptions: FetchOptions<T> = {}) {
-  const config = useRuntimeConfig()
+export async function useApi<T = unknown>(url: string | (() => string), userOptions: FetchOptions<T> = {}) {
+  // const config = useRuntimeConfig()
   const token = useCookie('token').value
+  const { baseURL, userTgId } = await $fetch<{ baseURL: string, userTgId: string }>('/api/config')
 
   const defaultOptions: FetchOptions<T> = {
-    baseURL: `${config.public.baseURL}`,
+
+    baseURL: `${baseURL}`,
     method: 'GET',
     retry: 3,
 
@@ -30,7 +32,8 @@ export function useApi<T = unknown>(url: string | (() => string), userOptions: F
           'Authorization': token,
           'Accept': 'application/json',
           'Content-type': 'application/json',
-          'x-tg-id': config.public.userTgId,
+
+          'x-tg-id': userTgId,
         } as Headers
       }
     },

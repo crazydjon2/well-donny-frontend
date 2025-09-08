@@ -1,16 +1,18 @@
-import { defineNuxtPlugin, useCookie, useRuntimeConfig } from '#app'
+import { defineNuxtPlugin, useCookie } from '#app'
 import { useUserStore } from '#imports'
 import { authService } from '~/services/authService'
 
 export default defineNuxtPlugin(async () => {
   const token = useCookie('token')
   const userStore = useUserStore()
-  const config = useRuntimeConfig()
+  const { userTgId } = await $fetch<{ baseURL: string, userTgId: string }>('/api/config')
+  // const config = useRuntimeConfig()
 
   const { data: signInData, status, refresh } = await authService.signIn()
   if (status.value === 'error') {
     const { data: user } = await authService.createUser({
-      tgId: config.public.userTgId,
+
+      tgId: userTgId,
       name: 'ИИИ',
     })
 
