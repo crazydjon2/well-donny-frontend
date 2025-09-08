@@ -7,9 +7,6 @@ RUN npm install
 
 COPY . .
 
-# Копируем .env
-COPY .env .env
-
 RUN npm run build
 
 ENV NODE_ENV=production
