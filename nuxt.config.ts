@@ -1,8 +1,10 @@
 import process from 'node:process'
+import { useRuntimeConfig } from '#app'
 import viteConfig from './vite.config'
 import 'dotenv/config'
 
-console.log(process.env)
+const config = useRuntimeConfig()
+console.log(config.public.baseURL)
 export default defineNuxtConfig({
   compatibilityDate: '2025-05-15',
   devtools: { enabled: true },
@@ -18,8 +20,10 @@ export default defineNuxtConfig({
     autoImport: false,
   },
   runtimeConfig: {
+    baseURL: process.env.BASE_URL, // серверная часть
+    userTgId: process.env.USER_TG_ID,
     public: {
-      baseURL: process.env.BASE_URL || 'http://35.223.102.131:8080/',
+      baseURL: process.env.BASE_URL || 'http://localhost:8080/',
       userTgId: process.env.USER_TG_ID,
     },
   },
