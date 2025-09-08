@@ -1,10 +1,7 @@
 import process from 'node:process'
-import { useRuntimeConfig } from '#app'
 import viteConfig from './vite.config'
 import 'dotenv/config'
 
-const config = useRuntimeConfig()
-console.log(config.public.baseURL)
 export default defineNuxtConfig({
   compatibilityDate: '2025-05-15',
   devtools: { enabled: true },
