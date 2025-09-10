@@ -1,8 +1,6 @@
 <template>
-  <div
-    class="relative px-4 py-3 rounded-[20px] overflow-hidden"
-    :class="type === 'primary' ? 'bg-primary-2' : 'bg-secondary-3'"
-  >
+  <div class="relative px-4 py-3 rounded-[20px] overflow-hidden"
+    :class="type === 'primary' ? 'top-primary' : 'top-secondary'">
     <div class="flex items-center justify-center">
       <div class="">
         <slot name="left" />
@@ -33,3 +31,15 @@ defineProps<{
   withDecoration?: boolean
 }>()
 </script>
+
+<style scoped>
+.top-primary {
+  background: var(--color-primary-2);
+  box-shadow: 0px 0px 4px 4px var(--color-primary) inset;
+}
+
+.top-secondary {
+  background: var(--color-secondary-3);
+  box-shadow: 0px 0px 4px 4px var(--color-secondary) inset;
+}
+</style>

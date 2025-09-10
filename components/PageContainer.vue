@@ -1,79 +1,67 @@
 <template>
-  <div class="max-h-[100vh] overflow-hidden">
+  <div class="">
     <div
-      class="background-wave sticky top-0 z-20 overflow-hidden transition-all duration-200 ease-in-out"
-      :class="[page === 'library' ? 'bg-secondary' : 'bg-primary']" :style="{
-        height: isScrollingDown ? '150px' : '280px',
-      }"
+      class="background-wave fixed w-full top-0 z-40 transition-all overflow-hidden ease-in-out"
+      :class="[page === 'library' ? 'bg-secondary' : 'bg-primary']"
+      :style="{ height: isScrollingDown ? '175px' : '290px' }"
     >
       <slot name="title" />
 
-      <div class="flex w-full gap-7 px-10 transition-opacity duration-200">
-        <slot name="additional" />
+      <transition name="fade">
+        <div v-show="!isScrollingDown" class="flex w-full gap-7 duration-150">
+          <slot name="additional" />
+        </div>
+      </transition>
+      <div class="absolute bottom-[-1px] w-full bg-white rounded-t-3xl h-[44px]">
+        <slot name="content-header" />
       </div>
     </div>
     <div
-      id="aaa" class="relative z-30 bg-white rounded-t-3xl -mt-6 transition-all duration-200 overflow-auto" :style="{
-        height: isScrollingDown ? 'calc(100vh - 150px)' : 'calc(100vh - 280px)',
-      }"
+      class="relative z-30 bg-white rounded-t-3xl pt-6 transition-all overflow-auto"
+      :class="!isScrollingDown ? 'mt-[290px]' : 'mt-[174px]'"
     >
       <slot name="content" />
     </div>
   </div>
 </template>
 
+<!-- TODO:
+1. ADD OFFEST FOR UP SCROLL
+2. FIX FAST SCROLL DOWN TO THE END OF THE PAGE -->
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 
 defineProps<{ page: 'library' | 'main' }>()
 
-// TODO
-// ADD CONSTANT
-// MAKE IT MORE STABLE
 const isScrollingDown = ref(false)
-let timer: NodeJS.Timeout
-const lastScrollY = ref<number>(0)
-const scrollLatency = ref(true)
+const lastStopPoint = ref(0)
 
+let timer: NodeJS.Timeout
 function handleScroll() {
+  const scrollY = window.scrollY
+  const maxScroll = window.innerHeight
+
+  if (scrollY > maxScroll) {
+    return
+  }
   clearTimeout(timer)
   timer = setTimeout(() => {
-    const currentScrollY = document.querySelector('#aaa')?.scrollTop || 0
-
-    // console.log(Math.abs(currentScrollY), Math.abs((lastScrollY.value)), zeroLatency.value)
-    // if (currentScrollY === 0 && zeroLatency.value) {
-    //   isScrollingDown.value = false
-    // }
-    if (scrollLatency.value) {
-      if (lastScrollY.value - currentScrollY > 100 || currentScrollY < 10) {
-        isScrollingDown.value = false
-      }
-      else if (lastScrollY.value - currentScrollY < 0) {
-        isScrollingDown.value = true
-      }
-      scrollLatency.value = false
-      setTimeout(() => {
-        scrollLatency.value = true
-      }, 401)
-
-      lastScrollY.value = currentScrollY || 0
+    if (lastStopPoint.value - scrollY > 0 || scrollY === 0) {
+      isScrollingDown.value = false
     }
-  }, 100)
+    else {
+      isScrollingDown.value = true
+    }
+    lastStopPoint.value = scrollY
+  }, 50)
 }
 
 onMounted(() => {
-  // lastScroll = window.scrollY
-  const container = document.querySelector('#aaa')
-  if (container) {
-    container.addEventListener('scroll', handleScroll, { passive: true })
-  }
+  document.addEventListener('scroll', handleScroll, { passive: true })
 })
 
 onBeforeUnmount(() => {
-  const container = document.querySelector('#aaa')
-  if (container) {
-    container.removeEventListener('scroll', handleScroll)
-  }
+  document.removeEventListener('scroll', handleScroll)
 })
 </script>
 

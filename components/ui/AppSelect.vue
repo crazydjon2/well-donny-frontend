@@ -12,6 +12,6 @@
 </template>
 
 <script lang="ts" setup>
-defineProps<{ placeholder: string, options: any[] }>()
+defineProps<{ placeholder?: string, options: any[] }>()
 const model = defineModel()
 </script>

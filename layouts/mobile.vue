@@ -1,28 +1,18 @@
 <template>
   <div>
     <slot />
-    <div>
-      <p>API URL: {{ apiUrl }}</p>
-      <p>TG ID: {{ tgId }}</p>
-      {{ apiKey }}
-    </div>
-    <MobileMenu />
+    <Transition name="move-up">
+      <MobileMenu v-if="isMenuVisible" />
+    </Transition>
     <ModalsContainer />
   </div>
 </template>
 
 <script setup lang="ts">
+import { useGlobalStore } from '#imports';
+import { storeToRefs } from 'pinia';
 import { ModalsContainer } from 'vue-final-modal'
 import MobileMenu from '~/components/MobileMenu.vue'
 
-const config: { baseURL: string, userTgId: string } = await $fetch('/api/config')
-const apiUrl = config.baseURL
-const tgId = config.userTgId
-const apiKey = import.meta.env.VITE_API_KEY
-// eslint-disable-next-line no-console
-console.log(apiKey)
-// eslint-disable-next-line no-console
-console.log('AAAAAAAAAAAAAAAAAAAA')
-// eslint-disable-next-line no-console
-console.log('Runtime config:', apiUrl)
+const { isMenuVisible } = storeToRefs(useGlobalStore())
 </script>

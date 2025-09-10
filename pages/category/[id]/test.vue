@@ -1,58 +1,102 @@
 <template>
-  <div class="container">
+  <div class="container overflow-hidden !mb-[6rem]">
     <PageTop type="primary">
       <template #left>
         <AppIcon icon="tuning" :width="22" :height="26" color="text-white" />
       </template>
       <template #default>
-        Тест
+        {{ $t('test') }}
       </template>
       <template #right>
-        <AppIcon icon="close" color="text-white" :width="16" :height="16" @click="goBack" />
+        <AppIcon icon="close" color="text-white" class="cursor-pointer" :width="16" :height="16" @click="goBack" />
       </template>
     </PageTop>
     <ShipProgress v-if="cards" :length="cards.length" :position="slide + 1" class="mt-5" />
     <div v-if="cards" class="mt-6">
-      <FlashCardsContainer v-model="slide" :allow-swipe="false">
+      <FlashCardsContainer v-model="slide" :allow-swipe="false" :is-square="false">
         <FlashCardsItem v-for="(card) in cards" :key="card.id" class="flex flex-col overflow-visible p-1">
           <div
-            class="w-full !h-[200px] flex items-center bg-white justify-center border-secondary border-2 shadow-small-secondary rounded-3xl"
-          >
+            class="w-full !h-[200px] flex items-center bg-white justify-center border-secondary border-2 shadow-small-secondary rounded-3xl">
             {{ card.word.original }}
           </div>
         </FlashCardsItem>
+
+        <template #end-slide>
+          <div class="w-full bg-grey rounded-3xl h-[200px] mb-auto" />
+        </template>
       </FlashCardsContainer>
 
       <div v-if="correctWord" class="relative mt-8 w-full flex flex-col gap-4">
-        <TransitionGroup name="list">
-          <AppButton
-            v-for="word in wordsPool" :key="word.id" outline full
-            :custom-class="pickedWord && word.id === correctWord.id ? '!bg-green !border-green !shadow-none' : (pickedWord && pickedWord.id === word.id) && pickedWord.id !== correctWord.id ? '!bg-red !border-red !shadow-none' : ''"
-            @click="showAnswer(word)"
-          >
+        <TransitionGroup name="move-up">
+          <AppButton v-for="word in wordsPool" :key="word.id" outline full :custom-class="getButtonClass(word)"
+            @click="showAnswer(word)">
             <span class="text font-light">{{ word.translated }}</span>
           </AppButton>
         </TransitionGroup>
       </div>
-      <div v-if="!wordsPool.length" class="w-full h-[200px]" />
+      <div v-if="!wordsPool.length && !isEnd" class="w-full h-[200px]" />
+
+      <Transition name="fade">
+        <div v-if="isEnd" class="w-full text-center mt-5">
+          <span class="text-small font-normal text-center">{{ $t('learnt-text', { length: cards.length }) }}</span>
+          <h3 class="font-accent text-[4rem] leading-[4rem]">
+            Well donny!
+          </h3>
+
+          <div class="mt-8 text-small gap-2">
+            <div class="flex justify-between">
+              <span>{{ $t('correct-answers') }}</span>
+              <span>{{ statistic.right }}/{{ cards.length }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span>{{ $t('need-to-learn') }}</span>
+              <span>{{ statistic.wrong }}/{{ cards.length }}</span>
+            </div>
+          </div>
+        </div>
+      </Transition>
+
+      <Transition name="move-up">
+        <div v-if="isEnd" class="w-full flex justify-center gap-5 fixed bottom-5 px-5 left-0">
+          <AppDelayedElement @click="refreshCards">
+            <AppButton full outline :type="ButtonTypes.SECONDARY">
+              {{ $t('button.more') }}
+            </AppButton>
+          </AppDelayedElement>
+          <AppDelayedElement @click="onCardsEnd">
+            <AppButton  full>
+              {{ $t('button.finish') }}
+            </AppButton>
+          </AppDelayedElement>
+        </div>
+      </Transition>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import type { Word } from '~/assets/types/word'
-import { pickWords, useRouterUtility } from '#imports'
+import { pickWords, useGlobalStore, useRouterUtility } from '#imports'
 import { storeToRefs } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { ButtonTypes } from '~/assets/types/ui'
 import PageTop from '~/components/PageTop.vue'
 import ShipProgress from '~/components/ShipProgress.vue'
-import { AppButton, AppIcon } from '~/components/ui'
+import { AppButton, AppIcon, AppDelayedElement } from '~/components/ui'
 import FlashCardsContainer from '~/components/ui/flashCards/FlashCardsContainer.vue'
 import FlashCardsItem from '~/components/ui/flashCards/FlashCardsItem.vue'
 import { useCategoryStore } from '~/stores/category'
 
-const { cards } = storeToRefs(useCategoryStore())
+const categoriesProgress = ref(0)
+const router = useRouter()
+const route = useRoute()
+
+const { setMenuVisibility, setLightHouseState } = useGlobalStore()
+const { cards, category } = storeToRefs(useCategoryStore())
 const { goBack } = useRouterUtility()
+
+setLightHouseState(true)
 
 const slide = ref(0)
 
@@ -70,14 +114,78 @@ const wordsPool = computed<Word[]>(() => {
   return cards.value ? pickWords(cards.value?.map(card => card.word), cards.value[slide.value].word, 4) : []
 })
 
+const statistic = ref<{ wrong: number, right: number }>({ wrong: 0, right: 0 })
 const delay = 500
 function showAnswer(word: Word) {
   pickedWord.value = word
+
+  if (word.id === correctWord.value?.id) {
+    ++statistic.value.right
+  }
+  else {
+    ++statistic.value.wrong
+  }
+
   setTimeout(() => {
     pickedWord.value = null
     setTimeout(() => {
       slide.value = slide.value + 1
     }, 100)
   }, delay)
+}
+
+const isEnd = computed(() => {
+  return slide.value === cards.value?.length
+})
+watch(isEnd, () => {
+  if (isEnd.value) {
+    setMenuVisibility(false)
+  }
+})
+
+function onCardsEnd() {
+  setMenuVisibility(true)
+  router.push(`/category/${route.params.id}`)
+}
+
+function refreshCards() {
+  setMenuVisibility(true)
+  router.go(0)
+}
+
+onMounted(() => {
+  const data = JSON.parse(localStorage.getItem('cdata') as string)
+  if (data && category.value && data[category.value.id]) {
+    categoriesProgress.value = data[category.value?.id]
+  }
+
+  setTimeout(() => {
+    setLightHouseState(false)
+  }, 300)
+})
+onBeforeUnmount(() => {
+  if (category.value) {
+    const categoriesData = JSON.parse(localStorage.getItem('cdata') as string) || {}
+    localStorage.setItem('cdata', JSON.stringify({
+      ...categoriesData,
+      [category.value.id.toString()]: ((statistic.value.right + statistic.value.wrong) / (cards.value?.length || 1)) * 100,
+    }))
+  }
+})
+
+const correctClasses = "!bg-green !border-green !shadow-none translate-x-[-2px] translate-y-[2px]"
+const wrongClasses = "!bg-red !border-red !shadow-none translate-x-[-2px] translate-y-[2px]"
+const getButtonClass = (word: Word) => {
+  if (!pickedWord.value) return ''
+
+  if (word.id === correctWord.value?.id) {
+    return correctClasses
+  }
+
+  if (pickedWord.value?.id === word.id && pickedWord.value.id !== correctWord.value?.id) {
+    return wrongClasses
+  }
+
+  return ''
 }
 </script>

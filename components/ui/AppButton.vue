@@ -1,6 +1,6 @@
 <template>
   <button
-    class="flex justify-center text-white rounded-xl py-5 cursor-pointer" :class="[buttonClasses, [customClass]]"
+    class="flex justify-center text-white rounded-xl py-5 px-4 cursor-pointer app-button" :class="[buttonClasses, [customClass]]"
   >
     <span>
       <slot>{{ $t('ui.button') }}</slot>
@@ -70,5 +70,14 @@ span {
   opacity: 0.5;
   pointer-events: none;
   touch-action: none;
+}
+
+.app-button.bg-primary.active {
+  background: var(--color-primary-2);
+  border-color: var(--color-primary-2);
+}
+.app-button.bg-secondary.active {
+  background: var(--color-secondary-2);
+  border-color: var(--color-secondary-2);
 }
 </style>

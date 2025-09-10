@@ -4,8 +4,17 @@ export function useRouterUtility() {
   const router = useRouter()
 
   function goBack() {
-    router.back()
+    if (window.history.state.back) {
+      router.back()
+    }
+    else {
+      router.push('/')
+    }
   }
 
-  return { goBack }
+  function goHome() {
+    router.push('/')
+  }
+
+  return { goBack, goHome }
 }

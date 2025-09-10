@@ -17,3 +17,5 @@ export interface CardMethods {
   accept: () => void
   reject: () => void
 }
+
+export type TiltState = 'center' | 'left' | 'right'

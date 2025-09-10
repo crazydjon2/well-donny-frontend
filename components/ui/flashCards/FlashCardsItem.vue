@@ -1,18 +1,17 @@
 <template>
-  <div
-    v-if="isActive || isNext || isPrev" class="flash-card z-10"
+  <div v-if="isActive || isNext || isPrev" class="flash-card z-10"
     :class="{ 'flash-card-no-click': !allowClick, 'absolute w-full h-full': isNext || isPrev, 'z-[1]': isNext, 'z-[20]': isPrev }"
-    :style="cardStyle" @mousedown="startDrag" @touchstart="startDrag" @click.self="handleClick"
-  >
+    :style="cardStyle" @mousedown="startDrag" @touchstart="startDrag" @click.self="handleClick">
     <slot />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { Ref } from 'vue'
-import type { CardMethods, FlashCardsContext, MouseUpEvent, MoveEventRegister } from './types'
+import type { CardMethods, FlashCardsContext, MouseUpEvent, MoveEventRegister, TiltState } from './types'
 import { computed, getCurrentInstance, inject, onUnmounted, ref, shallowRef, watch, watchEffect } from 'vue'
 
+const ACTIVE_STATE = 150
 const startPos = ref({ x: 0, y: 0 })
 const currentPos = shallowRef({ x: 0, y: 0 })
 const isDragging = ref(false)
@@ -64,6 +63,8 @@ const onMove = inject<MoveEventRegister>('onMove')
 if (onMove) {
   onMove(onDrag)
 }
+const emits = defineEmits<{ (e: 'onTilt', state: TiltState): TiltState }>()
+const tiltState = ref<TiltState>('center')
 function onDrag(e: MouseEvent | TouchEvent) {
   if (isDragging.value) {
     const clientX = 'clientX' in e ? e.clientX : e.touches[0].clientX
@@ -72,6 +73,21 @@ function onDrag(e: MouseEvent | TouchEvent) {
     if (Math.abs(clientX - startPos.value.x) > 10) {
       allowClick.value = false
     }
+
+    if (clientX - startPos.value.x > ACTIVE_STATE) {
+      if (tiltState.value !== 'right') {
+        tiltState.value = 'right'
+      }
+    } else if (clientX - startPos.value.x < -ACTIVE_STATE) {
+      if (tiltState.value !== 'left') {
+        tiltState.value = 'left'
+      }
+    } else {
+      if (tiltState.value !== 'center') {
+        tiltState.value = 'center'
+      }
+    }
+
     currentPos.value = { x: clientX - startPos.value.x, y: clientY - startPos.value.y }
   }
 }
@@ -88,12 +104,14 @@ function endDrag() {
     if (currentSlide.value === items.value.length - 1) {
       currentPos.value = { x: 0, y: 0 }
     }
-    else if (currentPos.value.x > 150) {
+    else if (currentPos.value.x > ACTIVE_STATE) {
       setSlide(currentSlide.value + 1)
+      tiltState.value = 'center'
       markState('right')
     }
-    else if (currentPos.value.x < -150) {
+    else if (currentPos.value.x < -ACTIVE_STATE) {
       setSlide(currentSlide.value + 1)
+      tiltState.value = 'center'
       markState('left')
     }
     else {
@@ -144,6 +162,12 @@ watch(currentSlide, (newValue, oldValue) => {
     else if (newValue < oldValue && isActive.value) {
       currentPos.value = { x: 0, y: 0 }
     }
+  }
+})
+
+watch(tiltState, (newValue, oldValue) => {
+  if (newValue !== oldValue) {
+    emits('onTilt', tiltState.value)
   }
 })
 

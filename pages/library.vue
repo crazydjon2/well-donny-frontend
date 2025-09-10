@@ -3,7 +3,7 @@
     <template #title>
       <div class="z-10">
         <h2 class="p-5 font-accent text-secondary-dark text-[6rem] leading-[90px]">
-          Библиотека
+          {{ $t('library') }}
         </h2>
       </div>
     </template>
@@ -19,20 +19,21 @@
         </div>
       </div>
     </template>
+    <template #content-header>
+      <div class="flex h-full gap-4 overflow-auto items-center px-5 w-full">
+        <AppChip
+          v-for="type in types" :key="type.id" :active="activeType === type.id"
+          @click="getCategories(type.id)"
+        >
+          <span class="text-small font-normal">{{ $t(`category.type.${type.type}`) }}</span>
+        </AppChip>
+      </div>
+    </template>
     <template #content>
-      <div class="bg-white rounded-t-3xl min-h-[400vh]">
-        <div v-if="types" class="flex gap-4 sticky top-0 px-5 pt-5 bg-white z-50">
-          <AppChip
-            v-for="type in types" :key="type.id" :active="activeType === type.id"
-            @click="getCategories(type.id)"
-          >
-            <span class="text-small font-normal">{{ type.type }}</span>
-          </AppChip>
-        </div>
-
+      <div class="min-h-[400vh]">
         <div v-if="categories && categories.length" class="grid grid-cols-2 gap-6 px-5 pt-5">
           <div v-for="(category) in categories" :key="category.id">
-            <NuxtLink :to="`/category/${category.category.id}`">
+            <AppDelayedElement :to="`/category/${category.category.id}`">
               <AppCategoryCard :category="category.category" :author="category.user">
                 <!-- <template #default>
               <div class="absolute right-4 bottom-5" @click.prevent="beforeDelete(category.category.id)">
@@ -40,7 +41,7 @@
               </div>
             </template> -->
               </AppCategoryCard>
-            </NuxtLink>
+            </AppDelayedElement>
           </div>
         </div>
       </div>
@@ -52,7 +53,7 @@
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import PageContainer from '~/components/PageContainer.vue'
-import { AppChip, AppIcon, AppInput } from '~/components/ui'
+import { AppChip, AppIcon, AppInput, AppDelayedElement } from '~/components/ui'
 import { categoriesService } from '~/services/categoriesService'
 import { categoryService } from '~/services/categoryService'
 import { useCategoriesStore } from '~/stores/categories'
