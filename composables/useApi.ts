@@ -21,8 +21,9 @@ export async function useApi<T = unknown>(url: string | (() => string), userOpti
     method: 'GET',
     retry: 3,
 
-    // cache request
-    key: typeof url === 'string' ? url : url(),
+    // TODO
+    // resolve cache problem (need to check body)
+    // key: typeof url === 'string' ? url : url(),
 
     onRequest({ options }) {
       const hasToken = !!token

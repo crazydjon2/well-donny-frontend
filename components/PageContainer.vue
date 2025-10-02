@@ -36,28 +36,20 @@ defineProps<{ page: 'library' | 'main' }>()
 const isScrollingDown = ref(false)
 const lastStopPoint = ref(0)
 
-let timer: NodeJS.Timeout
 function handleScroll() {
   const scrollY = window.scrollY
-  const maxScroll = window.innerHeight
 
-  if (scrollY > maxScroll) {
-    return
+  if (lastStopPoint.value - scrollY > 75 || scrollY === 0) {
+    isScrollingDown.value = false
   }
-  clearTimeout(timer)
-  timer = setTimeout(() => {
-    if (lastStopPoint.value - scrollY > 0 || scrollY === 0) {
-      isScrollingDown.value = false
-    }
-    else {
-      isScrollingDown.value = true
-    }
-    lastStopPoint.value = scrollY
-  }, 50)
+  else if (lastStopPoint.value - scrollY < -10) {
+    isScrollingDown.value = true
+  }
+  lastStopPoint.value = scrollY
 }
 
 onMounted(() => {
-  document.addEventListener('scroll', handleScroll, { passive: true })
+  document.addEventListener('scroll', handleScroll)
 })
 
 onBeforeUnmount(() => {

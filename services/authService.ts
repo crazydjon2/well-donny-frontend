@@ -23,7 +23,7 @@ export const authService = {
       method: 'POST',
       body: {
         name,
-        tg_id: tgId,
+        tg_id: +tgId,
       },
     })
   },

@@ -17,9 +17,11 @@
       <FlashCardsContainer v-model="slide">
         <template v-for="(card, index) in cards" :key="card.id">
           <FlashCardsItem v-show="isFlipping ? slide === index : true" @on-tilt="tiltState = $event">
-            <AppCard :text-first="card.word.original" :text-second="card.word.translated" large :word-max="cards.length"
-              :word-current="index + 1" @flip-started="isFlipping = true" @flip-ended="isFlipping = false"
-              :custom-class="cardClasses(index)" @on-back-pressed="slide--" />
+            <AppCard
+              :text-first="card.word.original" :text-second="card.word.translated" large :word-max="cards.length"
+              :word-current="index + 1" :custom-class="cardClasses(index)" @flip-started="isFlipping = true"
+              @flip-ended="isFlipping = false" @on-back-pressed="slide--"
+            />
           </FlashCardsItem>
         </template>
 
@@ -30,14 +32,18 @@
         <template #actions="{ onAcceptPressed, onRejectPressed }">
           <div v-if="!isEnd" class="w-full flex justify-center gap-5 mt-7 px-3">
             <AppDelayedElement @click="onRejectPressed">
-              <AppButton full :outline="tiltState === 'center' || tiltState === 'right'"
-                :disabled="slide === cards.length" :type="ButtonTypes.SECONDARY">
+              <AppButton
+                full :outline="tiltState === 'center' || tiltState === 'right'"
+                :disabled="slide === cards.length" :type="ButtonTypes.SECONDARY"
+              >
                 {{ $t('button.dont-know') }}
               </AppButton>
             </AppDelayedElement>
             <AppDelayedElement @click="onAcceptPressed">
-              <AppButton full :outline="tiltState === 'center' || tiltState === 'left'"
-                :disabled="slide === cards.length">
+              <AppButton
+                full :outline="tiltState === 'center' || tiltState === 'left'"
+                :disabled="slide === cards.length"
+              >
                 {{ $t('button.know') }}
               </AppButton>
             </AppDelayedElement>
@@ -57,14 +63,14 @@
       <Transition name="move-up">
         <div v-if="isEnd" class="w-full flex justify-center gap-5 fixed bottom-5 px-5 left-0">
           <AppDelayedElement @click="refreshCards">
-            <AppButton  full outline :type="ButtonTypes.SECONDARY">
+            <AppButton full outline :type="ButtonTypes.SECONDARY">
               {{ $t('button.more') }}
             </AppButton>
           </AppDelayedElement>
           <AppDelayedElement @click="onCardsEnd">
-          <AppButton full>
-            {{ $t('button.finish') }}
-          </AppButton>
+            <AppButton full>
+              {{ $t('button.finish') }}
+            </AppButton>
           </AppDelayedElement>
         </div>
       </Transition>
@@ -73,6 +79,7 @@
 </template>
 
 <script setup lang="ts">
+import type { TiltState } from '~/components/ui/flashCards/types'
 import { useGlobalStore, useRouterUtility } from '#imports'
 import { storeToRefs } from 'pinia'
 import { computed, ref, watch } from 'vue'
@@ -80,11 +87,10 @@ import { useRoute, useRouter } from 'vue-router'
 import { ButtonTypes } from '~/assets/types/ui'
 import PageTop from '~/components/PageTop.vue'
 import ShipProgress from '~/components/ShipProgress.vue'
-import { AppButton, AppIcon, AppDelayedElement } from '~/components/ui'
+import { AppButton, AppDelayedElement, AppIcon } from '~/components/ui'
 // import { Carousel, Slide } from 'vue3-carousel'
 import FlashCardsContainer from '~/components/ui/flashCards/FlashCardsContainer.vue'
 import FlashCardsItem from '~/components/ui/flashCards/FlashCardsItem.vue'
-import type { TiltState } from '~/components/ui/flashCards/types'
 import { useCategoryStore } from '~/stores/category'
 
 const router = useRouter()
@@ -123,10 +129,12 @@ const cardClasses = computed(() => (index: number) => {
   }
   if (tiltState.value === 'center') {
     return
-  } else if (tiltState.value === 'left') {
+  }
+  if (tiltState.value === 'left') {
     return '!bg-secondary !text-white !border-secondary shadow-small-secondary'
-  } else {
-    return '!bg-primary !text-white'
+  }
+  else {
+    return '!bg-primary !border-primary shadow-small-primary-i !text-white'
   }
 })
 </script>

@@ -2,7 +2,7 @@
   <div class="card rounded-3xl select-none aspect-square bg-white h-full" :class="[size]" :style="cardStyle" @click="startAnimation">
     <div
       class="relative card__inner shadow-small-primary border-2 border-primary flex items-center justify-center h-full w-full aspect-square rounded-3xl"
-      :class="[{ 'card--flip shadow-small-fliped-primary': isFlipped }, large ? 'p-8' : 'p-4', customClass]"
+      :class="[{ 'card--flip border-secondary shadow-small-fliped-secondary': isFlipped }, large ? 'p-8' : 'p-4', customClass]"
     >
       <div class="card__face card__front">
         <p :class="{ 'font-bold': large }" class="text-center" @click.prevent>
@@ -110,8 +110,8 @@ export default defineComponent({
     },
     customClass: {
       type: String,
-      required: false
-    }
+      required: false,
+    },
   },
   emits: ['flipStarted', 'flipEnded', 'onBackPressed'],
   setup(props, ctx) {

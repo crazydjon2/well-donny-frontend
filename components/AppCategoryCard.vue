@@ -40,5 +40,8 @@ const props = defineProps<{
   letter-spacing: -0.32px;
   color: var(--color-primary);
 
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 1rem;
 }
 </style>

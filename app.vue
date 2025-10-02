@@ -8,6 +8,7 @@
 
 <script setup lang="ts">
 import { useCookie } from '#app'
+import { nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import AppLoader from './components/AppLoader.vue'
 import LightHouseLoading from './components/LightHouseLoading.vue'
@@ -28,9 +29,8 @@ const { data: signInData, status, refresh } = await authService.signIn()
 if (status.value === 'error') {
   token.value = ''
   const { data: user } = await authService.createUser({
-
     tgId: tgIdLc || userTgId,
-    name: 'ИИИ',
+    name: [...Array.from({ length: 5 })].map(() => (Math.random() * 1000000).toString(36).replace('.', '')).join(''),
   })
 
   if (user.value) {
@@ -42,6 +42,7 @@ if (status.value === 'error') {
 }
 if (signInData.value?.token) {
   token.value = signInData.value.token
+  await nextTick()
 
   const { data: user } = await authService.getUser()
   setTimeout(() => {

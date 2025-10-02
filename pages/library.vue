@@ -30,7 +30,7 @@
       </div>
     </template>
     <template #content>
-      <div class="min-h-[400vh]">
+      <div class="min-h-[100vh]">
         <div v-if="categories && categories.length" class="grid grid-cols-2 gap-6 px-5 pt-5">
           <div v-for="(category) in categories" :key="category.id">
             <AppDelayedElement :to="`/category/${category.category.id}`">
@@ -53,7 +53,7 @@
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import PageContainer from '~/components/PageContainer.vue'
-import { AppChip, AppIcon, AppInput, AppDelayedElement } from '~/components/ui'
+import { AppChip, AppDelayedElement, AppIcon, AppInput } from '~/components/ui'
 import { categoriesService } from '~/services/categoriesService'
 import { categoryService } from '~/services/categoryService'
 import { useCategoriesStore } from '~/stores/categories'

@@ -19,8 +19,10 @@
       </p>
       <div class="w-full flex flex-col gap-4">
         <TransitionGroup name="fade">
-          <CreateWordCard v-for="(word, index) in words" :key="index" v-model:original="word.original"
-            v-model:translated="word.translated" />
+          <CreateWordCard
+            v-for="(word, index) in words" :key="index" v-model:original="word.original"
+            v-model:translated="word.translated"
+          />
         </TransitionGroup>
       </div>
       <AppIcon icon="add" color="text-dark" @click="addWord" />
@@ -40,7 +42,7 @@ import { CreateWordCard } from '#components'
 import { storeToRefs } from 'pinia'
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { AppButton, AppIcon, AppInput, AppSelect, AppDelayedElement } from '~/components/ui'
+import { AppButton, AppDelayedElement, AppIcon, AppInput, AppSelect } from '~/components/ui'
 import { useRouterUtility } from '~/composables/useRouterUtility'
 import { useCategoryStore } from '~/stores/category'
 
@@ -64,15 +66,20 @@ function addWord() {
   })
 }
 
-function onCategoryCreate() {
+async function onCategoryCreate() {
   if (category.type) {
-    createCategory({
+    const { error } = await createCategory({
       ...category,
       type: category.type.id,
       words: words.value,
-    }).then(() => {
-      router.push('/')
     })
+
+    if (!error.value) {
+      router.push('/')
+    }
+    else {
+      console.log(error.value)
+    }
   }
 }
 </script>

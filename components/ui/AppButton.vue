@@ -39,8 +39,8 @@ export default defineComponent({
   setup(props) {
     const buttonClasses = computed(() => {
       return {
-        'bg-primary border-primary border-[2px] shadow-primary active:bg-primary-2 active:border-primary-2': props.type === ButtonTypes.PRIMARY,
-        'bg-secondary border-secondary border-[2px] shadow-secondary active:bg-secondary-2 active:border-secondary-2': props.type === ButtonTypes.SECONDARY,
+        'bg-primary border-primary border-[2px] shadow-primary active:!text-white active:bg-primary-2 active:border-primary-2': props.type === ButtonTypes.PRIMARY,
+        'bg-secondary border-secondary border-[2px] shadow-secondary active:!text-white active:bg-secondary-2 active:border-secondary-2': props.type === ButtonTypes.SECONDARY,
         'w-full': props.full,
         'w-min-[165px]': !props.full,
         '!bg-light !text-dark button--disabled': props.disabled,

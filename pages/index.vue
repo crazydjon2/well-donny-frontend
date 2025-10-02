@@ -34,7 +34,7 @@
       </div>
     </template>
     <template #content>
-      <div class="rounded-t-3xl h-[1000px]">
+      <div class="rounded-t-3xl pb-[200px]">
         <div v-if="categories.length" class="grid grid-cols-2 gap-6 px-5 pt-5">
           <div v-for="(category, index) in categories" :key="category.id">
             <AppDelayedElement :to="`/category/${category.category.id}`">
@@ -69,7 +69,7 @@ import { ref } from 'vue'
 import AppCategoryCard from '~/components/AppCategoryCard.vue'
 import ConfirmModal from '~/components/modals/ConfirmModal.vue'
 import PageContainer from '~/components/PageContainer.vue'
-import { AppChip, AppIcon, AppDelayedElement } from '~/components/ui'
+import { AppChip, AppDelayedElement, AppIcon } from '~/components/ui'
 import { categoriesService } from '~/services/categoriesService'
 
 import { useCategoriesStore } from '~/stores/categories'
@@ -115,9 +115,5 @@ function deleteCategory() {
         })
     }
   }
-}
-
-function a() {
-  alert('aaaaaaa')
 }
 </script>

@@ -1,7 +1,9 @@
 <template>
-  <div v-if="isActive || isNext || isPrev" class="flash-card z-10"
-    :class="{ 'flash-card-no-click': !allowClick, 'absolute w-full h-full': isNext || isPrev, 'z-[1]': isNext, 'z-[20]': isPrev }"
-    :style="cardStyle" @mousedown="startDrag" @touchstart="startDrag" @click.self="handleClick">
+  <div
+    v-if="isActive || isNext || isPrev" class="relative flash-card z-10"
+    :class="{ 'flash-card-no-click': !allowClick, '!absolute top-0 left-0 w-full h-full': isNext || isPrev, 'z-[1]': isNext, 'z-[20]': isPrev }"
+    :style="cardStyle" @mousedown="startDrag" @touchstart="startDrag" @click.self="handleClick"
+  >
     <slot />
   </div>
 </template>
@@ -11,6 +13,7 @@ import type { Ref } from 'vue'
 import type { CardMethods, FlashCardsContext, MouseUpEvent, MoveEventRegister, TiltState } from './types'
 import { computed, getCurrentInstance, inject, onUnmounted, ref, shallowRef, watch, watchEffect } from 'vue'
 
+const emits = defineEmits<{ (e: 'onTilt', state: TiltState): TiltState }>()
 const ACTIVE_STATE = 150
 const startPos = ref({ x: 0, y: 0 })
 const currentPos = shallowRef({ x: 0, y: 0 })
@@ -18,7 +21,7 @@ const isDragging = ref(false)
 const allowClick = ref(true)
 const cardStyle = computed(() => {
   return {
-    transform: `translate(${currentPos.value.x / 2}px, ${currentPos.value.y / 4}px) rotate(${currentPos.value.x / 100}deg)`,
+    transform: `translate(${currentPos.value.x / 2}px, ${currentPos.value.y / 15}px) rotate(${currentPos.value.x / 100}deg)`,
     transition: isDragging.value ? 'none' : 'transform 0.7s ease',
   }
 })
@@ -63,7 +66,6 @@ const onMove = inject<MoveEventRegister>('onMove')
 if (onMove) {
   onMove(onDrag)
 }
-const emits = defineEmits<{ (e: 'onTilt', state: TiltState): TiltState }>()
 const tiltState = ref<TiltState>('center')
 function onDrag(e: MouseEvent | TouchEvent) {
   if (isDragging.value) {
@@ -78,11 +80,13 @@ function onDrag(e: MouseEvent | TouchEvent) {
       if (tiltState.value !== 'right') {
         tiltState.value = 'right'
       }
-    } else if (clientX - startPos.value.x < -ACTIVE_STATE) {
+    }
+    else if (clientX - startPos.value.x < -ACTIVE_STATE) {
       if (tiltState.value !== 'left') {
         tiltState.value = 'left'
       }
-    } else {
+    }
+    else {
       if (tiltState.value !== 'center') {
         tiltState.value = 'center'
       }
@@ -177,8 +181,12 @@ watchEffect(() => {
     return
 
   if (isActive.value) {
-    currentCardMethods.value.accept = () => markState('right')
-    currentCardMethods.value.reject = () => markState('left')
+    currentCardMethods.value.accept = () => {
+      markState('right')
+    }
+    currentCardMethods.value.reject = () => {
+      markState('left')
+    }
   }
 })
 </script>
