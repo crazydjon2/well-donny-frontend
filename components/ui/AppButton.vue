@@ -1,6 +1,6 @@
 <template>
   <button
-    class="flex justify-center text-white rounded-xl py-5 cursor-pointer" :class="[buttonClasses, [customClass]]"
+    class="flex justify-center text-white rounded-xl py-5 px-4 cursor-pointer app-button" :class="[buttonClasses, [customClass]]"
   >
     <span>
       <slot>{{ $t('ui.button') }}</slot>
@@ -39,8 +39,8 @@ export default defineComponent({
   setup(props) {
     const buttonClasses = computed(() => {
       return {
-        'bg-primary border-primary border-[2px] shadow-primary active:bg-primary-2 active:border-primary-2': props.type === ButtonTypes.PRIMARY,
-        'bg-secondary border-secondary border-[2px] shadow-secondary active:bg-secondary-2 active:border-secondary-2': props.type === ButtonTypes.SECONDARY,
+        'bg-primary border-primary border-[2px] shadow-primary active:!text-white active:bg-primary-2 active:border-primary-2': props.type === ButtonTypes.PRIMARY,
+        'bg-secondary border-secondary border-[2px] shadow-secondary active:!text-white active:bg-secondary-2 active:border-secondary-2': props.type === ButtonTypes.SECONDARY,
         'w-full': props.full,
         'w-min-[165px]': !props.full,
         '!bg-light !text-dark button--disabled': props.disabled,
@@ -70,5 +70,14 @@ span {
   opacity: 0.5;
   pointer-events: none;
   touch-action: none;
+}
+
+.app-button.bg-primary.active {
+  background: var(--color-primary-2);
+  border-color: var(--color-primary-2);
+}
+.app-button.bg-secondary.active {
+  background: var(--color-secondary-2);
+  border-color: var(--color-secondary-2);
 }
 </style>

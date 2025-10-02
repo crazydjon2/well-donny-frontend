@@ -1,12 +1,11 @@
 <template>
-  <div class="p-2 -mx-5 overflow-x-hidden">
-    <div class="cards-container relative">
+  <div class="p-2 -mx-5">
+    <div class="cards-container mx-5 relative">
       <slot />
-      <slot name="end-slide">
-        <FlashCardsItem class="a aspect-square flex items-center justify-center select-none">
-          Конечный слайд
+  
+        <FlashCardsItem class=" flex items-center justify-center select-none" :class="isSquare && 'aspect-square'">
+          <slot name="end-slide" />
         </FlashCardsItem>
-      </slot>
     </div>
     <slot name="actions" :on-reject-pressed="onRejectPressed" :on-accept-pressed="onAcceptPressed" />
   </div>
@@ -17,8 +16,9 @@ import type { CardMethods, MoveEventRegister } from './types'
 import { computed, onUnmounted, provide, ref } from 'vue'
 import FlashCardsItem from './FlashCardsItem.vue'
 
-const props = withDefaults(defineProps<{ allowSwipe?: boolean }>(), {
+const props = withDefaults(defineProps<{ allowSwipe?: boolean, isSquare?: boolean }>(), {
   allowSwipe: true,
+  isSquare: true,
 })
 const model = defineModel<number>({ default: 0 })
 

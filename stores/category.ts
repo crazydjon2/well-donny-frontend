@@ -37,6 +37,13 @@ export const useCategoryStore = defineStore('category', () => {
       })
   }
 
+  const removeUserFromCategory = async (userId: string, categoryId: string) => {
+    return await categoryService.removeUserFromCategory(userId, categoryId)
+      .then(() => {
+        refetchCategories()
+      })
+  }
+
   const getCategoriesTypes = async () => {
     const { data: types } = await categoryService.getCategoriesTypes()
     if (types.value) {
@@ -51,5 +58,5 @@ export const useCategoryStore = defineStore('category', () => {
     }
   }
 
-  return { category, setCategory, cards, setCategoryCards, createCategory, getCategoriesTypes, deleteCategory, categoriesTypes, getCategory }
+  return { category, setCategory, cards, setCategoryCards, createCategory, getCategoriesTypes, deleteCategory, categoriesTypes, getCategory, removeUserFromCategory }
 })

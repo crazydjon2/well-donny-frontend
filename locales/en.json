@@ -1,6 +1,12 @@
 {
-  "text": "text",
-  "ui": {
-    "button": "BUTTON"
-  }
+  "my-course": "MY COURSES",
+  "attention": "Внимание!",
+
+  "buttons": {
+    "create": "создать",
+    "canel": "отменить",
+    "delete": "удалить"
+  },
+
+  "delete-description": "Курс и весь его прогресс будет полностью удален (и у других пользователей тоже!)"
 }

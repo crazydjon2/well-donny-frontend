@@ -11,7 +11,10 @@ import { computed, ref, watch } from 'vue'
 const props = defineProps<{ length: number, position: number }>()
 
 const offset = computed(() => {
-  return `left: ${Math.min(92, (100 / props.length) * (props.position - 1))}%`
+  if (props.length === props.position - 1) {
+    return `left: calc(100% - 70px)`
+  }
+  return `left: ${Math.min(85, (100 / props.length) * (props.position - 1))}%`
 })
 
 const animation = ref(false)

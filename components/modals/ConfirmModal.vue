@@ -4,7 +4,7 @@
     @close="emits('close')"
   >
     <div class="bg-white rounded-3xl w-full flex flex-col items-center p-4">
-      <h3 class="text-small mb-1">
+      <h3 class="text-small font-bold mb-2">
         {{ title }}
       </h3>
       <p class="text-regular text-center">

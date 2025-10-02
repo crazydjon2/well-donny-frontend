@@ -5,12 +5,13 @@ import { useApi } from '~/composables/useApi'
 export const authService = {
   async signIn() {
     const { userTgId } = await $fetch<{ baseURL: string, userTgId: string }>('/api/config')
+    const tgIdLc = localStorage.getItem('tgId')
     // const config = useRuntimeConfig()
 
     return useApi<{ token: string }>('/signIn', {
       headers: {
 
-        'x-tg-id': userTgId || '',
+        'x-tg-id': tgIdLc || userTgId || '',
       },
     })
   },
@@ -22,7 +23,7 @@ export const authService = {
       method: 'POST',
       body: {
         name,
-        tg_id: tgId,
+        tg_id: +tgId,
       },
     })
   },

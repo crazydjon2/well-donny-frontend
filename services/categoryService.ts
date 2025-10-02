@@ -18,10 +18,19 @@ export const categoryService = {
     })
   },
   addUserToCategory({ user, categoryId }: { user: User, categoryId: string }) {
-    return useApi('/user-categories', {
+    return useApi('/user-categories/add', {
       method: 'POST',
       body: {
         userId: user.id,
+        categoryId,
+      },
+    })
+  },
+  removeUserFromCategory(userId: string, categoryId: string) {
+    return useApi('/user-categories/remove', {
+      method: 'POST',
+      body: {
+        userId,
         categoryId,
       },
     })

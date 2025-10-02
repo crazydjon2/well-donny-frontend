@@ -22,6 +22,10 @@ select:focus {
     box-shadow: -2px 2px 0px 0px var(--color-primary-2);
     transform: translateX(-2px) translateY(2px);
   }
+  &.active {
+    box-shadow: -2px 2px 0px 0px var(--color-primary-2);
+    transform: translateX(-2px) translateY(2px);
+  }
 }
 
 .shadow-small-primary {
@@ -29,6 +33,10 @@ select:focus {
   transition: 0.3s;
 
   &:active {
+    box-shadow: -1px 1px 0px 0px var(--color-primary-2);
+    transform: translateX(-1px) translateY(1px);
+  }
+  &.active {
     box-shadow: -1px 1px 0px 0px var(--color-primary-2);
     transform: translateX(-1px) translateY(1px);
   }
@@ -42,6 +50,10 @@ select:focus {
     box-shadow: -1px 1px 0px 0px var(--color-link-active);
     transform: translateX(-1px) translateY(1px);
   }
+  &.active {
+    box-shadow: -1px 1px 0px 0px var(--color-link-active);
+    transform: translateX(-1px) translateY(1px);
+  }
 }
 
 .shadow-primary-dark {
@@ -49,6 +61,10 @@ select:focus {
   transition: 0.3s;
 
   &:active {
+    box-shadow: -2px 2px 0px 0px var(--color-link-active);
+    transform: translateX(-2px) translateY(2px);
+  }
+  &.active {
     box-shadow: -2px 2px 0px 0px var(--color-link-active);
     transform: translateX(-2px) translateY(2px);
   }
@@ -62,6 +78,10 @@ select:focus {
     box-shadow: -2px 2px 0px 0px var(--color-secondary-3);
     transform: translateX(-2px) translateY(2px);
   }
+  &.active {
+    box-shadow: -2px 2px 0px 0px var(--color-secondary-3);
+    transform: translateX(-2px) translateY(2px);
+  }
 }
 
 .shadow-small-secondary {
@@ -70,6 +90,24 @@ select:focus {
 
   &:active {
     box-shadow: -1px 1px 0px 0px var(--color-secondary-3);
+    transform: translateX(-1px) translateY(1px);
+  }
+  &.active {
+    box-shadow: -1px 1px 0px 0px var(--color-secondary-3);
+    transform: translateX(-1px) translateY(1px);
+  }
+}
+
+.shadow-small-primary-i {
+  box-shadow: -2px 2px 0px 0px var(--color-primary-3) !important;
+  transition: 0.3s;
+
+  &:active {
+    box-shadow: -1px 1px 0px 0px var(--color-primary-3) !important;
+    transform: translateX(-1px) translateY(1px);
+  }
+  &.active {
+    box-shadow: -1px 1px 0px 0px var(--color-primary-3) !important;
     transform: translateX(-1px) translateY(1px);
   }
 }
@@ -82,16 +120,28 @@ select:focus {
     box-shadow: -1px 1px 0px 0px var(--color-secondary-4);
     transform: translateX(-1px) translateY(1px);
   }
+  &.active {
+    box-shadow: -1px 1px 0px 0px var(--color-secondary-4);
+    transform: translateX(-1px) translateY(1px);
+  }
 }
 
-.shadow-small-fliped-primary {
-  box-shadow: 2px 2px 0px 0px var(--color-primary-2);
+.shadow-small-fliped-secondary {
+  box-shadow: 2px 2px 0px 0px var(--color-secondary-2);
   transition: 0.3s;
 
   &:active {
-    box-shadow: 1px 1px 0px 0px var(--color-primary-2);
+    box-shadow: 1px 1px 0px 0px var(--color-secondary-2);
     transform: translateX(1px) translateY(-1px);
   }
+  &.active {
+    box-shadow: 1px 1px 0px 0px var(--color-secondary-2);
+    transform: translateX(1px) translateY(-1px);
+  }
+}
+
+.active {
+  outline: none;
 }
 
 .carousel__viewport {
@@ -107,4 +157,14 @@ select:focus {
   width: 100%;
   margin: 0 auto;
   padding: 20px;
+}
+
+.v-popper__popper {
+  z-index: 99 !important;
+}
+.v-popper__inner {
+  border-radius: 12px !important;
+}
+.v-popper__arrow-container {
+  display: none;
 }

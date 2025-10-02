@@ -6,6 +6,9 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-05-15',
   devtools: { enabled: true },
   ssr: false,
+  // app: {
+  //   pageTransition: { name: 'fade', mode: 'out-in' },
+  // },
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxt/eslint',

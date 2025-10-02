@@ -1,8 +1,9 @@
 <template>
-  <div class="cursor-pointer">
-    <span :class="{ 'chip--active': active }">{{ text }}
+  <div class="cursor-pointer flex flex-col items-center justify-center">
+    <p class="h-full" :class="{ 'chip--active': active }">
+      {{ text }}
       <slot />
-    </span>
+    </p>
   </div>
 </template>
 
@@ -27,7 +28,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-span {
+p {
   font-weight: 400;
   font-style: Regular;
   font-size: 12px;

@@ -13,6 +13,7 @@ export async function useApi<T = unknown>(url: string | (() => string), userOpti
   // const config = useRuntimeConfig()
   const token = useCookie('token').value
   const { baseURL, userTgId } = await $fetch<{ baseURL: string, userTgId: string }>('/api/config')
+  const tgIdLc = localStorage.getItem('tgId')
 
   const defaultOptions: FetchOptions<T> = {
 
@@ -20,8 +21,9 @@ export async function useApi<T = unknown>(url: string | (() => string), userOpti
     method: 'GET',
     retry: 3,
 
-    // cache request
-    key: typeof url === 'string' ? url : url(),
+    // TODO
+    // resolve cache problem (need to check body)
+    // key: typeof url === 'string' ? url : url(),
 
     onRequest({ options }) {
       const hasToken = !!token
@@ -33,7 +35,7 @@ export async function useApi<T = unknown>(url: string | (() => string), userOpti
           'Accept': 'application/json',
           'Content-type': 'application/json',
 
-          'x-tg-id': userTgId,
+          'x-tg-id': tgIdLc || userTgId,
         } as Headers
       }
     },

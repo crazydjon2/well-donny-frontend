@@ -3,7 +3,7 @@
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.5s ease; /* Define the transition property, duration, and easing */
+  transition: opacity 0.3s ease; /* Define the transition property, duration, and easing */
 }
 
 .fade-enter-from,
@@ -39,3 +39,47 @@
 }
 
 // LIST ANIMATION END
+
+// MOVE-DOWN ANIMATION START
+
+.move-down-move, /* apply transition to moving elements */
+.move-down-enter-active,
+.move-down-leave-active {
+  transition: all 0.5s ease;
+}
+
+.move-down-enter-from,
+.move-down-leave-to {
+  opacity: 0;
+  transform: translateY(-200px);
+}
+
+/* ensure leaving items are taken out of layout flow so that moving
+   animations can be calculated correctly. */
+.move-down-leave-active {
+  position: absolute;
+}
+
+// MOVE-DOWN ANIMATION END
+
+// MOVE-UP ANIMATION START
+
+.move-up-move, /* apply transition to moving elements */
+.move-up-enter-active,
+.move-up-leave-active {
+  transition: all 0.5s ease;
+}
+
+.move-up-enter-from,
+.move-up-leave-to {
+  opacity: 0;
+  transform: translateY(200px);
+}
+
+/* ensure leaving items are taken out of layout flow so that moving
+   animations can be calculated correctly. */
+.move-up-leave-active {
+  position: absolute;
+}
+
+// MOVE-UP ANIMATION END

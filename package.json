@@ -5,7 +5,7 @@
   "scripts": {
     "build": "yarn lint && node ./utils/fix-svg.js && nuxt build",
     "fix-svg": "node ./utils/fix-svg.js",
-    "dev": "node ./utils/fix-svg.js && nuxt dev --host 0.0.0.0",
+    "dev": "node ./utils/fix-svg.js && nuxt dev --host",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
@@ -17,6 +17,7 @@
     "@pinia/nuxt": "0.11.1",
     "dotenv": "^17.2.2",
     "eslint": "^9.0.0",
+    "floating-vue": "^5.2.2",
     "nuxt": "^3.17.5",
     "pinia": "^3.0.3",
     "storybook": "9.0.5",
