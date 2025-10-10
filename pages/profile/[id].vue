@@ -6,6 +6,8 @@
         <AppIcon v-if="isMe" icon="settings" color="text-white" :width="36" :height="36" />
       </div>
     </PageTop>
+
+    Tg data: {{ tgUserData }}
     <div class="mt-6">
       <div class="flex gap-4">
         <div class="bg-grey w-full" />
@@ -125,4 +127,6 @@ watch(pickedLocale, () => {
 watch(strickData, () => {
   calendarAttributes.value[0].dates = strickData.value
 }, { immediate: true })
+
+const tgUserData = Telegram.WebApp.initDataUnsafe.user
 </script>
