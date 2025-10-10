@@ -14,5 +14,4 @@ import AppLoader from './components/AppLoader.vue'
 import LightHouseLoading from './components/LightHouseLoading.vue'
 
 const tgUserData = Telegram.WebApp.initDataUnsafe.user
-console.log(tgUserData)
 </script>
