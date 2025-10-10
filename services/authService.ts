@@ -11,8 +11,7 @@ export const authService = {
 
     return useApi<{ token: string }>('/signIn', {
       headers: {
-
-        'x-tg-id': tgUserData.id || tgIdLc || userTgId || '',
+        'x-tg-id': tgUserData?.id || tgIdLc || userTgId || '',
       },
     })
   },

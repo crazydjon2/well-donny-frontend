@@ -19,5 +19,14 @@ export default defineNuxtConfig({
   storybook: {
     port: 6006,
   },
+  app: {
+    head: {
+      script: [
+        {
+          src: 'https://telegram.org/js/telegram-web-app.js?59',
+        },
+      ],
+    },
+  },
   vite: viteConfig,
 })
