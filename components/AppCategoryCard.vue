@@ -4,7 +4,7 @@
     :class="primary ? 'border-primary shadow-small-primary' : 'border-secondary shadow-small-secondary'"
   >
     <span class="category__name">{{ props.category.name }}</span>
-    <span class="category__author mt-auto">@{{ props.author.name }}</span>
+    <span class="category__author mt-auto" @click.stop.prevent="goToProfile">@{{ props.author.name }}</span>
 
     <slot />
   </div>
@@ -13,6 +13,7 @@
 <script lang="ts" setup>
 import type { Category } from '~/assets/types/category'
 import type { User } from '~/assets/types/user'
+import { useRouter } from 'vue-router'
 
 const props = defineProps<{
   category: Category
@@ -20,6 +21,12 @@ const props = defineProps<{
   description?: string
   primary?: boolean
 }>()
+
+const router = useRouter()
+
+function goToProfile() {
+  router.push(`/profile/${props.author.id}`)
+}
 </script>
 
 <style scoped>

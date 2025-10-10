@@ -1,4 +1,4 @@
-import type { User } from '~/assets/types/user'
+import type { User, UserProfile } from '~/assets/types/user'
 // import { useRuntimeConfig } from '#app'
 import { useApi } from '~/composables/useApi'
 
@@ -17,6 +17,9 @@ export const authService = {
   },
   getUser() {
     return useApi<User>('/user')
+  },
+  getProfile(id: string) {
+    return useApi<UserProfile>(`/user/${id}`)
   },
   createUser({ name, tgId }: { name: string, tgId: string }) {
     return useApi<User>('/user', {
