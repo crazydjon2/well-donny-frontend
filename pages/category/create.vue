@@ -78,7 +78,7 @@ async function onCategoryCreate() {
       router.push('/')
     }
     else {
-      console.log(error.value)
+      console.error(error.value)
     }
   }
 }

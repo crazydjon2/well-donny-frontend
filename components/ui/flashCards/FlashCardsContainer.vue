@@ -2,10 +2,9 @@
   <div class="p-2 -mx-5">
     <div class="cards-container mx-5 relative">
       <slot />
-  
-        <FlashCardsItem class=" flex items-center justify-center select-none" :class="isSquare && 'aspect-square'">
-          <slot name="end-slide" />
-        </FlashCardsItem>
+      <FlashCardsItem class=" flex items-center justify-center select-none" :class="isSquare && 'aspect-square'">
+        <slot name="end-slide" />
+      </FlashCardsItem>
     </div>
     <slot name="actions" :on-reject-pressed="onRejectPressed" :on-accept-pressed="onAcceptPressed" />
   </div>
