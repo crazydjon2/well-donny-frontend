@@ -34,13 +34,7 @@
         <div v-if="categories && categories.length" class="grid grid-cols-2 gap-6 px-5 pt-5">
           <div v-for="(category) in categories" :key="category.id">
             <AppDelayedElement :to="`/category/${category.category.id}`">
-              <AppCategoryCard :category="category.category" :author="category.user">
-                <!-- <template #default>
-              <div class="absolute right-4 bottom-5" @click.prevent="beforeDelete(category.category.id)">
-                <AppIcon icon="trash" :width="16" :height="16" />
-              </div>
-            </template> -->
-              </AppCategoryCard>
+              <AppCategoryCard :category="category.category" :author="category.user" />
             </AppDelayedElement>
           </div>
         </div>

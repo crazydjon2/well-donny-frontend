@@ -41,17 +41,17 @@
 
       <Transition name="fade">
         <div v-if="isEnd" class="w-full text-center mt-5">
-          <span class="text-small font-normal text-center">{{ $t('learnt-text', { length: cards.length }) }}</span>
+          <span v-if="cards.length" class="text-small font-normal text-center">{{ $t('learnt-text', { length: cards.length }) }}</span>
           <h3 class="font-accent text-[4rem] leading-[4rem]">
             Well donny!
           </h3>
 
           <div class="mt-8 text-small gap-2">
-            <div class="flex justify-between">
+            <div v-if="cards.length" class="flex justify-between">
               <span>{{ $t('correct-answers') }}</span>
               <span>{{ statistic.right }}/{{ cards.length }}</span>
             </div>
-            <div class="flex justify-between">
+            <div v-if="cards.length" class="flex justify-between">
               <span>{{ $t('need-to-learn') }}</span>
               <span>{{ statistic.wrong }}/{{ cards.length }}</span>
             </div>
@@ -87,7 +87,7 @@
 import type { Word } from '~/assets/types/word'
 import { pickWords, useGlobalStore, useRouterUtility } from '#imports'
 import { storeToRefs } from 'pinia'
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, render, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ButtonTypes } from '~/assets/types/ui'
 import PageTop from '~/components/PageTop.vue'
@@ -95,7 +95,9 @@ import ShipProgress from '~/components/ShipProgress.vue'
 import { AppButton, AppDelayedElement, AppIcon } from '~/components/ui'
 import FlashCardsContainer from '~/components/ui/flashCards/FlashCardsContainer.vue'
 import FlashCardsItem from '~/components/ui/flashCards/FlashCardsItem.vue'
+import { categoryService } from '~/services/categoryService'
 import { testService } from '~/services/testService'
+import { userStrickService } from '~/services/userStrickService'
 import { useCategoryStore } from '~/stores/category'
 
 const categoriesProgress = ref(0)
@@ -160,7 +162,11 @@ watch(isEnd, async () => {
     const { data } = await testService.getProgress(category.value?.id as string)
     if (data.value && +data.value === 100) {
       courseDone.value = true
+      if (category.value) {
+        categoryService.markAsDone(category.value?.id)
+      }
     }
+    userStrickService.updateStrick()
     setMenuVisibility(false)
   }
 }, { immediate: true })

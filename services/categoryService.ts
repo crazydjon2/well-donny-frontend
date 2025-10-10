@@ -43,4 +43,12 @@ export const categoryService = {
       method: 'DELETE',
     })
   },
+  markAsDone(categoryId: string) {
+    return useApi('/user-categories/mark-as-done', {
+      method: 'PUT',
+      body: {
+        categoryId,
+      },
+    })
+  },
 }

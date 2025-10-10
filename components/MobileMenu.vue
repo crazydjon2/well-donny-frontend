@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed bottom-5 w-full z-50">
+  <div class="fixed bottom-5 left-[calc(50%-122px)] z-50">
     <div class="flex w-fit mx-auto gap-8 justify-between bg-primary shadow-small-primary py-2.5 px-4 rounded-3xl">
       <AppDelayedElement v-slot="{ isActive }" to="/">
         <div class="flex flex-col items-center whitespace-nowrap">
@@ -13,7 +13,7 @@
           <span :class="isActive ? 'text-link-active' : 'text-white'">{{ $t('menu.library') }}</span>
         </div>
       </AppDelayedElement>
-      <AppDelayedElement v-slot="{ isActive }" to="/profile">
+      <AppDelayedElement v-slot="{ isActive }" to="/profile/me">
         <div class="flex flex-col items-center">
           <AppIcon icon="anchor" :color="isActive ? 'text-link-active' : 'text-white'" :width="36" :height="36" />
           <span :class="isActive ? 'text-link-active' : 'text-white'">{{ $t('menu.profile') }}</span>
@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { AppIcon, AppDelayedElement } from './ui'
+import { AppDelayedElement, AppIcon } from './ui'
 </script>
 
 <style scoped>

@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div>
     <div
       class="background-wave fixed w-full top-0 z-40 transition-all overflow-hidden ease-in-out"
       :class="[page === 'library' ? 'bg-secondary' : 'bg-primary']"

@@ -1,36 +1,42 @@
 <template>
-  <div v-if="category" class="container">
+  <div v-if="category" class="container !pb-[200px]">
     <PageTop type="primary" with-decoration>
       <template #left>
-        <AppIcon icon="chevron-left" :width="22" :height="26" color="text-white" class="cursor-pointer"
-          @click="goBack" />
+        <AppIcon
+          icon="chevron-left" :width="22" :height="26" color="text-white" class="cursor-pointer"
+          @click="goBack"
+        />
       </template>
       <template #default>
         <span class="font-accent text-white text-meduim">{{ category?.name }}</span>
       </template>
       <template #right>
         <VDropdown :disabled="modal" placement="bottom-end">
-          <!-- This will be the popover target (for the events and position) -->
           <AppIcon icon="tuning" :width="22" :height="26" color="text-white cursor-pointer" />
-          <!-- This will be the content of the popover -->
           <template #popper>
             <div class="p-5 gap-3 flex flex-col rounded-xl">
-              <p class="text-small text-center border-b-1">{{ $t('action.edit') }}</p>
-              <p class="text-small text-center border-b-1" @click="modalState = 'restart'; modal = true">{{
-                $t('action.restart') }}
+              <p class="text-small text-center border-b-1">
+                {{ $t('action.edit') }}
               </p>
-              <p class="text-small text-center border-b-1">{{ $t('action.share') }}</p>
-              <p class="text-small text-center border-b-1" @click="modalState = 'delete'; modal = true">{{
-                $t('action.delete') }}</p>
+              <p class="text-small text-center border-b-1" @click="modalState = 'restart'; modal = true">
+                {{
+                  $t('action.restart') }}
+              </p>
+              <p class="text-small text-center border-b-1">
+                {{ $t('action.share') }}
+              </p>
+              <p class="text-small text-center border-b-1" @click="modalState = 'delete'; modal = true">
+                {{
+                  $t('action.delete') }}
+              </p>
             </div>
           </template>
         </VDropdown>
-
       </template>
     </PageTop>
 
     <div class="w-fit">
-      <NuxtLink to="/">
+      <NuxtLink :to="`/profile/${category.users[0].id}`">
         <p v-if="category?.users" class="mt-[2px] text-extra-small text-primary w-fit">
           @{{ category?.users[0].name }}
         </p>
@@ -41,11 +47,12 @@
       <div class="rounded-full max-w-[2.75rem] max-h-[2.75rem] min-w-[2.75rem] min-h-[2.75rem] bg-grey" />
       <div class="w-full ml-6 bg-primary text-regular p-2 text-white rounded-xl relative">
         {{ category.description }}
-        <!-- TEXT BUBBLE -->
-        <div class="absolute left-[-19px] top-4 -translate-y-1/2
+        <div
+          class="absolute left-[-19px] top-4 -translate-y-1/2
                w-0 h-0
                border-y-[6px] border-y-transparent
-               border-r-[22px] border-primary -rotate-[15deg]" />
+               border-r-[22px] border-primary -rotate-[15deg]"
+        />
       </div>
     </div>
 
@@ -63,19 +70,17 @@
     </div>
 
     <div v-if="isUserInCategory" class="grid grid-cols-2 gap-5">
-      <CategoryStatusCard :percent="percent" class="min-h-[125px] h-[calc(100%+4px)]" />
+      <CategoryStatusCard :percent="+percent" class="min-h-[125px] h-[calc(100%+4px)]" />
       <AppDelayedElement :to="`${route.fullPath}/cards`" class="border-secondary shadow-secondary border-2 rounded-xl">
         <div class="flex items-center justify-center rounded-xl min-h-[125px] h-full">
           <span class="text-regular font-bold uppercase">{{ $t('cards') }}</span>
         </div>
       </AppDelayedElement>
-      <!-- <div
-        class="flex items-center justify-center border-2 border-secondary rounded-xl min-h-[125px] shadow-secondary"
+      <AppDelayedElement
+        :to="`${route.fullPath}/test`"
+        :disabled="+percent === 100"
+        class="col-span-2 border-secondary shadow-secondary border-2 rounded-xl"
       >
-        <span class="text-regular font-bold uppercase">повторение</span>
-      </div> -->
-      <AppDelayedElement :to="`${route.fullPath}/test`"
-        class="col-span-2 border-secondary shadow-secondary border-2 rounded-xl">
         <div class="flex items-center justify-center rounded-xl min-h-[125px]">
           <span class="text-regular font-bold uppercase">{{ $t('test') }}</span>
         </div>
@@ -91,8 +96,10 @@
       </AppButton>
     </div>
 
-    <ConfirmModal v-model="modal" :title="$t('attention')" :description="modelDescription"
-      :btn-left="$t('button.cancel')" :btn-right="$t('button.delete')" @close="modal = false" @confirm="onConfirm" />
+    <ConfirmModal
+      v-model="modal" :title="$t('attention')" :description="modelDescription"
+      :btn-left="$t('button.cancel')" :btn-right="$t('button.delete')" @close="modal = false" @confirm="onConfirm"
+    />
   </div>
 </template>
 
@@ -101,15 +108,15 @@ import { useRouterUtility, useUserStore } from '#imports'
 import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import { Carousel, Slide } from 'vue3-carousel'
+import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { ButtonTypes } from '~/assets/types/ui'
+import ConfirmModal from '~/components/modals/ConfirmModal.vue'
 import PageTop from '~/components/PageTop.vue'
 import { AppButton, AppDelayedElement, AppIcon } from '~/components/ui'
 import { categoryService } from '~/services/categoryService'
 import { testService } from '~/services/testService'
 import { useCategoryStore } from '~/stores/category'
-import ConfirmModal from '~/components/modals/ConfirmModal.vue'
-import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -159,16 +166,18 @@ const modelDescription = computed(() => {
   return t('modal.description.delete')
 })
 
-const isCreator = ref(category.value?.users.some((u) => u.id === user.value?.id && u.role === 'creator'))
+const isCreator = ref(category.value?.users.some(u => u.id === user.value?.id && u.role === 'creator'))
 async function onConfirm() {
   if (category.value && user.value) {
     if (modalState.value === 'delete') {
       if (!isCreator.value) {
         await categoryService.removeUserFromCategory(user.value?.id, category.value?.id)
-      } else {
+      }
+      else {
         await categoryService.deleteCategory(category.value?.id)
       }
-    } else {
+    }
+    else {
       await testService.restartCourse(category.value?.id)
     }
     router.go(0)

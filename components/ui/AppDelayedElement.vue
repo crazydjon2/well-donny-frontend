@@ -7,6 +7,7 @@ interface Props {
   to?: string
   delay?: number
   tag?: string
+  disabled?: boolean
   onClick?: (event: MouseEvent) => void
 }
 
@@ -62,9 +63,17 @@ const isActive = computed(() => {
   <component
     :is="tag"
     ref="element"
-    class="w-full cursor-pointer"
+    class="w-full cursor-pointer element"
+    :class="props.disabled && 'disabled'"
     @click="handleClick"
   >
     <slot :is-active="isActive" />
   </component>
 </template>
+
+<style>
+.element.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+</style>

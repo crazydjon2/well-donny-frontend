@@ -1,0 +1,44 @@
+.vc-bordered {
+  border: 2px solid var(--color-primary-2) !important;
+  border-radius: 1.25rem !important;
+}
+
+.is-not-in-month {
+  &::after {
+    opacity: 0.1;
+  }
+
+  & * {
+    opacity: 0.5 !important;
+    pointer-events: inherit !important;
+  }
+}
+
+.vc-highlight {
+  position: relative;
+  background: var(--color-primary) !important;
+  box-shadow: -2px 2px 0px 0px var(--color-primary-2) !important;
+
+  &.vc-highlight-base-middle {
+    box-shadow: 0 2px 0px 0px var(--color-primary-2) !important;
+  }
+
+  &.vc-highlight-base-start {
+    box-shadow: 0 2px 0px 0px var(--color-primary-2) !important;
+  }
+}
+
+.vc-highlight-content-light {
+  color: var(--color-white) !important;
+}
+
+.is-today::after {
+  content: '';
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  background-image: url(/icon/loader-border.svg);
+  background-size: 32px 32px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
