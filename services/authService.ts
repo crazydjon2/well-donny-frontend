@@ -6,12 +6,13 @@ export const authService = {
   async signIn() {
     const { userTgId } = await $fetch<{ baseURL: string, userTgId: string }>('/api/config')
     const tgIdLc = localStorage.getItem('tgId')
+    const tgUserData = Telegram.WebApp.initDataUnsafe.user
     // const config = useRuntimeConfig()
 
     return useApi<{ token: string }>('/signIn', {
       headers: {
 
-        'x-tg-id': tgIdLc || userTgId || '',
+        'x-tg-id': tgUserData.id || tgIdLc || userTgId || '',
       },
     })
   },

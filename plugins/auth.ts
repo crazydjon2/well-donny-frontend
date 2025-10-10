@@ -14,14 +14,15 @@ export default defineNuxtPlugin(async () => {
   try {
     const { userTgId } = await $fetch<{ baseURL: string, userTgId: string }>('/api/config')
     const tgIdLc = localStorage.getItem('tgId')
+    const tgUserData = Telegram.WebApp.initDataUnsafe.user
 
     const { data: signInData, status } = await authService.signIn()
 
     if (status.value === 'error') {
       token.value = ''
       const { data: user } = await authService.createUser({
-        tgId: tgIdLc || userTgId,
-        name: Math.random().toString(36).substring(2, 8),
+        tgId: tgUserData?.id || tgIdLc || userTgId,
+        name: tgUserData?.username || Math.random().toString(36).substring(2, 8),
       })
       if (user.value)
         userStore.setUser(user.value)
