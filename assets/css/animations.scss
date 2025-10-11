@@ -93,3 +93,47 @@
 .page-leave-to {
   opacity: 0;
 }
+
+/* ОДНОВРЕМЕННОЕ исчезновение и появление */
+.flip-enter-active,
+.flip-leave-active {
+  transition: all 0.5s ease !important;
+}
+
+/* Новые элементы появляются СРАЗУ на своих местах */
+.flip-enter-from {
+  opacity: 0;
+  transform: scale(0.8);
+  position: relative; /* Остаются в потоке */
+  z-index: 2; /* Поверх уходящих */
+}
+
+.flip-enter-to {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Старые элементы исчезают со своих мест */
+.flip-leave-from {
+  opacity: 1;
+  transform: scale(1);
+  position: relative; /* Остаются в потоке до конца анимации */
+  z-index: 1; /* Под новыми */
+}
+
+.flip-leave-to {
+  opacity: 0;
+  transform: scale(0.7);
+  position: relative; /* Ключевой момент - остаёмся в потоке! */
+}
+
+/* Когда анимация закончена - элементы удаляются из DOM */
+.flip-leave-active {
+  /* Без absolute! Элемент остаётся на своём месте до конца анимации */
+  pointer-events: none;
+}
+
+/* Отключаем move-анимацию т.к. у нас полная замена */
+.flip-move {
+  transition: none;
+}

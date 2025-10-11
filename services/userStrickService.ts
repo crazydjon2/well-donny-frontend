@@ -9,7 +9,7 @@ export const userStrickService = {
       },
     })
   },
-  getStrick(date: string) {
-    return useApi(`/user-learning-strick?date=${date}`)
+  getStrick(date: Date) {
+    return useApi(`/user-learning-strick?date=${date.toDateString()}`)
   },
 }

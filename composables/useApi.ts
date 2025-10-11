@@ -14,6 +14,7 @@ export async function useApi<T = unknown>(url: string | (() => string), userOpti
   const token = useCookie('token').value
   const { baseURL, userTgId } = await $fetch<{ baseURL: string, userTgId: string }>('/api/config')
   const tgIdLc = localStorage.getItem('tgId')
+  const tgUserData = Telegram.WebApp.initDataUnsafe.user
 
   const defaultOptions: FetchOptions<T> = {
 
@@ -22,8 +23,8 @@ export async function useApi<T = unknown>(url: string | (() => string), userOpti
     retry: 3,
 
     // TODO
-    // resolve cache problem (need to check body)
-    // key: typeof url === 'string' ? url : url(),
+    // resolve cache problem (need to check body and query)
+    key: String(Math.random()),
 
     onRequest({ options }) {
       const hasToken = !!token
@@ -35,7 +36,7 @@ export async function useApi<T = unknown>(url: string | (() => string), userOpti
           'Accept': 'application/json',
           'Content-type': 'application/json',
 
-          'x-tg-id': tgIdLc || userTgId,
+          'x-tg-id': tgUserData?.id || tgIdLc || userTgId,
         } as Headers
       }
     },

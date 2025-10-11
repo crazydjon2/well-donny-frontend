@@ -79,7 +79,7 @@ import { useCategoriesStore } from '~/stores/categories'
 const { categories } = storeToRefs(useCategoriesStore())
 const { user } = storeToRefs(useUserStore())
 const { setCategories } = useCategoriesStore()
-const { data } = await categoriesService.getCategories()
+const { data } = await categoriesService.getAllCategories({ userId: user.value?.id })
 const { deleteCategory: deleteCategoryMethod, removeUserFromCategory } = useCategoryStore()
 
 const modalOpen = ref<boolean>(false)
