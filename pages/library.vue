@@ -32,6 +32,8 @@
     <template #content>
       <div class="min-h-[100vh]">
         <div v-if="categories && categories.length" class="grid grid-cols-2 gap-6 px-5 pt-5">
+          <!-- TODO
+          ADD ANIMATION -->
           <div v-for="(category) in categories" :key="category.id">
             <AppDelayedElement :to="`/category/${category.category.id}`">
               <AppCategoryCard :category="category.category" :author="category.user" />
@@ -61,7 +63,7 @@ getCategories(activeType.value)
 
 async function getCategories(type: string) {
   activeType.value = type
-  const { data } = await categoriesService.getAllCategories({ type: activeType.value })
+  const { data } = await categoriesService.getAllCategories({ type: activeType.value, role: 'creator' })
   if (data.value) {
     setCategories(data.value)
   }

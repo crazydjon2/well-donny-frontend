@@ -14,7 +14,7 @@ export default defineNuxtPlugin(async () => {
   try {
     const { userTgId } = await $fetch<{ baseURL: string, userTgId: string }>('/api/config')
     const tgIdLc = localStorage.getItem('tgId')
-    const tgUserData = Telegram?.WebApp.initDataUnsafe.user
+    const tgUserData = Telegram.WebApp.initDataUnsafe.user
 
     const { data: signInData, status, refresh } = await authService.signIn()
 

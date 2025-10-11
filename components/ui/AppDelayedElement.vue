@@ -12,7 +12,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  delay: 400,
+  delay: 100,
   tag: 'div',
 })
 
