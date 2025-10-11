@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container !mb-[6rem]">
     <PageTop type="secondary" with-decoration class="mb-5 sticky top-5">
       <template #default>
         <span class="font-accent text-white text-meduim">{{ $t('new-course') }}</span>
