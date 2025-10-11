@@ -14,13 +14,14 @@ export async function useApi<T = unknown>(url: string | (() => string), userOpti
   const token = useCookie('token').value
   const { baseURL, userTgId } = await $fetch<{ baseURL: string, userTgId: string }>('/api/config')
   const tgIdLc = localStorage.getItem('tgId')
-  const tgUserData = Telegram.WebApp.initDataUnsafe.user
+  const tgUserData = await initTelegramAuth()
 
   const defaultOptions: FetchOptions<T> = {
 
     baseURL: `${baseURL}`,
     method: 'GET',
     retry: 3,
+    cache: 'no-cache',
 
     // TODO
     // resolve cache problem (need to check body and query)
@@ -71,4 +72,28 @@ export async function useApi<T = unknown>(url: string | (() => string), userOpti
   const options = defu(userOptions, defaultOptions) as UseFetchOptions<T>
 
   return useFetch(url, options)
+}
+
+function initTelegramAuth(): Promise<any> {
+  return new Promise((resolve) => {
+    if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
+      resolve(Telegram.WebApp.initDataUnsafe.user)
+      return
+    }
+
+    // Ждём события готовности Telegram WebApp
+    if (window.Telegram?.WebApp?.ready) {
+      Telegram.WebApp.ready()
+      // Даём время на инициализацию
+      setTimeout(() => {
+        resolve(Telegram.WebApp.initDataUnsafe?.user || null)
+      }, 500)
+    }
+    else {
+      // Если Telegram API не загружен, ждём немного
+      setTimeout(() => {
+        resolve(Telegram?.WebApp?.initDataUnsafe?.user || null)
+      }, 1000)
+    }
+  })
 }
