@@ -64,7 +64,7 @@
 
 // MOVE-UP ANIMATION START
 
-.move-up-move, /* apply transition to moving elements */
+ /* apply transition to moving elements */
 .move-up-enter-active,
 .move-up-leave-active {
   transition: all 0.5s ease;
@@ -76,10 +76,14 @@
   transform: translateY(200px);
 }
 
+.move-up-move {
+  transition: all 0.5s ease;
+}
+
 /* ensure leaving items are taken out of layout flow so that moving
    animations can be calculated correctly. */
 .move-up-leave-active {
-  position: absolute;
+  position: relative;
 }
 
 // MOVE-UP ANIMATION END
@@ -94,46 +98,25 @@
   opacity: 0;
 }
 
-/* ОДНОВРЕМЕННОЕ исчезновение и появление */
-.flip-enter-active,
-.flip-leave-active {
-  transition: all 0.5s ease !important;
+
+// MOVE-DOWN-SMALL ANIMATION START
+
+.move-down-small-move, /* apply transition to moving elements */
+.move-down-small-enter-active,
+.move-down-small-leave-active {
+  transition: all 0.5s ease;
 }
 
-/* Новые элементы появляются СРАЗУ на своих местах */
-.flip-enter-from {
+.move-down-small-enter-from,
+.move-down-small-leave-to {
   opacity: 0;
-  transform: scale(0.8);
-  position: relative; /* Остаются в потоке */
-  z-index: 2; /* Поверх уходящих */
+  transform: translateY(-50px);
 }
 
-.flip-enter-to {
-  opacity: 1;
-  transform: scale(1);
+/* ensure leaving items are taken out of layout flow so that moving
+   animations can be calculated correctly. */
+.move-down-small-leave-active {
+  position: absolute;
 }
 
-/* Старые элементы исчезают со своих мест */
-.flip-leave-from {
-  opacity: 1;
-  transform: scale(1);
-  position: relative; /* Остаются в потоке до конца анимации */
-  z-index: 1; /* Под новыми */
-}
-
-.flip-leave-to {
-  opacity: 0;
-  transform: scale(0.7);
-  position: relative; /* Ключевой момент - остаёмся в потоке! */
-}
-
-/* Когда анимация закончена - элементы удаляются из DOM */
-.flip-leave-active {
-  /* Без absolute! Элемент остаётся на своём месте до конца анимации */
-  pointer-events: none;
-}
-
-/* Отключаем move-анимацию т.к. у нас полная замена */
-.flip-move {
-  transition: none;
-}
+// MOVE-DOWN-SMALL ANIMATION END

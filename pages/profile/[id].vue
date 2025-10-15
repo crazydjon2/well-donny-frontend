@@ -34,16 +34,18 @@
       </div>
     </div>
 
-    <div v-if="isMe" class="flex max-w-[500px] mx-auto my-6">
-      <Calendar v-bind="calendarConfig" :attributes="calendarAttributes" />
-    </div>
+    <Transition name="fade">
+      <div v-if="isMe" class="flex max-w-[500px] mx-auto my-6">
+        <Calendar v-bind="calendarConfig" :attributes="calendarAttributes" />
+      </div>
+    </Transition>
 
     <div class="mt-6">
       <h3 class="text-[1.5rem] font-bold text-center">
         КУРСЫ
       </h3>
       <Carousel v-bind="carouselConfig">
-        <Slide v-for="category in categories" :key="category.id">
+        <Slide v-for="category in userCategories" :key="category.id">
           <AppDelayedElement :to="`/category/${category.category.id}`">
             <AppCategoryCard :category="category.category" :author="category.user" class="w-full">
               <AppIcon icon="chevron-left" :width="20" :height="20" class="absolute right-6 bottom-6 rotate-180" />
@@ -58,10 +60,11 @@
 <script lang="ts" setup>
 import type { CalendarProps } from 'v-calendar/dist/types/src/use/calendar.js'
 import type { AttributeConfig } from 'v-calendar/dist/types/src/utils/attribute.js'
+import type { UsersCategory } from '~/assets/types/usersCategories'
 import { useCookie } from '#app'
 import { storeToRefs } from 'pinia'
 import { Calendar } from 'v-calendar'
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { Carousel, Slide } from 'vue3-carousel'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
@@ -92,21 +95,34 @@ const calendarConfig: CalendarProps = {
 
 const calendarAttributes: AttributeConfig = ref([{
   dates: [],
-  highlight: true, // Boolean, String, Object
+  highlight: true,
 }])
 
-const { data: profileData } = await authService.getProfile(route.params.id === 'me' ? user.value.id : route.params.id as string)
-if (profileData.value) {
-  setProfile(profileData.value)
-}
+const userCategories = ref<UsersCategory[]>([])
+const userStrickData = ref()
+onMounted(async () => {
+  const [{ data: profileData }, { data: categories }, { data: strickData }] = await Promise.all([
+    authService.getProfile(route.params.id === 'me' ? user.value.id : route.params.id as string),
+    categoriesService.getAllCategories({
+      userId: user.value?.id,
+      type: '',
+      role: 'creator',
+    }),
+    userStrickService.getStrick(new Date()),
+  ])
 
-const { data: categories } = await categoriesService.getAllCategories({
-  userId: profile.value?.id,
-  type: '',
-  role: 'creator',
+  if (profileData.value) {
+    setProfile(profileData.value)
+  }
+
+  if (categories.value) {
+    userCategories.value = categories.value
+  }
+
+  if (strickData.value) {
+    userStrickData.value = strickData.value
+  }
 })
-
-const { data: strickData } = await userStrickService.getStrick(new Date())
 
 const carouselConfig = {
   itemsToShow: 2,
@@ -122,7 +138,7 @@ watch(pickedLocale, () => {
   localCookie.value = locale.value
 })
 
-watch(strickData, () => {
-  calendarAttributes.value[0].dates = strickData.value
+watch(userStrickData, () => {
+  calendarAttributes.value[0].dates = userStrickData.value
 }, { immediate: true })
 </script>

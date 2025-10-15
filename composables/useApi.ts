@@ -1,6 +1,6 @@
 import type { UseFetchOptions } from '#app'
 
-import { createError, useCookie, useFetch } from '#imports'
+import { createError, useCookie, useFetch, useRuntimeConfig } from '#imports'
 import { defu } from 'defu'
 
 interface ErrorType {
@@ -10,22 +10,18 @@ interface ErrorType {
 type FetchOptions<T> = UseFetchOptions<T> & { timeout?: number }
 
 export async function useApi<T = unknown>(url: string | (() => string), userOptions: FetchOptions<T> = {}) {
-  // const config = useRuntimeConfig()
+  const config = useRuntimeConfig()
   const token = useCookie('token').value
-  const { baseURL, userTgId } = await $fetch<{ baseURL: string, userTgId: string }>('/api/config')
   const tgIdLc = localStorage.getItem('tgId')
-  const tgUserData = await initTelegramAuth()
+  const tgUserData = Telegram?.WebApp?.initDataUnsafe?.user || null
 
   const defaultOptions: FetchOptions<T> = {
-
-    baseURL: `${baseURL}`,
+    baseURL: `${config.public.baseUrl}`,
     method: 'GET',
     retry: 3,
-    cache: 'no-cache',
 
     // TODO
     // resolve cache problem (need to check body and query)
-    key: String(Math.random()),
 
     onRequest({ options }) {
       const hasToken = !!token
@@ -37,7 +33,7 @@ export async function useApi<T = unknown>(url: string | (() => string), userOpti
           'Accept': 'application/json',
           'Content-type': 'application/json',
 
-          'x-tg-id': tgUserData?.id || tgIdLc || userTgId,
+          'x-tg-id': tgUserData?.id || tgIdLc || 1,
         } as Headers
       }
     },
@@ -72,28 +68,4 @@ export async function useApi<T = unknown>(url: string | (() => string), userOpti
   const options = defu(userOptions, defaultOptions) as UseFetchOptions<T>
 
   return useFetch(url, options)
-}
-
-function initTelegramAuth(): Promise<any> {
-  return new Promise((resolve) => {
-    if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
-      resolve(Telegram.WebApp.initDataUnsafe.user)
-      return
-    }
-
-    // Ждём события готовности Telegram WebApp
-    if (window.Telegram?.WebApp?.ready) {
-      Telegram.WebApp.ready()
-      // Даём время на инициализацию
-      setTimeout(() => {
-        resolve(Telegram.WebApp.initDataUnsafe?.user || null)
-      }, 500)
-    }
-    else {
-      // Если Telegram API не загружен, ждём немного
-      setTimeout(() => {
-        resolve(Telegram?.WebApp?.initDataUnsafe?.user || null)
-      }, 1000)
-    }
-  })
 }

@@ -1,4 +1,5 @@
 import { defineNuxtPlugin, useCookie } from '#app'
+import { useTelegramAuth } from '#imports'
 import { nextTick } from 'vue'
 import { authService } from '~/services/authService'
 import { useGlobalStore } from '~/stores/global'
@@ -12,9 +13,9 @@ export default defineNuxtPlugin(async () => {
   setLoader(true)
 
   try {
-    const { userTgId } = await $fetch<{ baseURL: string, userTgId: string }>('/api/config')
     const tgIdLc = localStorage.getItem('tgId')
-    const tgUserData = Telegram.WebApp.initDataUnsafe.user
+    await useTelegramAuth().init(3000)
+    const tgUserData = Telegram?.WebApp.initDataUnsafe.user
 
     const { data: signInData, status, refresh } = await authService.signIn()
 
@@ -22,7 +23,7 @@ export default defineNuxtPlugin(async () => {
       token.value = ''
       await nextTick()
       const { data: user } = await authService.createUser({
-        tgId: tgUserData?.id || tgIdLc || userTgId,
+        tgId: tgUserData?.id || tgIdLc || 1,
         name: tgUserData?.username || Math.random().toString(36).substring(2, 8),
       })
       if (user.value) {

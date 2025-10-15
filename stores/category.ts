@@ -9,8 +9,9 @@ import { categoryService } from '~/services/categoryService'
 export const useCategoryStore = defineStore('category', () => {
   const category = ref<Category | null>(null)
   const cards = ref<Card[] | null>(null)
-  const categoriesTypes = ref<CategoryType[]>([])
-  const { refetchCategories } = useCategoriesStore()
+  const categoryTypes = ref<CategoryType[]>([])
+  const { getCategories } = useCategoriesStore()
+  const loading = ref<boolean>(false)
 
   // const fetchCategories = async () => {
   //   const categoriesData: Category[] = await getCategories()
@@ -33,30 +34,40 @@ export const useCategoryStore = defineStore('category', () => {
   const deleteCategory = async (id: string) => {
     return await categoryService.deleteCategory(id)
       .then(() => {
-        refetchCategories()
+        getCategories()
       })
   }
 
   const removeUserFromCategory = async (userId: string, categoryId: string) => {
     return await categoryService.removeUserFromCategory(userId, categoryId)
       .then(() => {
-        refetchCategories()
+        getCategories()
       })
   }
 
-  const getCategoriesTypes = async () => {
+  const getCategoryTypes = async () => {
     const { data: types } = await categoryService.getCategoriesTypes()
     if (types.value) {
-      categoriesTypes.value = types.value
+      categoryTypes.value = types.value
     }
   }
 
   const getCategory = async (id: string) => {
+    loading.value = true
     const { data } = await categoryService.getCategory(id)
     if (data.value) {
       setCategory(data.value)
+      loading.value = false
     }
   }
 
-  return { category, setCategory, cards, setCategoryCards, createCategory, getCategoriesTypes, deleteCategory, categoriesTypes, getCategory, removeUserFromCategory }
+  const getCategoryCards = async (id: string) => {
+    const { data } = await categoryService.getCategoryCards(id)
+
+    if (data.value) {
+      setCategoryCards(data.value)
+    }
+  }
+
+  return { category, setCategory, cards, setCategoryCards, createCategory, getCategoryTypes, deleteCategory, categoryTypes, getCategory, removeUserFromCategory, getCategoryCards }
 })

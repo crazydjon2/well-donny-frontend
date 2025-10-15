@@ -165,7 +165,15 @@ watch(currentSlide, (newValue, oldValue) => {
     }
     else if (newValue < oldValue && isActive.value) {
       currentPos.value = { x: 0, y: 0 }
+      if (isActive.value) {
+        console.log(isLeftState.value, isRightState.value, tiltState.value)
+        tiltState.value = isLeftState.value ? 'left' : 'right'
+      }
     }
+  }
+  // on cards reset
+  if (currentSlide.value === 0) {
+    currentPos.value = { x: 0, y: 0 }
   }
 })
 

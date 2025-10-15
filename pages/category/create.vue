@@ -10,11 +10,11 @@
     </PageTop>
     <div class="flex flex-col gap-4">
       <AppInput v-model="category.name" :placeholder="$t('input.placeholder.course-title')" />
-      <AppSelect v-model="category.type" :options="categoriesTypes" :placeholder="$t('input.placeholder.category')" />
+      <AppSelect v-model="category.type" :options="categoryTypes" :placeholder="$t('input.placeholder.category')" />
       <AppInput v-model="category.description" :placeholder="$t('input.placeholder.description')" />
     </div>
     <div class="mt-8 flex flex-col gap-4 items-center w-full">
-      <p class="text-small self-start">
+      <p class="text-small">
         {{ $t('termins') }}
       </p>
       <div class="w-full flex flex-col gap-4">
@@ -27,8 +27,8 @@
       </div>
       <AppIcon icon="add" color="text-dark" @click="addWord" />
     </div>
-    <AppDelayedElement @click="onCategoryCreate">
-      <AppButton full outline class="mt-8">
+    <AppDelayedElement :disabled="loader" @click="onCategoryCreate">
+      <AppButton full outline class="mt-8" :disabled="loader">
         {{ $t('button.add-course') }}
       </AppButton>
     </AppDelayedElement>
@@ -39,19 +39,25 @@
 import type { CategoryType } from '~/assets/types/categoriesTypes'
 import type { CreateWordDTO } from '~/assets/types/word'
 import { CreateWordCard } from '#components'
+import { useGlobalStore } from '#imports'
 import { storeToRefs } from 'pinia'
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { AppButton, AppDelayedElement, AppIcon, AppInput, AppSelect } from '~/components/ui'
 import { useRouterUtility } from '~/composables/useRouterUtility'
 import { useCategoryStore } from '~/stores/category'
 
 const { goBack } = useRouterUtility()
-const { getCategoriesTypes, createCategory } = useCategoryStore()
-const { categoriesTypes } = storeToRefs(useCategoryStore())
+const { getCategoryTypes, createCategory } = useCategoryStore()
+const { loader } = storeToRefs(useGlobalStore())
+const { setLoader } = useGlobalStore()
+const { categoryTypes } = storeToRefs(useCategoryStore())
 const router = useRouter()
 
-await getCategoriesTypes()
+onMounted(async () => {
+  await getCategoryTypes()
+})
+
 const category: { name: string, description: string, type: CategoryType | null } = reactive({
   name: '',
   description: '',
@@ -68,6 +74,7 @@ function addWord() {
 
 async function onCategoryCreate() {
   if (category.type) {
+    setLoader(true)
     const { error } = await createCategory({
       ...category,
       type: category.type.id,
@@ -79,6 +86,7 @@ async function onCategoryCreate() {
     }
     else {
       console.error(error.value)
+      setLoader(false)
     }
   }
 }
