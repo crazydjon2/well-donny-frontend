@@ -37,7 +37,14 @@
       <template #content>
         <div class="min-h-[100vh]">
           <div v-if="categories.length" class="grid grid-cols-2 gap-6 px-5 pt-5">
-            <div v-for="(category, index) in categories" :key="category.id">
+            <MotionComponent
+              v-for="(category, index) in categories"
+              :key="category.id"
+              :initial="{ opacity: 0, scale: 0.9 }"
+              :enter="{ opacity: 1, scale: 1 }"
+              :leave="{ opacity: 0, scale: 0.8 }"
+              :transition="{ type: 'spring', stiffness: 200, damping: 20 }"
+            >
               <AppDelayedElement :to="`/category/${category.category.id}`">
                 <AppCategoryCard
                   :category="category.category" :author="category.user"
@@ -50,7 +57,10 @@
                   </template>
                 </AppCategoryCard>
               </AppDelayedElement>
-            </div>
+            </MotionComponent>
+          </div>
+          <div v-else class="grid grid-cols-2 gap-6 px-5 pt-5">
+            <SkeletonLoader v-for="n in 4" :key="n" class="flex flex-col relative rounded-xl p-4 aspect-square" />
           </div>
         </div>
       </template>
@@ -65,21 +75,22 @@
 
 <script setup lang="ts">
 import { useCategoryStore, useUserStore } from '#imports'
+import { MotionComponent } from '@vueuse/motion'
 import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
+
+import { onMounted, ref } from 'vue'
 
 import AppCategoryCard from '~/components/AppCategoryCard.vue'
 import ConfirmModal from '~/components/modals/ConfirmModal.vue'
 import PageContainer from '~/components/PageContainer.vue'
+import SkeletonLoader from '~/components/SkeletonLoader.vue'
 import { AppChip, AppDelayedElement, AppIcon } from '~/components/ui'
-import { categoriesService } from '~/services/categoriesService'
 
 import { useCategoriesStore } from '~/stores/categories'
 
 const { categories } = storeToRefs(useCategoriesStore())
 const { user } = storeToRefs(useUserStore())
-const { setCategories } = useCategoriesStore()
-const { data } = await categoriesService.getAllCategories({ userId: user.value?.id })
+const { getCategories } = useCategoriesStore()
 const { deleteCategory: deleteCategoryMethod, removeUserFromCategory } = useCategoryStore()
 
 const modalOpen = ref<boolean>(false)
@@ -87,13 +98,9 @@ const modalOpen = ref<boolean>(false)
 const chips = ['все курсы', 'собственные', 'недавние']
 const activeChip = ref('собственные')
 
-if (data.value) {
-  // categories.value = data.value
-  setCategories(data.value)
-}
-else {
-  setCategories([])
-}
+onMounted(async () => {
+  getCategories()
+})
 
 const categoryId = ref<string>('')
 const isCreator = ref(false)

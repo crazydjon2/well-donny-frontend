@@ -21,51 +21,70 @@
     </template>
     <template #content-header>
       <div class="flex h-full gap-4 overflow-auto items-center px-5 w-full">
-        <AppChip
-          v-for="type in types" :key="type.id" :active="activeType === type.id"
-          @click="getCategories(type.id)"
-        >
+        <AppChip v-for="type in categoryTypes" :key="type.id" :active="activeType === type.id" @click="getCategories(type.id)">
           <span class="text-small font-normal">{{ $t(`category.type.${type.type}`) }}</span>
         </AppChip>
       </div>
     </template>
     <template #content>
       <div class="min-h-[100vh]">
-        <div v-if="categories && categories.length" class="grid grid-cols-2 gap-6 px-5 pt-5">
-          <!-- TODO
+        <Transition name="move-down-small">
+          <div v-if="categories && categories.length" class="grid grid-cols-2 gap-6 px-5 pt-5 w-full">
+            <!-- TODO
           ADD ANIMATION -->
-          <div v-for="(category) in categories" :key="category.id">
-            <AppDelayedElement :to="`/category/${category.category.id}`">
-              <AppCategoryCard :category="category.category" :author="category.user" />
-            </AppDelayedElement>
+            <MotionComponent
+              v-for="(category) in categories" :key="category.id" :initial="{ opacity: 0, scale: 0.9 }"
+              :enter="{ opacity: 1, scale: 1 }"
+              :leave="{ opacity: 0, scale: 0.8 }"
+              :transition="{ type: 'spring', stiffness: 200, damping: 20 }"
+            >
+              <AppDelayedElement :to="`/category/${category.category.id}`">
+                <AppCategoryCard :category="category.category" :author="category.user" />
+              </AppDelayedElement>
+            </MotionComponent>
           </div>
-        </div>
+          <div v-else class="grid grid-cols-2 gap-6 px-5 pt-5 w-full">
+            <SkeletonLoader v-for="n in 4" :key="n" class="flex flex-col relative rounded-xl p-4 aspect-square" />
+          </div>
+        </Transition>
       </div>
     </template>
   </PageContainer>
 </template>
 
 <script setup lang="ts">
+import type { UsersCategory } from '~/assets/types/usersCategories'
+import { useCategoryStore } from '#imports'
+import { MotionComponent } from '@vueuse/motion'
 import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import SkeletonLoader from '@/components/SkeletonLoader.vue'
 import PageContainer from '~/components/PageContainer.vue'
 import { AppChip, AppDelayedElement, AppIcon, AppInput } from '~/components/ui'
 import { categoriesService } from '~/services/categoriesService'
-import { categoryService } from '~/services/categoryService'
-import { useCategoriesStore } from '~/stores/categories'
 
-const { categories } = storeToRefs(useCategoriesStore())
-const { setCategories } = useCategoriesStore()
+const { getCategoryTypes } = useCategoryStore()
+const { categoryTypes } = storeToRefs(useCategoryStore())
 
-const { data: types } = await categoryService.getCategoriesTypes()
-const activeType = ref(types.value ? types.value[0].id : '')
-getCategories(activeType.value)
+const activeType = ref('')
 
+onMounted(async () => {
+  await getCategoryTypes()
+  if (categoryTypes.value) {
+    activeType.value = categoryTypes.value ? categoryTypes.value[0].id : ''
+  }
+  getCategories(activeType.value)
+})
+
+const categories = ref<UsersCategory[]>([])
+const loading = ref<boolean>(false)
 async function getCategories(type: string) {
   activeType.value = type
+  loading.value = true
   const { data } = await categoriesService.getAllCategories({ type: activeType.value, role: 'creator' })
   if (data.value) {
-    setCategories(data.value)
+    categories.value = data.value
   }
+  loading.value = false
 }
 </script>

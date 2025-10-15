@@ -57,7 +57,7 @@
     </div>
 
     <div class="!mt-3 !-mx-5 max-w-[100vw]">
-      <Carousel v-bind="carouselConfig">
+      <Carousel v-if="cards && cards.length" v-bind="carouselConfig">
         <Slide v-for="card in cards" :key="card.id">
           <AppCard :text-first="card.word.original" :text-second="card.word.translated" />
         </Slide>
@@ -77,9 +77,8 @@
         </div>
       </AppDelayedElement>
       <AppDelayedElement
-        :to="`${route.fullPath}/test`"
-        :disabled="+percent === 100"
         class="col-span-2 border-secondary shadow-secondary border-2 rounded-xl"
+        @click="onTestPressed"
       >
         <div class="flex items-center justify-center rounded-xl min-h-[125px]">
           <span class="text-regular font-bold uppercase">{{ $t('test') }}</span>
@@ -106,7 +105,7 @@
 <script setup lang="ts">
 import { useRouterUtility, useUserStore } from '#imports'
 import { storeToRefs } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { Carousel, Slide } from 'vue3-carousel'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
@@ -123,10 +122,10 @@ const route = useRoute()
 const router = useRouter()
 const { goBack } = useRouterUtility()
 
-const { category } = storeToRefs(useCategoryStore())
+const { category, cards } = storeToRefs(useCategoryStore())
 const { user } = storeToRefs(useUserStore())
 
-const { cards } = useCategoryStore()
+const { getCategoryCards } = useCategoryStore()
 
 const isUserInCategory = computed(() => {
   if (user && user.value) {
@@ -152,10 +151,13 @@ const carouselConfig = {
 }
 
 const percent = ref(0)
-const { data } = await testService.getProgress(route.params.id as string)
-if (data.value) {
-  percent.value = data.value
-}
+onMounted(async () => {
+  getCategoryCards(route.params.id as string)
+  const { data } = await testService.getProgress(route.params.id as string)
+  if (data.value) {
+    percent.value = data.value
+  }
+})
 
 const modalState = ref<'edit' | 'delete' | 'restart'>('edit')
 const modal = ref(false)
@@ -166,7 +168,7 @@ const modelDescription = computed(() => {
   return t('modal.description.delete')
 })
 
-const isCreator = ref(category.value?.users.some(u => u.id === user.value?.id && u.role === 'creator'))
+const isCreator = computed(() => category?.value?.users.some(u => u.id === user.value?.id && u.role === 'creator'))
 async function onConfirm() {
   if (category.value && user.value) {
     if (modalState.value === 'delete') {
@@ -181,6 +183,16 @@ async function onConfirm() {
       await testService.restartCourse(category.value?.id)
     }
     router.go(0)
+  }
+}
+
+function onTestPressed() {
+  if (+percent.value === 100) {
+    modalState.value = 'restart'
+    modal.value = true
+  }
+  else {
+    router.push(`${route.path}/test`)
   }
 }
 </script>

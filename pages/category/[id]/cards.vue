@@ -82,7 +82,7 @@
 import type { TiltState } from '~/components/ui/flashCards/types'
 import { useGlobalStore, useRouterUtility } from '#imports'
 import { storeToRefs } from 'pinia'
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ButtonTypes } from '~/assets/types/ui'
 import PageTop from '~/components/PageTop.vue'
@@ -97,6 +97,7 @@ const router = useRouter()
 const route = useRoute()
 
 const { cards } = storeToRefs(useCategoryStore())
+const { getCategoryCards } = useCategoryStore()
 const { setMenuVisibility } = useGlobalStore()
 const { goBack } = useRouterUtility()
 
@@ -119,7 +120,7 @@ function onCardsEnd() {
 
 function refreshCards() {
   setMenuVisibility(true)
-  router.go(0)
+  slide.value = 0
 }
 
 const tiltState = ref<TiltState>('center')
@@ -136,5 +137,9 @@ const cardClasses = computed(() => (index: number) => {
   else {
     return '!bg-primary !border-primary shadow-small-primary-i !text-white'
   }
+})
+
+onMounted(() => {
+  getCategoryCards(route.params?.id as string)
 })
 </script>

@@ -2,9 +2,13 @@ import type { UsersCategory } from '~/assets/types/usersCategories'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { categoriesService } from '~/services/categoriesService'
+import { useGlobalStore } from './global'
 
 export const useCategoriesStore = defineStore('categories', () => {
+  const { setLoader } = useGlobalStore()
+
   const categories = ref<UsersCategory[]>([])
+  const loading = ref<boolean>(false)
 
   // const fetchCategories = async () => {
   //   const categoriesData: Category[] = await getCategories()
@@ -16,7 +20,8 @@ export const useCategoriesStore = defineStore('categories', () => {
     categories.value = data
   }
 
-  const refetchCategories = async () => {
+  const getCategories = async () => {
+    loading.value = true
     const { data, error } = await categoriesService.getCategories()
     if (data.value) {
       setCategories(data.value)
@@ -24,7 +29,9 @@ export const useCategoriesStore = defineStore('categories', () => {
     else if (!data.value && !error.value) {
       setCategories([])
     }
+    loading.value = false
+    setLoader(false)
   }
 
-  return { categories, setCategories, refetchCategories }
+  return { categories, setCategories, getCategories, loading }
 })

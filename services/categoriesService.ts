@@ -7,7 +7,7 @@ export const categoriesService = {
   getCategories() {
     return useApi<UsersCategory[]>('/categories')
   },
-  getAllCategories(queries: { type: CategoryType['id'], role?: UserRoles, userId?: string }) {
+  getAllCategories(queries: { type?: CategoryType['id'], role?: UserRoles, userId?: string }) {
     return useApi<UsersCategory[]>(`/categories/all?type=${queries.type || ''}&role=${queries.role || ''}&userId=${queries.userId || ''}`)
   },
 }

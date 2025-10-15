@@ -35,6 +35,9 @@ declare global {
         setBackgroundColor?: (color: string) => void
         [key: string]: any
       }
+      WebView: {
+        isIframe: boolean
+      }
     }
   }
 }
