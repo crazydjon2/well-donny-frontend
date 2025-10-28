@@ -10,3 +10,10 @@ export interface CreateWordDTO {
   original: string
   translated: string
 }
+
+export interface EditWordDTO {
+  id?: string
+  original: string
+  translated: string
+  toDelete?: boolean
+}

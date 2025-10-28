@@ -28,6 +28,11 @@
       "course-title": "Название курса"
     }
   },
+  "folders": {
+    "all": "все",
+    "personal": "собственные",
+    "recent": "недавние"
+  },
   "category": {
     "type": {
       "language": "Языки",

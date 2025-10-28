@@ -15,7 +15,7 @@
           <AppIcon icon="tuning" :width="22" :height="26" color="text-white cursor-pointer" />
           <template #popper>
             <div class="p-5 gap-3 flex flex-col rounded-xl">
-              <p class="text-small text-center border-b-1">
+              <p v-if="isCreator" class="text-small text-center border-b-1" @click="goToEdit">
                 {{ $t('action.edit') }}
               </p>
               <p class="text-small text-center border-b-1" @click="modalState = 'restart'; modal = true">
@@ -194,5 +194,9 @@ function onTestPressed() {
   else {
     router.push(`${route.path}/test`)
   }
+}
+
+function goToEdit() {
+  router.push(`/category/create/${category.value?.id}`)
 }
 </script>

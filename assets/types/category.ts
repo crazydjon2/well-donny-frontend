@@ -1,5 +1,5 @@
 import type { User, UserRoles } from './user'
-import type { CreateWordDTO } from './word'
+import type { CreateWordDTO, EditWordDTO } from './word'
 
 export interface Category {
   id: string
@@ -9,7 +9,11 @@ export interface Category {
   // TODO ADD ENUM!!!!!!!!!!!
   type: {
     id: string
-    type: 'language' | 'science'
+    type: string
+    parent?: {
+      id: string
+      type: string
+    }
   }
   createdAt: string
   updatedAt: string
@@ -20,4 +24,12 @@ export interface CreateCategoryDTO {
   description?: string
   type: string
   words: CreateWordDTO[]
+}
+
+export interface EditCategoryDTO {
+  id: string
+  name: string
+  description?: string
+  type: string
+  words: EditWordDTO[]
 }

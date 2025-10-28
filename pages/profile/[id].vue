@@ -104,7 +104,7 @@ onMounted(async () => {
   const [{ data: profileData }, { data: categories }, { data: strickData }] = await Promise.all([
     authService.getProfile(route.params.id === 'me' ? user.value.id : route.params.id as string),
     categoriesService.getAllCategories({
-      userId: user.value?.id,
+      userId: route.params.id === 'me' ? user.value.id : route.params.id as string,
       type: '',
       role: 'creator',
     }),

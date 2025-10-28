@@ -1,6 +1,6 @@
 import type { Card } from '~/assets/types/card'
 import type { CategoryType } from '~/assets/types/categoriesTypes'
-import type { Category, CreateCategoryDTO } from '~/assets/types/category'
+import type { Category, CreateCategoryDTO, EditCategoryDTO } from '~/assets/types/category'
 import type { User } from '~/assets/types/user'
 import { useApi } from '~/composables/useApi'
 
@@ -14,6 +14,12 @@ export const categoryService = {
   createCategory(data: CreateCategoryDTO) {
     return useApi<Category>('/categories/create', {
       method: 'POST',
+      body: data,
+    })
+  },
+  editCategory(categoryId: string, data: EditCategoryDTO) {
+    return useApi<Category>(`categories/${categoryId}`, {
+      method: 'PUT',
       body: data,
     })
   },
@@ -35,8 +41,8 @@ export const categoryService = {
       },
     })
   },
-  getCategoriesTypes() {
-    return useApi<CategoryType[]>('/categories-types')
+  getCategoriesTypes(id?: string) {
+    return useApi<CategoryType[]>(`/categories-types?typeId=${id || ''}`)
   },
   deleteCategory(id: string) {
     return useApi<any>(`/categories/${id}`, {

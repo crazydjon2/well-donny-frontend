@@ -1,7 +1,6 @@
 import type { Card } from '~/assets/types/card'
 import type { CategoryType } from '~/assets/types/categoriesTypes'
-import type { Category, CreateCategoryDTO } from '~/assets/types/category'
-import { useCategoriesStore } from '#imports'
+import type { Category, CreateCategoryDTO, EditCategoryDTO } from '~/assets/types/category'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { categoryService } from '~/services/categoryService'
@@ -10,14 +9,7 @@ export const useCategoryStore = defineStore('category', () => {
   const category = ref<Category | null>(null)
   const cards = ref<Card[] | null>(null)
   const categoryTypes = ref<CategoryType[]>([])
-  const { getCategories } = useCategoriesStore()
   const loading = ref<boolean>(false)
-
-  // const fetchCategories = async () => {
-  //   const categoriesData: Category[] = await getCategories()
-
-  //   categories.value = categoriesData
-  // }
 
   const setCategory = (data: Category) => {
     category.value = data
@@ -31,18 +23,16 @@ export const useCategoryStore = defineStore('category', () => {
     return await categoryService.createCategory(data)
   }
 
+  const editWord = async (data: EditCategoryDTO) => {
+    return await categoryService.editCategory(data.id, data)
+  }
+
   const deleteCategory = async (id: string) => {
     return await categoryService.deleteCategory(id)
-      .then(() => {
-        getCategories()
-      })
   }
 
   const removeUserFromCategory = async (userId: string, categoryId: string) => {
     return await categoryService.removeUserFromCategory(userId, categoryId)
-      .then(() => {
-        getCategories()
-      })
   }
 
   const getCategoryTypes = async () => {
@@ -69,5 +59,5 @@ export const useCategoryStore = defineStore('category', () => {
     }
   }
 
-  return { category, setCategory, cards, setCategoryCards, createCategory, getCategoryTypes, deleteCategory, categoryTypes, getCategory, removeUserFromCategory, getCategoryCards }
+  return { category, setCategory, cards, setCategoryCards, createCategory, getCategoryTypes, deleteCategory, categoryTypes, getCategory, removeUserFromCategory, getCategoryCards, editWord }
 })

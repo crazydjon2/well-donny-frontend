@@ -11,10 +11,13 @@
     <div class="flex flex-col gap-4">
       <AppInput v-model="category.name" :placeholder="$t('input.placeholder.course-title')" />
       <AppSelect v-model="category.type" :options="categoryTypes" :placeholder="$t('input.placeholder.category')" />
+      <Transition name="move-down-small">
+        <AppSelect v-if="subTypes.length" v-model="category.subType" :options="subTypes" :placeholder="$t('input.placeholder.category')" />
+      </Transition>
       <AppInput v-model="category.description" :placeholder="$t('input.placeholder.description')" />
     </div>
     <div class="mt-8 flex flex-col gap-4 items-center w-full">
-      <p class="text-small">
+      <p class="text-h3 uppercase">
         {{ $t('termins') }}
       </p>
       <div class="w-full flex flex-col gap-4">
@@ -22,6 +25,7 @@
           <CreateWordCard
             v-for="(word, index) in words" :key="index" v-model:original="word.original"
             v-model:translated="word.translated"
+            @on-delete="deleteCard(index)"
           />
         </TransitionGroup>
       </div>
@@ -41,10 +45,12 @@ import type { CreateWordDTO } from '~/assets/types/word'
 import { CreateWordCard } from '#components'
 import { useGlobalStore } from '#imports'
 import { storeToRefs } from 'pinia'
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import PageTop from '~/components/PageTop.vue'
 import { AppButton, AppDelayedElement, AppIcon, AppInput, AppSelect } from '~/components/ui'
 import { useRouterUtility } from '~/composables/useRouterUtility'
+import { categoryService } from '~/services/categoryService'
 import { useCategoryStore } from '~/stores/category'
 
 const { goBack } = useRouterUtility()
@@ -58,10 +64,11 @@ onMounted(async () => {
   await getCategoryTypes()
 })
 
-const category: { name: string, description: string, type: CategoryType | null } = reactive({
+const category: { name: string, description: string, type: CategoryType | null, subType: CategoryType | null } = reactive({
   name: '',
   description: '',
   type: null,
+  subType: null,
 })
 
 const words = ref<CreateWordDTO[]>([{ original: '', translated: '' }])
@@ -77,7 +84,7 @@ async function onCategoryCreate() {
     setLoader(true)
     const { error } = await createCategory({
       ...category,
-      type: category.type.id,
+      type: category.subType?.id || category.type.id,
       words: words.value,
     })
 
@@ -89,5 +96,17 @@ async function onCategoryCreate() {
       setLoader(false)
     }
   }
+}
+
+const subTypes = ref<CategoryType[]>([])
+watch(() => category.type, async () => {
+  if (category.type) {
+    const { data } = await categoryService.getCategoriesTypes(category.type.id)
+    subTypes.value = data.value ? data.value : []
+  }
+})
+
+function deleteCard(position: number) {
+  words.value = words.value.filter((_, index) => index !== position)
 }
 </script>
