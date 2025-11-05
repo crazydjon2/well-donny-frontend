@@ -1,5 +1,5 @@
 <template>
-  <div class="container !mb-[6rem]">
+  <div class="container">
     <PageTop type="secondary" with-decoration class="mb-5 sticky top-5">
       <template #default>
         <span class="font-accent text-white text-meduim">{{ $t('new-course') }}</span>
@@ -20,22 +20,31 @@
       <p class="text-h3 uppercase">
         {{ $t('termins') }}
       </p>
+      <div class="rounded-full bg-secondary shadow-small-secondary">
+        <AppIcon icon="plus" color="text-white" @click="addWord" />
+      </div>
       <div class="w-full flex flex-col gap-4">
-        <TransitionGroup name="fade">
+        <TransitionGroup name="word-item">
           <CreateWordCard
-            v-for="(word, index) in words" :key="index" v-model:original="word.original"
+            v-for="(word, index) in words"
+            :key="getWordKey(word, index)"
+            v-model:original="word.original"
             v-model:translated="word.translated"
+            :class="{ 'new-word': word.isNew }"
             @on-delete="deleteCard(index)"
           />
         </TransitionGroup>
       </div>
-      <AppIcon icon="add" color="text-dark" @click="addWord" />
     </div>
-    <AppDelayedElement :disabled="loader" @click="onCategoryCreate">
-      <AppButton full outline class="mt-8" :disabled="loader">
-        {{ $t('button.add-course') }}
-      </AppButton>
-    </AppDelayedElement>
+    <Teleport to="body">
+      <Transition name="move-up">
+        <AppDelayedElement v-if="!isMenuVisible" :disabled="loader" class="fixed bottom-4 left-0 px-5" @click="onCategoryCreate">
+          <AppButton full outline :disabled="loader">
+            {{ $t('button.add-course') }}
+          </AppButton>
+        </AppDelayedElement>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
@@ -45,7 +54,7 @@ import type { CreateWordDTO } from '~/assets/types/word'
 import { CreateWordCard } from '#components'
 import { useGlobalStore } from '#imports'
 import { storeToRefs } from 'pinia'
-import { onMounted, reactive, ref, watch } from 'vue'
+import { onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import PageTop from '~/components/PageTop.vue'
 import { AppButton, AppDelayedElement, AppIcon, AppInput, AppSelect } from '~/components/ui'
@@ -55,13 +64,18 @@ import { useCategoryStore } from '~/stores/category'
 
 const { goBack } = useRouterUtility()
 const { getCategoryTypes, createCategory } = useCategoryStore()
-const { loader } = storeToRefs(useGlobalStore())
-const { setLoader } = useGlobalStore()
+const { loader, isMenuVisible } = storeToRefs(useGlobalStore())
+const { setLoader, setMenuVisibility } = useGlobalStore()
 const { categoryTypes } = storeToRefs(useCategoryStore())
 const router = useRouter()
 
 onMounted(async () => {
+  setMenuVisibility(false)
   await getCategoryTypes()
+})
+
+onUnmounted(() => {
+  setMenuVisibility(true)
 })
 
 const category: { name: string, description: string, type: CategoryType | null, subType: CategoryType | null } = reactive({
@@ -71,21 +85,44 @@ const category: { name: string, description: string, type: CategoryType | null, 
   subType: null,
 })
 
-const words = ref<CreateWordDTO[]>([{ original: '', translated: '' }])
+// Добавляем уникальные ID для каждого слова
+const words = ref<Array<CreateWordDTO & { id: number, isNew: boolean }>>([
+  { original: '', translated: '', id: Date.now(), isNew: false },
+])
+
+let nextWordId = Date.now() + 1
+
 function addWord() {
-  words.value.push({
+  words.value.unshift({
     original: '',
     translated: '',
+    id: nextWordId++,
+    isNew: true,
   })
+
+  // Убираем флаг isNew после анимации
+  setTimeout(() => {
+    const newWord = words.value.find(word => word.id === nextWordId - 1)
+    if (newWord) {
+      newWord.isNew = false
+    }
+  }, 500)
+}
+
+function getWordKey(word: any, index: number) {
+  return word.id || index
 }
 
 async function onCategoryCreate() {
   if (category.type) {
     setLoader(true)
+    // Убираем служебные поля перед отправкой
+    const wordsToSend = words.value.map(({ id, isNew, ...word }) => word)
+
     const { error } = await createCategory({
       ...category,
       type: category.subType?.id || category.type.id,
-      words: words.value,
+      words: wordsToSend,
     })
 
     if (!error.value) {
@@ -110,3 +147,36 @@ function deleteCard(position: number) {
   words.value = words.value.filter((_, index) => index !== position)
 }
 </script>
+
+<style scoped>
+/* Анимация только для новых слов */
+.word-item-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.word-item-enter-from {
+  opacity: 0;
+  transform: translateY(-10px) scale(0.95);
+}
+
+.word-item-enter-to {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Анимация для удаления всех элементов */
+.word-item-leave-active {
+  transition: all 0.3s ease-in;
+  position: absolute;
+  width: 100%;
+}
+
+.word-item-leave-to {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+
+.word-item-move {
+  transition: transform 0.3s ease;
+}
+</style>

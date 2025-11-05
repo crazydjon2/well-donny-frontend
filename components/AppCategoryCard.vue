@@ -4,7 +4,14 @@
     :class="primary ? 'border-primary shadow-small-primary' : 'border-secondary shadow-small-secondary'"
   >
     <span class="category__name">{{ props.category.name }}</span>
-    <span class="category__author mt-auto" @click.stop.prevent="goToProfile">@{{ props.author.name }}</span>
+    <div class="flex items-center text-[8px] gap-1">
+      <span>{{ category.categoriesTypes.type }}</span>
+      <div v-if="rate" class="flex">
+        <AppIcon icon="star-filled" color="text-secondary-2" :width="8" :height="8" class="relative top-[0.7px]" />
+        {{ rate?.toFixed(1) }}
+      </div>
+    </div>
+    <span class="category__author mt-auto w-fit" @click.stop.prevent="goToProfile">@{{ props.author.name }}</span>
 
     <slot />
   </div>
@@ -14,12 +21,14 @@
 import type { Category } from '~/assets/types/category'
 import type { User } from '~/assets/types/user'
 import { useRouter } from 'vue-router'
+import { AppIcon } from './ui'
 
 const props = defineProps<{
   category: Category
   author: User
   description?: string
   primary?: boolean
+  rate?: number
 }>()
 
 const router = useRouter()

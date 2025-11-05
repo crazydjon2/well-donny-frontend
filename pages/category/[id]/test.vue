@@ -1,5 +1,5 @@
 <template>
-  <div class="container overflow-hidden !mb-[6rem]">
+  <div class="container overflow-hidden min-h-[100vh]">
     <PageTop type="primary">
       <template #left>
         <AppIcon icon="tuning" :width="22" :height="26" color="text-white" />
@@ -14,12 +14,14 @@
     <ShipProgress v-if="cards" :length="cards.length" :position="slide + 1" class="mt-5" />
     <div v-if="cards" class="mt-6">
       <FlashCardsContainer :key="renderKey" v-model="slide" :allow-swipe="false" :is-square="false">
-        <FlashCardsItem v-for="(card) in cards" :key="card.id" class="flex flex-col overflow-visible p-1">
+        <FlashCardsItem v-for="(card) in cards" :key="card.id" class="flex flex-col overflow-visible p-1 relative">
           <div
-            class="w-full !h-[200px] flex items-center bg-white justify-center border-secondary border-2 shadow-small-secondary rounded-3xl"
+            class="w-full !h-[200px] flex items-center bg-white justify-center border-secondary border-2 shadow-small-secondary rounded-3xl px-2"
           >
-            {{ card.original }}
+            <p class="truncate-text">{{ card.original }}</p>
           </div>
+
+          <AppIcon icon="resize" :width="18" :height="18" class="absolute right-4 top-4" @click="openModal(card)" />
         </FlashCardsItem>
 
         <template #end-slide>
@@ -85,9 +87,9 @@
 
 <script lang="ts" async setup>
 import type { Word } from '~/assets/types/word'
-import { pickWords, useGlobalStore, useRouterUtility } from '#imports'
+import { pickWords, useGlobalStore, useModalStore, useRouterUtility } from '#imports'
 import { storeToRefs } from 'pinia'
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ButtonTypes } from '~/assets/types/ui'
 import PageTop from '~/components/PageTop.vue'
@@ -217,6 +219,9 @@ onBeforeUnmount(() => {
     }))
   }
 })
+onUnmounted(() => {
+  setMenuVisibility(true)
+})
 
 const correctClasses = '!bg-green !border-green !shadow-none translate-x-[-2px] translate-y-[2px]'
 const wrongClasses = '!bg-red !border-red !shadow-none translate-x-[-2px] translate-y-[2px]'
@@ -234,4 +239,24 @@ function getButtonClass(word: Word) {
 
   return ''
 }
+
+const { open } = useModalStore()
+function openModal(card: Word) {
+  open(card.original)
+}
 </script>
+
+<style scoped>
+.truncate-text {
+  display: -webkit-box;
+  /* Required for -webkit-line-clamp to work */
+  -webkit-box-orient: vertical;
+  /* Required for vertical clamping */
+  -webkit-line-clamp: 3;
+  /* Limit to 3 lines */
+  overflow: hidden;
+  /* Hide overflowing content */
+  text-overflow: ellipsis;
+  /* Add ellipsis for truncated text */
+}
+</style>

@@ -139,6 +139,7 @@
    animations can be calculated correctly. */
 .move-left-small-leave-active {
   position: absolute;
+  z-index: 0;
 }
 
 // MOVE-LEFT-SMALL ANIMATION END

@@ -57,4 +57,13 @@ export const categoryService = {
       },
     })
   },
+  rateCategory(categoryId: string, rate: number) {
+    return useApi('/user-categories/rate', {
+      method: 'PUT',
+      body: {
+        categoryId,
+        rate,
+      },
+    })
+  },
 }

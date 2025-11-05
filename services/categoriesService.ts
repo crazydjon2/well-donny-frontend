@@ -12,6 +12,6 @@ export const categoriesService = {
     return useApi<UsersCategory[]>(`/categories/all?type=${queries.type || ''}&role=${queries.role || ''}&userId=${queries.userId || ''}&sort=${queries.sort || ''}&folder=${queries.folder || ''}`)
   },
   getByType(typeId: string) {
-    return useApi<Record<string, UsersCategory[]>>(`/categories/by-type?typeId=${typeId}`)
+    return useApi<Record<string, (UsersCategory & { averageRate: number })[]>>(`/categories/by-type?typeId=${typeId}`)
   },
 }

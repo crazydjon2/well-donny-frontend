@@ -10,6 +10,7 @@
       <p class="text-regular text-center">
         {{ description }}
       </p>
+      <slot />
       <div class="flex w-full gap-2 mt-5">
         <AppButton class="flex-[1]" :type="ButtonTypes.SECONDARY" outline full @click="emits('close')">
           {{ btnLeft }}
@@ -28,10 +29,10 @@ import AppButton from '../ui/AppButton.vue'
 import ModalFull from './ModalFull.vue'
 
 defineProps<{
-  title: string
-  description: string
-  btnLeft: string
-  btnRight: string
+  title?: string
+  description?: string
+  btnLeft?: string
+  btnRight?: string
 }>()
 
 const emits = defineEmits<Emits>()

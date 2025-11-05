@@ -1,32 +1,28 @@
-// stores/useModalStore.ts
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-let idCounter = 0
-
 export const useModalStore = defineStore('modal', () => {
-  const modals = ref<
-    {
-      id: number
-      component: string
-      props: Record<string, any>
-    }[]
-  >([])
+  const isOpen = ref(false)
+  const modalData = ref<{ text: string, img?: string }>({
+    text: '',
+    img: '',
+  })
 
-  function open(component: string, props: Record<string, any> = {}) {
-    const id = ++idCounter
-    modals.value.push({ id, component, props })
-    return id
+  function open(text: string, img?: string) {
+    modalData.value = {
+      text,
+      img,
+    }
+    isOpen.value = true
   }
 
-  function close(id?: number) {
-    if (id != null) {
-      modals.value = modals.value.filter(m => m.id !== id)
+  function close() {
+        modalData.value = {
+      text: '',
+      img: '',
     }
-    else {
-      modals.value.pop()
-    }
+    isOpen.value = false
   }
 
-  return { modals, open, close }
+  return { isOpen, modalData, open, close }
 })

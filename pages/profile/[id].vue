@@ -1,9 +1,9 @@
 <template>
-  <div class="container !pb-[200px]">
+  <div class="container">
     <PageTop type="primary-light">
       <div class="flex justify-between">
         {{ profile?.name }}
-        <AppIcon v-if="isMe" icon="settings" color="text-white" :width="36" :height="36" />
+        <AppIcon v-if="isMe" icon="settings" color="text-white" :width="36" :height="36" @click="settingsModal = true" />
       </div>
     </PageTop>
     <div class="mt-6">
@@ -54,6 +54,7 @@
         </Slide>
       </Carousel>
     </div>
+    <ProfileSettingsModal v-model="settingsModal" />
   </div>
 </template>
 
@@ -69,9 +70,10 @@ import { Carousel, Slide } from 'vue3-carousel'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import AppCategoryCard from '~/components/AppCategoryCard.vue'
+import ProfileSettingsModal from '~/components/modals/ProfileSettingsModal.vue'
 import PageTop from '~/components/PageTop.vue'
 import { AppDelayedElement, AppIcon } from '~/components/ui'
-import { authService } from '~/services/authService'
+import { authService } from '~/services/userService'
 import { categoriesService } from '~/services/categoriesService'
 import { userStrickService } from '~/services/userStrickService'
 import { useUserStore } from '~/stores/user'
@@ -132,6 +134,8 @@ const carouselConfig = {
 const isMe = computed(() => {
   return route.params.id === 'me' || route.params.id === user.value?.id
 })
+
+const settingsModal = ref(false)
 
 watch(pickedLocale, () => {
   locale.value = pickedLocale.value.type

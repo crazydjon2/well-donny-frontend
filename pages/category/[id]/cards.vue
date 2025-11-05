@@ -1,5 +1,5 @@
 <template>
-  <div class="container overflow-hidden !mb-[6rem]">
+  <div class="container overflow-hidden min-h-[100vh]">
     <PageTop type="primary">
       <template #default>
         {{ $t('cards') }}
@@ -19,8 +19,10 @@
           <FlashCardsItem v-show="isFlipping ? slide === index : true" @on-tilt="tiltState = $event">
             <AppCard
               :text-first="card.word.original" :text-second="card.word.translated" large :word-max="cards.length"
-              :word-current="index + 1" :custom-class="cardClasses(index)" @flip-started="isFlipping = true"
-              @flip-ended="isFlipping = false" @on-back-pressed="slide--"
+              :word-current="index + 1" :custom-class="cardClasses(index)" :word-id="card.word.id"
+              :is-favorite-init="card.word.isFavorite"
+              @flip-started="isFlipping = true"
+              @flip-ended="isFlipping = false" @on-back-pressed="slide > 0 ? slide-- : 1"
             />
           </FlashCardsItem>
         </template>
@@ -82,7 +84,7 @@
 import type { TiltState } from '~/components/ui/flashCards/types'
 import { useGlobalStore, useRouterUtility } from '#imports'
 import { storeToRefs } from 'pinia'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ButtonTypes } from '~/assets/types/ui'
 import PageTop from '~/components/PageTop.vue'
@@ -141,5 +143,9 @@ const cardClasses = computed(() => (index: number) => {
 
 onMounted(() => {
   getCategoryCards(route.params?.id as string)
+})
+
+onUnmounted(() => {
+  setMenuVisibility(true)
 })
 </script>

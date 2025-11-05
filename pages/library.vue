@@ -21,7 +21,10 @@
     </template>
     <template #content-header>
       <div class="flex h-full gap-4 overflow-auto items-center w-full">
-        <AppChip v-for="type in categoryTypes" :key="type.id" :active="activeType === type.id" @click="getCategories(type.id)">
+        <AppChip
+          v-for="type in categoryTypes" :key="type.id" :active="activeType === type.id"
+          @click="getCategories(type.id)"
+        >
           <span class="text-small font-normal">{{ $t(`category.type.${type.type}`) }}</span>
         </AppChip>
       </div>
@@ -41,18 +44,17 @@
           </div>
           <div v-else-if="categories" class="grid grid-cols-1 gap-6 px-5 pt-5 w-full">
             <MotionComponent
-              v-for="(categoryKey, index) in Object.keys(categories)" :key="index" :initial="{ opacity: 0, scale: 0.9 }"
-              :enter="{ opacity: 1, scale: 1 }"
-              :leave="{ opacity: 0, scale: 0.8 }"
-              :transition="{ type: 'spring', stiffness: 200, damping: 20 }"
+              v-for="(categoryKey, index) in Object.keys(categories)" :key="index"
+              :initial="{ opacity: 0, scale: 0.9 }" :enter="{ opacity: 1, scale: 1 }"
+              :leave="{ opacity: 0, scale: 0.8 }" :transition="{ type: 'spring', stiffness: 200, damping: 20 }"
             >
               <p class="text-small py-2 border-b-[1px] mb-4 uppercase">
                 {{ categoryKey }}
               </p>
               <div class="flex w-full gap-4 overflow-x-auto p-2">
-                <div v-for="category in categories[categoryKey]" :key="category.id" class="min-w-[calc(50%-10px)]">
+                <div v-for="category in categories[categoryKey]" :key="category.id" class="w-[calc(50%-10px)]">
                   <AppDelayedElement :to="`/category/${category.category.id}`">
-                    <AppCategoryCard :category="category.category" :author="category.user" />
+                    <AppCategoryCard :category="category.category" :author="category.user" :rate="category.averageRate" />
                   </AppDelayedElement>
                 </div>
               </div>
@@ -88,24 +90,26 @@ const activeType = ref('')
 
 onMounted(async () => {
   await getCategoryTypes()
-  if (categoryTypes.value) {
-    activeType.value = categoryTypes.value ? categoryTypes.value[0].id : ''
+  if (categoryTypes.value && categoryTypes.value[0]) {
+    activeType.value = categoryTypes && categoryTypes.value ? categoryTypes.value[0].id : ''
   }
   getCategories(activeType.value)
 })
 
-const categories = ref<Record<string, UsersCategory[]> | null>(null)
+const categories = ref<Record<string, (UsersCategory & { averageRate: number })[]> | null>(null)
 const loading = ref<boolean>(true)
 async function getCategories(type: string) {
-  activeType.value = type
-  loading.value = true
-  const { data } = await categoriesService.getByType(activeType.value)
-  if (data.value) {
-    if (Object.keys(data.value).length !== 0) {
-      categories.value = data.value
-    }
-    else {
-      categories.value = null
+  if (type) {
+    activeType.value = type
+    loading.value = true
+    const { data } = await categoriesService.getByType(activeType.value)
+    if (data.value) {
+      if (Object.keys(data.value).length !== 0) {
+        categories.value = data.value
+      }
+      else {
+        categories.value = null
+      }
     }
   }
   loading.value = false

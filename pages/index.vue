@@ -21,17 +21,44 @@
         </div>
       </template>
       <template #content-header>
-        <div class="flex h-full gap-4 overflow-x-auto items-center w-full">
-          <AppChip
-            v-for="folder in categoryFolders" :key="folder.value" :active="folder.value === activeFolder"
-            @click="setActiveFolder(folder.value)"
-          >
-            <p class="font-normal text-small">
-              {{ folder.name }}
-            </p>
-          </AppChip>
+        <div class="flex items-center">
+          <div id="folder-container" class="flex h-full gap-4 overflow-x-auto items-center w-[calc(100%-40px)]">
+            <AppChip
+              v-for="folder in categoryFolders" :id="`folder-${folder.value}`" :key="folder.value"
+              :active="folder.value === activeFolder"
+              @click="setActiveFolder(folder.value)"
+            >
+              <div class="flex items-center justify-center">
+                <p class="font-normal text-small">
+                  {{ folder.name }}
+                </p>
 
-          <AppIcon icon="plus" color="text-dark" class="mb-0.5 cursor-pointer" :width="16" :height="16" @click="folderModal = true" />
+                <!-- TODO
+                ADD tRANSItiON -->
+                <Transition>
+                  <Dropdown v-if="folder.custom && folder.value === activeFolder" :disabled="folderModal || folderDeleteModal" class="ml-1 mb-1">
+                    <AppIcon icon="settings" :width="18" :height="18" />
+                    <template #popper>
+                      <div class="p-5 px-7 gap-3 flex flex-col rounded-xl">
+                        <p class="text-small text-center border-b-1" @click="editFolder(folder)">
+                          редактировать
+                        </p>
+                        <p class="text-small text-center border-b-1" @click="folderDeleteModal = true">
+                          удалить
+                        </p>
+                      </div>
+                    </template>
+                  </Dropdown>
+                </Transition>
+              </div>
+            </AppChip>
+          </div>
+          <AppButton :type="ButtonTypes.SECONDARY" outline small class="flex items-center justify-center ml-2 mb-1.5">
+            <AppIcon
+              icon="plus" color="text-dark" class="p-1 cursor-pointer" :width="16" :height="16"
+              @click="folderToEdit = null;folderModal = true"
+            />
+          </AppButton>
         </div>
       </template>
       <template #content>
@@ -76,23 +103,28 @@
       :btn-right="isCreator ? $t('button.delete') : $t('button.remove')" @close="modalOpen = false"
       @confirm="deleteCategory"
     />
-    <CreateFolderModal v-model="folderModal" @on-create="onCreate" />
+    <ConfirmModal v-model="folderDeleteModal" :title="$t('attention')" :btn-left="$t('button.cancel')" :btn-right="$t('button.delete')" description="Папка будет удалена, восстановить её уже не получится. Все добавленные курсы останутся во вкладке «Все курсы»" @confirm="deleteFolder" />
+    <CreateFolderModal v-model="folderModal" :folder-id="folderToEdit" @on-create="onCreate" />
   </div>
 </template>
 
 <script setup lang="ts">
+import type { CategoryFolder } from '~/assets/types/usersCategories'
 import { useCategoryStore, useUserStore } from '#imports'
 import { MotionComponent } from '@vueuse/motion'
+
+import { Dropdown } from 'floating-vue'
 import { storeToRefs } from 'pinia'
 
 import { onMounted, ref, watch } from 'vue'
-
+import { ButtonTypes } from '~/assets/types/ui'
 import AppCategoryCard from '~/components/AppCategoryCard.vue'
 import ConfirmModal from '~/components/modals/ConfirmModal.vue'
 import CreateFolderModal from '~/components/modals/CreateFolderModal.vue'
 import PageContainer from '~/components/PageContainer.vue'
 import SkeletonLoader from '~/components/SkeletonLoader.vue'
-import { AppChip, AppDelayedElement, AppIcon } from '~/components/ui'
+import { AppButton, AppChip, AppDelayedElement, AppIcon } from '~/components/ui'
+import { folderService } from '~/services/folderService'
 
 import { useCategoriesStore } from '~/stores/categories'
 
@@ -103,6 +135,7 @@ const { deleteCategory: deleteCategoryMethod, removeUserFromCategory } = useCate
 
 const modalOpen = ref<boolean>(false)
 const folderModal = ref<boolean>(false)
+const folderDeleteModal = ref(false)
 
 const categoryId = ref<string>('')
 const isCreator = ref(false)
@@ -129,10 +162,24 @@ function deleteCategory() {
     }
   }
 }
+async function deleteFolder() {
+  await folderService.deleteFolder(activeFolder.value.toString())
+  await getFolders()
+  folderDeleteModal.value = false
+  setActiveFolder(0)
+}
 
 function onCreate() {
   getFolders()
   getCategories()
+}
+
+const folderToEdit = ref('')
+function editFolder(folder: CategoryFolder) {
+  if (folder.custom) {
+    folderToEdit.value = folder.value as string
+    folderModal.value = true
+  }
 }
 
 onMounted(() => {
@@ -140,6 +187,12 @@ onMounted(() => {
 })
 
 watch(activeFolder, () => {
+  setTimeout(() => {
+    document.querySelector(`#folder-${activeFolder.value}`)?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'end',
+    })
+  }, 100)
   getCategories()
 }, { immediate: true })
 </script>

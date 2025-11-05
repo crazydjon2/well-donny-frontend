@@ -1,12 +1,14 @@
 import { defineNuxtPlugin, useCookie } from '#app'
 import { useTelegramAuth } from '#imports'
 import { nextTick } from 'vue'
-import { authService } from '~/services/authService'
+
+import { authService } from '~/services/userService'
 import { useGlobalStore } from '~/stores/global'
 import { useUserStore } from '~/stores/user'
 
 export default defineNuxtPlugin(async () => {
   const token = useCookie('token')
+  const localeCookie = useCookie('locale')
   const userStore = useUserStore()
   const { setLoader } = useGlobalStore()
 
@@ -27,6 +29,7 @@ export default defineNuxtPlugin(async () => {
         name: tgUserData?.username || Math.random().toString(36).substring(2, 8),
       })
       if (user.value) {
+        localeCookie.value = user.value.language
         userStore.setUser(user.value)
       }
       await refresh()
@@ -37,8 +40,15 @@ export default defineNuxtPlugin(async () => {
       token.value = signInData.value.token
       await nextTick()
       const { data: user } = await authService.getUser()
-      if (user.value)
+      if (user.value) {
+        if (localeCookie.value !== user.value.language) {
+          setTimeout(() => {
+            window.location.reload()
+          })
+        }
+        localeCookie.value = user.value.language
         userStore.setUser(user.value)
+      }
     }
   }
   catch (e) {

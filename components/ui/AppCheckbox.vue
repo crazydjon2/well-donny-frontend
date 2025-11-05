@@ -6,7 +6,7 @@
         <AppIcon v-if="modelValue || value" icon="check" color="text-secondary" :width="30" :height="30" class="absolute -top-2 -left-1" />
       </Transition>
     </div>
-    <p class="ml-1">
+    <p v-if="text" class="ml-1">
       {{ text }}
     </p>
   </div>

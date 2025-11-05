@@ -1,9 +1,7 @@
 <template>
-  <div
-    v-if="isActive || isNext || isPrev" class="relative flash-card z-10"
+  <div v-if="isActive || isNext || isPrev" class="relative flash-card z-10"
     :class="{ 'flash-card-no-click': !allowClick, '!absolute top-0 left-0 w-full h-full': isNext || isPrev, 'z-[1]': isNext, 'z-[20]': isPrev }"
-    :style="cardStyle" @mousedown="startDrag" @touchstart="startDrag" @click.self="handleClick"
-  >
+    :style="cardStyle" @mousedown="startDrag" @touchstart="startDrag" @click.self="handleClick">
     <slot />
   </div>
 </template>
@@ -49,16 +47,18 @@ const isRightState = ref(false)
 const isLeftState = ref(false)
 
 function startDrag(e: MouseEvent | TouchEvent) {
-  isDragging.value = true
-  const clientX = 'clientX' in e ? e.clientX : e.touches[0].clientX
-  const clientY = 'clientY' in e ? e.clientY : e.touches[0].clientY
+  if (cardContext?.allowSwipe) {
+    isDragging.value = true
+    const clientX = 'clientX' in e ? e.clientX : e.touches[0].clientX
+    const clientY = 'clientY' in e ? e.clientY : e.touches[0].clientY
 
-  startPos.value = { x: clientX, y: clientY }
-  currentPos.value = { x: 0, y: 0 }
+    startPos.value = { x: clientX, y: clientY }
+    currentPos.value = { x: 0, y: 0 }
 
-  // Для touch-устройств предотвращаем скролл страницы
-  if ('touches' in e) {
-    document.body.style.overflow = 'hidden'
+    // Для touch-устройств предотвращаем скролл страницы
+    if ('touches' in e) {
+      document.body.style.overflow = 'hidden'
+    }
   }
 }
 
@@ -101,7 +101,7 @@ if (onMouseUp) {
   onMouseUp(endDrag)
 }
 
-function endDrag() {
+function endDrag(e: MouseEvent | TouchEvent) {
   if (isActive.value) {
     isDragging.value = false
 
@@ -125,6 +125,9 @@ function endDrag() {
     setTimeout(() => {
       allowClick.value = true
     }, 500)
+  }
+  if ('touches' in e) {
+    document.body.style.overflow = 'auto'
   }
 }
 

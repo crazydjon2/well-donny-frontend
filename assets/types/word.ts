@@ -4,6 +4,7 @@ export interface Word {
   translated: string
   createdAt: string
   updatedAt: string
+  isFavorite: boolean
 }
 
 export interface CreateWordDTO {

@@ -12,7 +12,7 @@
           <slot name="additional" />
         </div>
       </transition>
-      <div class="absolute bottom-[-1px] w-full bg-white rounded-t-3xl h-[44px] px-4">
+      <div class="absolute bottom-[-1px] w-full bg-white rounded-t-3xl h-[44px] px-4 pt-2">
         <slot name="content-header" />
       </div>
     </div>

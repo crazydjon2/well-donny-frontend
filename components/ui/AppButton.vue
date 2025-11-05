@@ -1,6 +1,6 @@
 <template>
   <button
-    class="flex justify-center text-white rounded-xl py-5 px-4 cursor-pointer app-button" :class="[buttonClasses, [customClass]]"
+    class="flex justify-center text-white rounded-xl py-5 px-4 cursor-pointer app-button rounded" :class="[buttonClasses, [customClass]]"
   >
     <span>
       <slot>{{ $t('ui.button') }}</slot>
@@ -35,6 +35,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    small: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup(props) {
     const buttonClasses = computed(() => {
@@ -45,6 +49,9 @@ export default defineComponent({
         'w-min-[165px]': !props.full,
         '!bg-light !text-dark button--disabled': props.disabled,
         'bg-white !text-dark': props.outline,
+        '!p-0 !rounded-lg': props.small,
+        'shadow-small-primary': props.small && props.type === ButtonTypes.PRIMARY,
+        'shadow-small-secondary': props.small && props.type === ButtonTypes.SECONDARY,
       }
     })
 
