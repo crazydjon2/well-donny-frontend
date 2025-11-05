@@ -7,3 +7,9 @@ export interface UsersCategory {
   user: User
   category: Category
 }
+
+export interface CategoryFolder {
+  name: string
+  value: number | string
+  custom: boolean
+}

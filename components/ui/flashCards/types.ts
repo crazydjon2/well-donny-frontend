@@ -8,6 +8,7 @@ export type MouseUpEvent = (handler: () => void) => void
 export interface FlashCardsContext {
   currentSlide: ComputedRef<number>
   items: Ref<number[]>
+  allowSwipe: boolean,
   registerItem: (uid: number) => number
   unregisterItem: (uid: number) => void
   setSlide: (index: number) => void

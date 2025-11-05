@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative px-4 py-3 rounded-[20px] overflow-hidden"
+    class="relative px-4 py-3 rounded-[20px] overflow-hidden z-100"
     :class="type === 'primary' ? 'top-primary' : type === 'secondary' ? 'top-secondary' : 'top-primary-light'"
   >
     <div class="flex items-center justify-center">

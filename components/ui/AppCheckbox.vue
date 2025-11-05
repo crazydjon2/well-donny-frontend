@@ -1,11 +1,12 @@
 <template>
-  <div class="flex items-center cursor-pointer w-fit" :class="disabled || 'opacity-30 pointer-events-none'" @click="onClick">
-    <div class="relative w-[24px] h-[24px] rounded-lg border-dark border-[1px]">
+  <div class="flex items-center cursor-pointer w-fit" :class="disabled && 'opacity-30 pointer-events-none'" @click="onClick">
+    <slot />
+    <div class="relative w-[24px] h-[24px] rounded-lg border-primary shadow-small-primary border-[2px]">
       <Transition name="fade">
-        <AppIcon v-if="modelValue" icon="check" color="text-primary" small class="absolute left-0.5 top-0.5" />
+        <AppIcon v-if="modelValue || value" icon="check" color="text-secondary" :width="30" :height="30" class="absolute -top-2 -left-1" />
       </Transition>
     </div>
-    <p class="ml-1">
+    <p v-if="text" class="ml-1">
       {{ text }}
     </p>
   </div>
@@ -28,7 +29,10 @@ export default defineComponent({
     },
     modelValue: {
       type: Boolean,
-      required: true,
+      required: false,
+    },
+    value: {
+      type: Boolean,
     },
   },
   emits: ['update:modelValue'],

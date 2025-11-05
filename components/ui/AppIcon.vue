@@ -1,11 +1,11 @@
 <template>
   <div>
-    <component :is="iconComponent" :class="colorClass" :style="sizeStyle" />
+    <component :is="iconComponent" :key="renderKey" :class="colorClass" :style="sizeStyle" />
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineAsyncComponent, defineComponent, watch } from 'vue'
+import { computed, defineAsyncComponent, defineComponent, nextTick, ref, watch } from 'vue'
 
 export default defineComponent({
   props: {
@@ -44,11 +44,14 @@ export default defineComponent({
       height: props.height ? `${props.height}px` : props.small ? '20px' : props.big ? '40px' : undefined,
     }))
 
-    watch(() => props.icon, () => {
+    const renderKey = ref(0)
+    watch(() => props.icon, async () => {
       iconComponent.value = defineAsyncComponent(() => import(`@/assets/icons/${props.icon}.svg`))
+      await nextTick()
+      renderKey.value = renderKey.value + 1
     })
 
-    return { iconComponent, colorClass, sizeStyle }
+    return { iconComponent, colorClass, sizeStyle, renderKey }
   },
 })
 </script>

@@ -2,9 +2,10 @@
   <div>
     <input
       v-model="model" :placeholder="placeholder" type="text" required
-      class="border-b-[1px] border-dark w-full h-[32px] text-small font-medium text-dark placeholder:text-small placeholder:text-hint-gray placeholder:font-medium"
+      class="border-b-2 border-primary px-3 w-full h-[32px] text-small font-medium placeholder:text-small placeholder:text-hint-gray placeholder:font-medium"
+      :class="[outline && 'border-primary !border-2 rounded-xl !p-3 min-h-[48px]', white && 'text-white border-white']"
     >
-    <label>{{ props.label }}</label>
+    <label class="text-[10px] pl-3 text-hint-gray" :class="white && 'text-white'">{{ props.label }}</label>
     <p v-if="error">
       {{ error }}
     </p>
@@ -14,8 +15,10 @@
 <script setup lang="ts">
 const props = defineProps<{
   label?: string
+  outline?: boolean
   placeholder?: string
   error?: string
+  white?: boolean
 }>()
 
 const model = defineModel()

@@ -1,12 +1,81 @@
 {
   "my-course": "MY COURSES",
-  "attention": "Внимание!",
-
-  "buttons": {
-    "create": "создать",
-    "canel": "отменить",
-    "delete": "удалить"
+  "attention": "Attention!",
+  "new-course": "new course",
+  "termins": "Terms",
+  "library": "Library",
+  "menu": {
+    "course": "my courses",
+    "library": "library",
+    "profile": "profile"
   },
-
-  "delete-description": "Курс и весь его прогресс будет полностью удален (и у других пользователей тоже!)"
+  "button": {
+    "create": "create",
+    "cancel": "cancel",
+    "delete": "delete",
+    "add-course": "add course",
+    "more": "again!",
+    "finish": "finish",
+    "dont-know": "don't know",
+    "remove": "remove",
+    "know": "know",
+    "next": "next",
+    "rate": "rate",
+    "save": "save"
+  },
+  "input": {
+    "placeholder": {
+      "category": "Category",
+      "description": "Description",
+      "course-title": "Course title"
+    }
+  },
+  "folders": {
+    "all": "all",
+    "personal": "personal",
+    "recent": "recent"
+  },
+  "category": {
+    "type": {
+      "language": "Languages",
+      "science": "Science"
+    }
+  },
+  "category-status": {
+    "done": "course completed",
+    "state": {
+      "1": "Set sail!",
+      "2": "This is just the beginning...",
+      "3": "Raise the sails!",
+      "4": "More than halfway!",
+      "5": "I see land...",
+      "6": "YO-HO-HO!"
+    }
+  },
+  "action": {
+    "edit": "edit",
+    "restart": "start over",
+    "share": "share",
+    "delete": "remove from my courses"
+  },
+  "modal": {
+    "rate": {
+      "title": "Rate the course!",
+      "description": "This will help users and authors find and create cool courses"
+    },
+    "rate-edit": {
+      "title": "Want to change your rating?",
+      "description": "Opinions may change, but they still remain important"
+    }
+  },
+  "cards": "Cards",
+  "test": "Test",
+  "words": "words",
+  "all": "all",
+  "correct-answers": "Correct answers",
+  "need-to-learn": "Need to review",
+  "learnt-text": "You've learned {length} cards",
+  "learnt-all": "You've learned all cards",
+  "delete-description": "The course and all its progress will be completely deleted (for other users too!)",
+  "remove-description": "The course and its progress will be removed from your profile"
 }

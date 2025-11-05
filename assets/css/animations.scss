@@ -120,3 +120,26 @@
 }
 
 // MOVE-DOWN-SMALL ANIMATION END
+
+// MOVE-LEFT-SMALL ANIMATION START
+
+.move-left-small-move, /* apply transition to moving elements */
+.move-left-small-enter-active,
+.move-left-small-leave-active {
+  transition: all 0.5s ease;
+}
+
+.move-left-small-enter-from,
+.move-left-small-leave-to {
+  opacity: 0;
+  transform: translateX(-50px);
+}
+
+/* ensure leaving items are taken out of layout flow so that moving
+   animations can be calculated correctly. */
+.move-left-small-leave-active {
+  position: absolute;
+  z-index: 0;
+}
+
+// MOVE-LEFT-SMALL ANIMATION END

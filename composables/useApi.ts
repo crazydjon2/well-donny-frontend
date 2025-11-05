@@ -13,7 +13,15 @@ export async function useApi<T = unknown>(url: string | (() => string), userOpti
   const config = useRuntimeConfig()
   const token = useCookie('token').value
   const tgIdLc = localStorage.getItem('tgId')
-  const tgUserData = Telegram?.WebApp?.initDataUnsafe?.user || null
+  let tgUserData = null
+  try {
+    // eslint-disable-next-line ts/ban-ts-comment
+    // @ts-expect-error
+    tgUserData = Telegram?.WebApp?.initDataUnsafe?.user || null
+  }
+  catch {
+    tgUserData = null
+  }
 
   const defaultOptions: FetchOptions<T> = {
     baseURL: `${config.public.baseUrl}`,

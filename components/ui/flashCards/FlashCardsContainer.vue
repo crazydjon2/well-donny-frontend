@@ -44,6 +44,7 @@ function setSlide(index: number) {
 
 provide('flashCardsContext', {
   currentSlide: computed(() => model.value),
+  allowSwipe: props.allowSwipe,
   registerItem,
   unregisterItem,
   items,
