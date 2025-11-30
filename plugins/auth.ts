@@ -17,11 +17,11 @@ export default defineNuxtPlugin(async () => {
   try {
     const tgIdLc = localStorage.getItem('tgId')
     await useTelegramAuth().init(3000)
-    const tgUserData = Telegram?.WebApp.initDataUnsafe.user
+    const tgUserData = global.Telegram.WebApp.initDataUnsafe?.user
 
-    const { data: signInData, status, refresh } = await authService.signIn()
+    const { data: signInData, error, refresh } = await authService.signIn()
 
-    if (status.value === 'error') {
+    if (error.value) {
       token.value = ''
       await nextTick()
       const { data: user } = await authService.createUser({

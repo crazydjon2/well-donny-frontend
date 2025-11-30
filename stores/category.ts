@@ -4,10 +4,12 @@ import type { Category, CreateCategoryDTO, EditCategoryDTO } from '~/assets/type
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { categoryService } from '~/services/categoryService'
+import type { UserCategory } from '~/assets/types/usersCategories'
 
 export const useCategoryStore = defineStore('category', () => {
   const category = ref<Category | null>(null)
   const cards = ref<Card[] | null>(null)
+  const userCategory = ref<UserCategory | null>(null)
   const categoryTypes = ref<CategoryType[]>([])
   const loading = ref<boolean>(false)
 
@@ -17,6 +19,10 @@ export const useCategoryStore = defineStore('category', () => {
 
   const setCategoryCards = (data: Card[]) => {
     cards.value = data
+  }
+
+  const setUserCategory = (data: UserCategory) => {
+    userCategory.value = data
   }
 
   const createCategory = async (data: CreateCategoryDTO) => {
@@ -59,5 +65,5 @@ export const useCategoryStore = defineStore('category', () => {
     }
   }
 
-  return { category, setCategory, cards, setCategoryCards, createCategory, getCategoryTypes, deleteCategory, categoryTypes, getCategory, removeUserFromCategory, getCategoryCards, editWord }
+  return { category, setCategory, cards, setCategoryCards, createCategory, getCategoryTypes, deleteCategory, categoryTypes, getCategory, removeUserFromCategory, getCategoryCards, editWord, setUserCategory, userCategory }
 })

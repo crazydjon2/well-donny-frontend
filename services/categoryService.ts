@@ -2,6 +2,7 @@ import type { Card } from '~/assets/types/card'
 import type { CategoryType } from '~/assets/types/categoriesTypes'
 import type { Category, CreateCategoryDTO, EditCategoryDTO } from '~/assets/types/category'
 import type { User } from '~/assets/types/user'
+import type { UserCategory } from '~/assets/types/usersCategories'
 import { useApi } from '~/composables/useApi'
 
 export const categoryService = {
@@ -57,6 +58,15 @@ export const categoryService = {
       },
     })
   },
+  setOrder(categoryId: string, reverse: boolean) {
+    return useApi('/user-categories/set-order', {
+      method: 'PUT',
+      body: {
+        categoryId,
+        reverse
+      },
+    })
+  },
   rateCategory(categoryId: string, rate: number) {
     return useApi('/user-categories/rate', {
       method: 'PUT',
@@ -65,5 +75,8 @@ export const categoryService = {
         rate,
       },
     })
+  },
+  getUserCategory(categoryId: string) {
+    return useApi<UserCategory>(`/user-categories/get/${categoryId}`)
   },
 }

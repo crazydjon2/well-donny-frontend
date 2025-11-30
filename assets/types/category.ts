@@ -5,7 +5,9 @@ import type { CreateWordDTO, EditWordDTO } from './word'
 export interface Category {
   id: string
   name: string
-  users: (User & { role: UserRoles, rate: number, completionСount: number })[]
+  author: (User & { role: UserRoles, rate: number, completionСount: number })
+  users: number
+  avarageRate: number
   description: string
   // TODO ADD ENUM!!!!!!!!!!!
   type: CategoryType & { parent?: CategoryType }

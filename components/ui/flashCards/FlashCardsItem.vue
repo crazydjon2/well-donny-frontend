@@ -1,7 +1,9 @@
 <template>
-  <div v-if="isActive || isNext || isPrev" class="relative flash-card z-10"
+  <div
+    v-if="isActive || isNext || isPrev" class="relative flash-card z-10"
     :class="{ 'flash-card-no-click': !allowClick, '!absolute top-0 left-0 w-full h-full': isNext || isPrev, 'z-[1]': isNext, 'z-[20]': isPrev }"
-    :style="cardStyle" @mousedown="startDrag" @touchstart="startDrag" @click.self="handleClick">
+    :style="cardStyle" @mousedown="startDrag" @touchstart="startDrag" @click.self="handleClick"
+  >
     <slot />
   </div>
 </template>
@@ -169,8 +171,10 @@ watch(currentSlide, (newValue, oldValue) => {
     else if (newValue < oldValue && isActive.value) {
       currentPos.value = { x: 0, y: 0 }
       if (isActive.value) {
-        console.log(isLeftState.value, isRightState.value, tiltState.value)
         tiltState.value = isLeftState.value ? 'left' : 'right'
+        setTimeout(() => {
+          tiltState.value = 'center'
+        }, 200)
       }
     }
   }

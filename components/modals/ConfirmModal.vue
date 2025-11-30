@@ -12,12 +12,16 @@
       </p>
       <slot />
       <div class="flex w-full gap-2 mt-5">
-        <AppButton class="flex-[1]" :type="ButtonTypes.SECONDARY" outline full @click="emits('close')">
-          {{ btnLeft }}
-        </AppButton>
-        <AppButton class="flex-[2]" full @click="emits('confirm')">
-          {{ btnRight }}
-        </AppButton>
+        <AppDelayedElement @click="emits('close')">
+          <AppButton class="flex-[1]" :type="ButtonTypes.SECONDARY" outline full>
+            {{ btnLeft }}
+          </AppButton>
+        </AppDelayedElement>
+        <AppDelayedElement @click="emits('confirm')">
+          <AppButton class="flex-[2]" full>
+            {{ btnRight }}
+          </AppButton>
+        </AppDelayedElement>
       </div>
     </div>
   </ModalFull>
@@ -25,7 +29,7 @@
 
 <script setup lang="ts">
 import { ButtonTypes } from '~/assets/types/ui'
-import AppButton from '../ui/AppButton.vue'
+import { AppButton, AppDelayedElement } from '../ui'
 import ModalFull from './ModalFull.vue'
 
 defineProps<{

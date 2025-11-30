@@ -13,3 +13,11 @@ export interface CategoryFolder {
   value: number | string
   custom: boolean
 }
+
+export interface UserCategory {
+  id: string
+  role: 'creator' | 'viewer'
+  completionСount:number,
+  rate: number,
+  reverseOrder: boolean
+}

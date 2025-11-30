@@ -3,7 +3,7 @@
     <div
       class="background-wave fixed w-full top-0 z-40 transition-all overflow-hidden ease-in-out"
       :class="[page === 'library' ? 'bg-secondary' : 'bg-primary']"
-      :style="{ height: isScrollingDown ? '175px' : '292px' }"
+      :style="{ height: isScrollingDown ? '175px' : '295px' }"
     >
       <slot name="title" />
 
@@ -12,7 +12,7 @@
           <slot name="additional" />
         </div>
       </transition>
-      <div class="absolute bottom-[-1px] w-full bg-white rounded-t-3xl h-[44px] px-4 pt-2">
+      <div class="absolute bottom-[-1px] w-full bg-white rounded-t-3xl h-[44px] px-4 pt-2 overflow-hidden translate-z-10">
         <slot name="content-header" />
       </div>
     </div>

@@ -36,9 +36,9 @@
     </PageTop>
 
     <div class="flex">
-      <NuxtLink :to="`/profile/${category.users[0].id}`" class="w-fit">
+      <NuxtLink :to="`/profile/${category.author.id}`" class="w-fit">
         <p v-if="category?.users" class="mt-[2px] text-extra-small text-primary w-fit">
-          @{{ category?.users[0].name }}
+          @{{ category?.author.name }}
         </p>
       </NuxtLink>
 
@@ -108,12 +108,12 @@
     <div v-else class="flex flex-col mt-5">
       <div class="w-full text-center flex items-center gap-5">
         <div class="flex flex-col w-full p-4 bg-primary text-white rounded-xl">
-          <span class="font-accent text-[96px] leading-[90px]">{{ category.users.length }}</span>
+          <span class="font-accent text-[96px] leading-[90px]">{{ category.users }}</span>
           <span class="text-regular leading-[16px] font-bold">пользователей</span>
           <span class="text-[10px] font-bold">добавили этот курс</span>
         </div>
-        <div v-if="avarageRate" class="flex flex-col w-full p-4 bg-secondary text-white rounded-xl">
-          <span class="font-accent text-[96px] leading-[90px]">{{ avarageRate }}</span>
+        <div v-if="category.avarageRate" class="flex flex-col w-full p-4 bg-secondary text-white rounded-xl">
+          <span class="font-accent text-[96px] leading-[90px]">{{ category.avarageRate }}</span>
           <span class="text-regular leading-[16px] font-bold">средняя оценка курса</span>
         </div>
       </div>
@@ -172,17 +172,12 @@ const route = useRoute()
 const router = useRouter()
 const { goBack } = useRouterUtility()
 
-const { category, cards } = storeToRefs(useCategoryStore())
+const { category, cards, userCategory } = storeToRefs(useCategoryStore())
 const { user } = storeToRefs(useUserStore())
 
 const { getCategoryCards, getCategory } = useCategoryStore()
 
-const isUserInCategory = computed(() => {
-  if (user && user.value) {
-    return category.value?.users.some(u => u.id === user.value?.id)
-  }
-  return false
-})
+const isUserInCategory = computed(() => userCategory.value)
 
 function addUser() {
   if (user.value && category.value) {
@@ -214,7 +209,7 @@ const modelDescription = computed(() => {
   return t('modal.description.delete')
 })
 
-const isCreator = computed(() => category?.value?.users.some(u => u.id === user.value?.id && u.role === 'creator'))
+const isCreator = computed(() => category?.value?.author)
 async function onConfirm() {
   if (category.value && user.value) {
     if (modalState.value === 'delete') {
@@ -261,19 +256,10 @@ async function rateCategory() {
 }
 
 const myRate = computed(() => {
-  return category.value?.users.find((u: User) => u.id === user.value?.id)?.rate
+  return userCategory.value?.rate
 })
 const myCompilationCount = computed(() => {
-  return category.value?.users.find((u: User) => u.id === user.value?.id)?.completionСount
-})
-const avarageRate = computed(() => {
-  const userWithRates = category.value?.users.filter(u => u.rate)
-  if (userWithRates) {
-    return userWithRates.reduce((sum, user) => {
-      return sum + user.rate
-    }, 0) / userWithRates.length
-  }
-  return 0
+  return userCategory.value?.completionСount
 })
 
 const description = ref()

@@ -8,9 +8,13 @@
       </div>
     </template>
     <template #additional>
+      <!-- class="bg-white border-secondary-3 border-2 rounded-xl shadow-small-secondary-dark !shadow-secondary-4 w-full" -->
       <div class="w-full px-5 flex gap-4">
         <AppInput
-          class="bg-white border-secondary-3 border-2 rounded-xl shadow-small-secondary-dark !shadow-secondary-4 w-full"
+          v-model="name"
+          secondary
+          placeholder="Текст"
+          class="w-full h-[38px]"
         />
         <div
           class="bg-white flex items-center justify-center border-secondary-3 border-2 rounded-xl shadow-small-secondary-dark !shadow-secondary-4"
@@ -21,12 +25,22 @@
     </template>
     <template #content-header>
       <div class="flex h-full gap-4 overflow-auto items-center w-full">
-        <AppChip
-          v-for="type in categoryTypes" :key="type.id" :active="activeType === type.id"
-          @click="getCategories(type.id)"
-        >
-          <span class="text-small font-normal">{{ $t(`category.type.${type.type}`) }}</span>
-        </AppChip>
+        <Transition name="move-down-small">
+          <div v-if="activeSubType" class="w-full relative flex">
+            <AppIcon icon="chevron-left" :width="24" :height="24" class="left-1 -top-0.5" @click="getCategories(activeType)" />
+            <p class="text-small font-bold ml-2" @click="getCategories(activeType)">
+              {{ activeSubTypeName }}
+            </p>
+          </div>
+          <div v-else class="flex h-full gap-4 overflow-auto items-center w-full">
+            <AppChip
+              v-for="type in categoryTypes" :key="type.id" :active="activeType === type.id"
+              @click="getCategories(type.id)"
+            >
+              <span class="text-small font-normal">{{ $t(`category.type.${type.type}`) }}</span>
+            </AppChip>
+          </div>
+        </Transition>
       </div>
     </template>
     <template #content>
@@ -48,13 +62,18 @@
               :initial="{ opacity: 0, scale: 0.9 }" :enter="{ opacity: 1, scale: 1 }"
               :leave="{ opacity: 0, scale: 0.8 }" :transition="{ type: 'spring', stiffness: 200, damping: 20 }"
             >
-              <p class="text-small py-2 border-b-[1px] mb-4 uppercase">
-                {{ categoryKey }}
-              </p>
-              <div class="flex w-full gap-4 overflow-x-auto p-2">
-                <div v-for="category in categories[categoryKey]" :key="category.id" class="w-[calc(50%-10px)]">
+              <div v-if="!activeSubType" class="flex items-center py-2 border-b-[1px] mb-4">
+                <p class="text-small uppercase">
+                  {{ categoryKey }}
+                </p>
+                <AppButton :type="ButtonTypes.SECONDARY" outline small class="flex items-center justify-center w-[24px] h-[24px] ml-auto" @click="activeSubTypeName = categoryKey;getCategories(categories[categoryKey].id, true)">
+                  <AppIcon icon="chevron-left" :width="16" :height="16" class="rotate-180" />
+                </AppButton>
+              </div>
+              <div class="flex w-full gap-4 overflow-x-auto p-2" :class="activeSubType && 'grid grid-cols-2'">
+                <div v-for="(category, ind) in categories[categoryKey].items" :key="category.id" class="min-w-[calc(50%-10px)]">
                   <AppDelayedElement :to="`/category/${category.category.id}`">
-                    <AppCategoryCard :category="category.category" :author="category.user" :rate="category.averageRate" />
+                    <AppCategoryCard :category="category.category" :author="category.user" :rate="category.averageRate" :primary="activeSubType ? !(ind % 4 === 1 || ind % 4 === 2) : ind % 2 === 0" />
                   </AppDelayedElement>
                 </div>
               </div>
@@ -77,16 +96,22 @@ import type { UsersCategory } from '~/assets/types/usersCategories'
 import { useCategoryStore } from '#imports'
 import { MotionComponent } from '@vueuse/motion'
 import { storeToRefs } from 'pinia'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
+import { ButtonTypes } from '~/assets/types/ui'
+import AppCategoryCard from '~/components/AppCategoryCard.vue'
 import PageContainer from '~/components/PageContainer.vue'
-import { AppChip, AppDelayedElement, AppIcon, AppInput } from '~/components/ui'
+import { AppButton, AppChip, AppDelayedElement, AppIcon, AppInput } from '~/components/ui'
 import { categoriesService } from '~/services/categoriesService'
 
 const { getCategoryTypes } = useCategoryStore()
 const { categoryTypes } = storeToRefs(useCategoryStore())
 
 const activeType = ref('')
+const activeSubType = ref('')
+const activeSubTypeName = ref('')
+
+const name = ref('')
 
 onMounted(async () => {
   await getCategoryTypes()
@@ -96,13 +121,19 @@ onMounted(async () => {
   getCategories(activeType.value)
 })
 
-const categories = ref<Record<string, (UsersCategory & { averageRate: number })[]> | null>(null)
+const categories = ref<Record<string, { id: string, items: (UsersCategory & { averageRate: number })[] }> | null>(null)
 const loading = ref<boolean>(true)
-async function getCategories(type: string) {
+async function getCategories(type?: string, isSubType: boolean = false) {
   if (type) {
-    activeType.value = type
+    if (!isSubType) {
+      activeType.value = type
+      activeSubType.value = ''
+    }
+    else {
+      activeSubType.value = type
+    }
     loading.value = true
-    const { data } = await categoriesService.getByType(activeType.value)
+    const { data } = await categoriesService.getByType(isSubType ? activeSubType.value : activeType.value, name.value)
     if (data.value) {
       if (Object.keys(data.value).length !== 0) {
         categories.value = data.value
@@ -114,4 +145,12 @@ async function getCategories(type: string) {
   }
   loading.value = false
 }
+
+let timer: NodeJS.Timeout
+watch(name, () => {
+  clearTimeout(timer)
+  timer = setTimeout(() => {
+    getCategories(activeSubType.value ? activeSubType.value : activeType.value, !!activeSubType.value)
+  }, 300)
+})
 </script>

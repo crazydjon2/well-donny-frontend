@@ -12,7 +12,7 @@ export const folderService = {
     })
   },
   editFolder(name: string, categories: string[], id: string) {
-    return useApi('/folder/create', {
+    return useApi('/folder/edit', {
       method: 'PUT',
       body: {
         name,

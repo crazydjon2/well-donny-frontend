@@ -9,12 +9,12 @@
       </template>
     </PageTop>
     <div class="flex flex-col gap-4">
-      <AppInput v-model="category.name" :placeholder="$t('input.placeholder.course-title')" />
-      <AppSelect v-model="category.type" :options="categoryTypes" :placeholder="$t('input.placeholder.category')" />
+      <AppInput v-model="category.name" :placeholder="$t('input.placeholder.course-title')" :error="errors?.name && errors?.name[0]" />
+      <AppSelect v-model="category.type" :options="categoryTypes" :placeholder="$t('input.placeholder.category')" :error="errors?.type && errors?.type[0]" />
       <Transition name="move-down-small">
-        <AppSelect v-if="subTypes.length" v-model="category.subType" :options="subTypes" :placeholder="$t('input.placeholder.category')" />
+        <AppSelect v-if="subTypes.length" v-model="category.subType" :options="subTypes" :placeholder="$t('input.placeholder.category')" :error="errors?.subType && errors?.subType[0]" />
       </Transition>
-      <AppInput v-model="category.description" :placeholder="$t('input.placeholder.description')" />
+      <AppInput v-model="category.description" :placeholder="$t('input.placeholder.description')" :error="errors?.description" />
     </div>
     <div class="mt-8 flex flex-col gap-4 items-center w-full">
       <p class="text-h3 uppercase">
@@ -31,6 +31,7 @@
             v-model:original="word.original"
             v-model:translated="word.translated"
             :class="{ 'new-word': word.isNew }"
+            :error="errors?.words && errors.words[index] ? errors?.words[index] : undefined "
             @on-delete="deleteCard(index)"
           />
         </TransitionGroup>
@@ -113,25 +114,26 @@ function getWordKey(word: any, index: number) {
   return word.id || index
 }
 
+const errors = ref<{ name?: string, description?: string, type?: string, subType?: string, words?: Record<number, Record<string, string[]>> } | null>(null)
 async function onCategoryCreate() {
-  if (category.type) {
-    setLoader(true)
-    // Убираем служебные поля перед отправкой
-    const wordsToSend = words.value.map(({ id, isNew, ...word }) => word)
+  errors.value = null
+  setLoader(true)
+  // Убираем служебные поля перед отправкой
+  const wordsToSend = words.value.map(({ id, isNew, ...word }) => word)
 
-    const { error } = await createCategory({
-      ...category,
-      type: category.subType?.id || category.type.id,
-      words: wordsToSend,
-    })
+  const { error } = await createCategory({
+    name: category.name,
+    description: category.description,
+    type: category.subType?.id || category.type?.id || '',
+    words: wordsToSend,
+  })
 
-    if (!error.value) {
-      router.push('/')
-    }
-    else {
-      console.error(error.value)
-      setLoader(false)
-    }
+  if (!error.value) {
+    router.push('/')
+  }
+  else {
+    errors.value = error.value.data.errors
+    setLoader(false)
   }
 }
 

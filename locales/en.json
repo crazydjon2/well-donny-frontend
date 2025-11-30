@@ -52,6 +52,22 @@
       "6": "YO-HO-HO!"
     }
   },
+  "test-page": {
+    "errors": {
+      "1": "thunder strike me!",
+      "2": "a thousand devils!",
+      "3": "so let's write it down...",
+      "4": "will need to repeat",
+      "5": "need to remember"
+    },
+    "success": {
+      "1": "keep it up!",
+      "2": "Well done!",
+      "3": "excellent!",
+      "4": "you're on fire!",
+      "5": "good job!"
+    }
+  },
   "action": {
     "edit": "edit",
     "restart": "start over",

@@ -103,7 +103,7 @@
       :btn-right="isCreator ? $t('button.delete') : $t('button.remove')" @close="modalOpen = false"
       @confirm="deleteCategory"
     />
-    <ConfirmModal v-model="folderDeleteModal" :title="$t('attention')" :btn-left="$t('button.cancel')" :btn-right="$t('button.delete')" description="Папка будет удалена, восстановить её уже не получится. Все добавленные курсы останутся во вкладке «Все курсы»" @confirm="deleteFolder" />
+    <ConfirmModal v-model="folderDeleteModal" :title="$t('attention')" :btn-left="$t('button.cancel')" :btn-right="$t('button.delete')" description="Папка будет удалена, восстановить её уже не получится. Все добавленные курсы останутся во вкладке «Все курсы»" @close="folderDeleteModal = false" @confirm="deleteFolder" />
     <CreateFolderModal v-model="folderModal" :folder-id="folderToEdit" @on-create="onCreate" />
   </div>
 </template>

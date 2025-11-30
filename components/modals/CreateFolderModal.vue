@@ -5,7 +5,7 @@
         <h2 class="text-small font-bold">
           Добавление новой папки
         </h2>
-        <AppInput v-model="name" class="mt-4" outline placeholder="Название папки" />
+        <AppInput v-model="name" class="mt-4" outline placeholder="Название папки" :error="errors?.name && errors.name[0]" />
 
         <div class="flex gap-4 overflow-x-auto items-center mt-5">
           <AppChip
@@ -29,14 +29,19 @@
             </div>
           </MotionComponent>
         </div>
+        <p class="text-red text-small mt-auto">{{ errors?.categories[0] }}</p>
 
         <div class="mt-auto flex w-full gap-4">
-          <AppButton outline :type="ButtonTypes.SECONDARY" @click="model = false">
-            отмена
-          </AppButton>
-          <AppButton full @click="createFolder">
-            сохранить
-          </AppButton>
+          <AppDelayedElement class="w-full" @click="model = false">
+            <AppButton outline :type="ButtonTypes.SECONDARY" full>
+              отмена
+            </AppButton>
+          </AppDelayedElement>
+          <AppDelayedElement class="w-full" @click="createFolder">
+            <AppButton full>
+              сохранить
+            </AppButton>
+          </AppDelayedElement>
         </div>
       </div>
     </div>
@@ -50,7 +55,7 @@ import { computed, ref, watch } from 'vue'
 import { ButtonTypes } from '~/assets/types/ui'
 import { folderService } from '~/services/folderService'
 import { useCategoriesStore } from '~/stores/categories'
-import { AppButton, AppCheckbox, AppChip, AppInput } from '../ui'
+import { AppButton, AppCheckbox, AppChip, AppDelayedElement, AppInput } from '../ui'
 import ModalFull from './ModalFull.vue'
 
 const props = defineProps<{ folderId?: string }>()
@@ -82,6 +87,7 @@ watch(activeFolder, async () => {
   }
 }, { immediate: true })
 
+const errors = ref<{ name: string, categories: string } | null>()
 const editMode = ref(false)
 const folderLoading = ref(false)
 watch(() => props.folderId, async () => {
@@ -100,23 +106,33 @@ watch(() => props.folderId, async () => {
     name.value = ''
     pickedCategories.value = []
   }
+  errors.value = null
 })
 
-function createFolder() {
-  if (name.value) {
-    if (editMode.value && props.folderId) {
-      folderService.editFolder(name.value, pickedCategories.value, props.folderId)
-        .then(() => {
-          model.value = false
-          emits('onCreate')
-        })
+watch(model, () => {
+  errors.value = null
+})
+
+async function createFolder() {
+  errors.value = null
+  if (editMode.value && props.folderId) {
+    const { error } = await folderService.editFolder(name.value, pickedCategories.value, props.folderId)
+    if (error.value) {
+      errors.value = error.value.data.errors
     }
     else {
-      folderService.createFolder(name.value, pickedCategories.value)
-        .then(() => {
-          model.value = false
-          emits('onCreate')
-        })
+      model.value = false
+      emits('onCreate')
+    }
+  }
+  else {
+    const { error } = await folderService.createFolder(name.value, pickedCategories.value)
+    if (error.value) {
+      errors.value = error.value.data.errors
+    }
+    else {
+      model.value = false
+      emits('onCreate')
     }
   }
 }

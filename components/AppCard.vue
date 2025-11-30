@@ -1,5 +1,5 @@
 <template>
-  <div class="card rounded-3xl select-none aspect-square bg-white h-full" :class="[size]" :style="cardStyle" @click="startAnimation">
+  <div class="card rounded-3xl select-none aspect-square bg-white" :class="[size, errorAnimationStarted && 'error-animation']" :style="cardStyle" @click="startAnimation">
     <div
       class="relative card__inner shadow-small-primary border-2 border-primary flex items-center justify-center h-full w-full aspect-square rounded-3xl"
       :class="[{ 'card--flip border-secondary shadow-small-fliped-secondary': isFlipped }, large ? 'p-8' : 'p-4', customClass]"
@@ -104,7 +104,7 @@
 
 <script lang="ts">
 import { useModalStore } from '#imports'
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref, watch } from 'vue'
 import { authService } from '~/services/userService'
 import AppIcon from './ui/AppIcon.vue'
 
@@ -146,12 +146,24 @@ export default defineComponent({
       type: Boolean,
       required: true,
     },
+    flipDisabled: {
+      type: Boolean,
+      default: false,
+    },
+    error: {
+      type: String,
+      default: '',
+    },
+    isReverse: {
+      type: Boolean,
+      default: false
+    }
   },
   emits: ['flipStarted', 'flipEnded', 'onBackPressed'],
   setup(props, ctx) {
     const { open } = useModalStore()
     const size = computed(() => {
-      return props.height ? `h-[${props.height}px]` : ''
+      return props.height ? `h-[${props.height}px]` : 'h-full'
     })
 
     const paddingConst = props.large ? 8 : 4
@@ -162,14 +174,16 @@ export default defineComponent({
         '--animation-delay': `${animationDuration}ms`,
       }
     })
-    const isFlipped = ref(false)
+    const isFlipped = ref(props.isReverse)
 
     const startAnimation = () => {
-      ctx.emit('flipStarted')
-      isFlipped.value = !isFlipped.value
-      setTimeout(() => {
-        ctx.emit('flipEnded')
-      }, animationDuration)
+      if (!props.flipDisabled) {
+        ctx.emit('flipStarted')
+        isFlipped.value = !isFlipped.value
+        setTimeout(() => {
+          ctx.emit('flipEnded')
+        }, animationDuration)
+      }
     }
 
     const openModal = () => {
@@ -198,7 +212,23 @@ export default defineComponent({
       }
     }
 
-    return { size, cardStyle, startAnimation, isFlipped, paddingConst, openModal, resolveFavorite, isFavorite }
+    watch(() => props.flipDisabled, () => {
+      if (!props.flipDisabled) {
+        startAnimation()
+      }
+    })
+
+    const errorAnimationStarted = ref<boolean>(false)
+    watch(() => props.error, () => {
+      if (props.error) {
+        errorAnimationStarted.value = true
+        setTimeout(() => {
+          errorAnimationStarted.value = false
+        }, 300)
+      }
+    })
+
+    return { size, cardStyle, startAnimation, isFlipped, paddingConst, openModal, resolveFavorite, isFavorite, errorAnimationStarted }
   },
 })
 </script>

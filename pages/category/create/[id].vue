@@ -9,19 +9,21 @@
       </template>
     </PageTop>
     <div class="flex flex-col gap-4">
-      <AppInput v-model="categoryToEdit.name" :placeholder="$t('input.placeholder.course-title')" />
+      <AppInput v-model="categoryToEdit.name" :placeholder="$t('input.placeholder.course-title')" :error="errors?.name && errors?.name[0]" />
       <AppSelect
         v-model="categoryToEdit.type" :options="categoryTypes"
         :placeholder="$t('input.placeholder.category')"
+        :error="errors?.type && errors?.type[0]"
       />
       <Transition name="move-down-small">
         <AppSelect
           v-if="subTypes.length" v-model="categoryToEdit.subType" :options="subTypes"
           :placeholder="$t('input.placeholder.category')"
+          :error="errors?.subType && errors?.subType[0]"
         />
       </Transition>
 
-      <AppInput v-model="categoryToEdit.description" :placeholder="$t('input.placeholder.description')" />
+      <AppInput v-model="categoryToEdit.description" :placeholder="$t('input.placeholder.description')" :error="errors?.description" />
     </div>
     <div class="mt-8 flex flex-col gap-4 items-center w-full">
       <p class="text-h3 uppercase">
@@ -38,6 +40,7 @@
               v-model:original="word.original"
               v-model:translated="word.translated"
               :class="{ 'new-word': word.isNew }"
+              :error="errors?.words && errors.words[index] ? errors?.words[index] : undefined "
               @on-delete="onDelete(word, index)"
             />
           </template>
@@ -127,13 +130,16 @@ function getWordKey(word: any, index: number) {
   return word.tempId || word.id || index
 }
 
+const errors = ref<{ name?: string, description?: string, type?: string, subType?: string, words?: Record<number, Record<string, string[]>> } | null>(null)
 async function onCategoryCreate() {
   if (categoryToEdit.type) {
     setLoader(true)
     const wordsToSend = words.value.map(({ tempId, isNew, ...word }) => word)
 
     const { error } = await editWord({
-      ...categoryToEdit,
+      id: categoryId,
+      name: categoryToEdit.name,
+      description: categoryToEdit.description,
       type: categoryToEdit.subType?.id || categoryToEdit.type.id,
       words: wordsToSend,
     })
@@ -142,7 +148,7 @@ async function onCategoryCreate() {
       router.push('/')
     }
     else {
-      console.error(error.value)
+      errors.value = error.value.data.errors
       setLoader(false)
     }
   }

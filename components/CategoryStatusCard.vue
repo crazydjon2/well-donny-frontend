@@ -1,6 +1,6 @@
 <template>
   <div class="relative rounded-xl flex flex-col items-center" :class="[cardClasses]">
-    <span class="text-regular font-bold text-white z-10">{{ description }}</span>
+    <span class="text-regular font-bold text-white z-10 text-center">{{ description }}</span>
     <span class="text-[8rem] font-accent leading-[90px] font-bold text-white z-10">{{ Math.round(percent) }}%</span>
     <span class="text-regular font-bold text-white z-10">{{ $t('category-status.done') }}</span>
     <img
