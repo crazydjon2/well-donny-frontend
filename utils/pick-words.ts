@@ -18,7 +18,7 @@ export function pickWords(words: Word[], correctWord: Word, count: number): Word
   }
 
   // Выбираем случайные слова (count-1, так как correctWord будет добавлен отдельно)
-  const data = $fetch(`https://api.datamuse.com/words?ml=${correctWord.translated}&max=4`)
+  // const data = $fetch(`https://api.datamuse.com/words?ml=${correctWord.translated}&max=4`)
   const randomWords = []
   for (let i = 0; i < Math.min(count - 1, wordsCopy.length); i++) {
     const randomIndex = Math.floor(Math.random() * wordsCopy.length)

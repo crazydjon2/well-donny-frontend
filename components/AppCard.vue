@@ -1,5 +1,8 @@
 <template>
-  <div class="card rounded-3xl select-none aspect-square bg-white" :class="[size, errorAnimationStarted && 'error-animation']" :style="cardStyle" @click="startAnimation">
+  <div
+    class="card rounded-3xl select-none aspect-square bg-white"
+    :class="[size, errorAnimationStarted && 'error-animation']" :style="cardStyle" @click="startAnimation"
+  >
     <div
       class="relative card__inner shadow-small-primary border-2 border-primary flex items-center justify-center h-full w-full aspect-square rounded-3xl"
       :class="[{ 'card--flip border-secondary shadow-small-fliped-secondary': isFlipped }, large ? 'p-8' : 'p-4', customClass]"
@@ -9,46 +12,26 @@
           {{ textFirst }}
         </p>
 
-        <div
-          class="absolute"
-          :class="large ? 'left-4 top-4' : 'left-4 top-4'"
-          @click.stop="openModal"
-        >
+        <div class="absolute" :class="large ? 'left-4 top-4' : 'left-4 top-4'" @click.stop="openModal">
           <AppIcon icon="resize" small />
         </div>
         <TransitionGroup name="fade">
           <AppIcon
-            v-if="isFavorite"
-            icon="star-filled"
-            color="text-secondary"
-            class="absolute"
-            :class="large ? 'right-4 top-4' : 'right-4 top-4'"
-            small
-            @click.stop="resolveFavorite"
+            v-if="isFavorite" icon="star-filled" color="text-secondary" class="absolute"
+            :class="large ? 'right-4 top-4' : 'right-4 top-4'" small @click.stop="resolveFavorite"
           />
           <AppIcon
-            v-if="!isFavorite"
-            icon="star"
-            class="absolute"
-            :class="large ? 'right-4 top-4' : 'right-4 top-4'"
-            small
-            @click.stop="resolveFavorite"
+            v-if="!isFavorite" icon="star" class="absolute" :class="large ? 'right-4 top-4' : 'right-4 top-4'"
+            small @click.stop="resolveFavorite"
           />
         </TransitionGroup>
         <AppIcon
-          v-if="large"
-          icon="back"
-          class="absolute cursor-pointer"
-          :class="large ? 'left-4 bottom-4' : 'left-4 bottom-4'"
-          small
-          @click.stop="$emit('onBackPressed')"
+          v-if="large" icon="back" class="absolute cursor-pointer"
+          :class="large ? 'left-4 bottom-4' : 'left-4 bottom-4'" small @click.stop="$emit('onBackPressed')"
         />
         <AppIcon
-          icon="refresh"
-          class="absolute cursor-pointer"
-          :class="large ? 'right-4 bottom-4' : 'right-4 bottom-4'"
-          small
-          @click.stop="startAnimation"
+          icon="refresh" class="absolute cursor-pointer" :class="large ? 'right-4 bottom-4' : 'right-4 bottom-4'"
+          small @click.stop="startAnimation"
         />
       </div>
       <div class="card__face card__back">
@@ -56,46 +39,26 @@
           {{ textSecond }}
         </p>
 
-        <div
-          class="absolute"
-          :class="large ? 'left-4 top-4' : 'left-4 top-4'"
-          @click.stop="openModal"
-        >
+        <div class="absolute" :class="large ? 'left-4 top-4' : 'left-4 top-4'" @click.stop="openModal">
           <AppIcon icon="resize" small />
         </div>
         <TransitionGroup name="fade">
           <AppIcon
-            v-if="isFavorite"
-            icon="star-filled"
-            color="text-secondary"
-            class="absolute"
-            :class="large ? 'right-4 top-4' : 'right-4 top-4'"
-            small
-            @click.stop="resolveFavorite"
+            v-if="isFavorite" icon="star-filled" color="text-secondary" class="absolute"
+            :class="large ? 'right-4 top-4' : 'right-4 top-4'" small @click.stop="resolveFavorite"
           />
           <AppIcon
-            v-if="!isFavorite"
-            icon="star"
-            class="absolute"
-            :class="large ? 'right-4 top-4' : 'right-4 top-4'"
-            small
-            @click.stop="resolveFavorite"
+            v-if="!isFavorite" icon="star" class="absolute" :class="large ? 'right-4 top-4' : 'right-4 top-4'"
+            small @click.stop="resolveFavorite"
           />
         </TransitionGroup>
         <AppIcon
-          v-if="large"
-          icon="back"
-          class="absolute cursor-pointer"
-          :class="large ? 'left-4 bottom-4' : 'left-4 bottom-4'"
-          small
-          @click.stop="$emit('onBackPressed')"
+          v-if="large" icon="back" class="absolute cursor-pointer"
+          :class="large ? 'left-4 bottom-4' : 'left-4 bottom-4'" small @click.stop="$emit('onBackPressed')"
         />
         <AppIcon
-          icon="refresh"
-          class="absolute cursor-pointer"
-          :class="large ? 'right-4 bottom-4' : 'right-4 bottom-4'"
-          small
-          @click.stop="startAnimation"
+          icon="refresh" class="absolute cursor-pointer" :class="large ? 'right-4 bottom-4' : 'right-4 bottom-4'"
+          small @click.stop="startAnimation"
         />
       </div>
     </div>
@@ -156,8 +119,8 @@ export default defineComponent({
     },
     isReverse: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   emits: ['flipStarted', 'flipEnded', 'onBackPressed'],
   setup(props, ctx) {
@@ -267,10 +230,15 @@ export default defineComponent({
 }
 
 .truncate-text {
-  display: -webkit-box; /* Required for -webkit-line-clamp to work */
-  -webkit-box-orient: vertical; /* Required for vertical clamping */
-  -webkit-line-clamp: 3; /* Limit to 3 lines */
-  overflow: hidden; /* Hide overflowing content */
-  text-overflow: ellipsis; /* Add ellipsis for truncated text */
+  display: -webkit-box;
+  /* Required for -webkit-line-clamp to work */
+  -webkit-box-orient: vertical;
+  /* Required for vertical clamping */
+  -webkit-line-clamp: 3;
+  /* Limit to 3 lines */
+  overflow: hidden;
+  /* Hide overflowing content */
+  text-overflow: ellipsis;
+  /* Add ellipsis for truncated text */
 }
 </style>

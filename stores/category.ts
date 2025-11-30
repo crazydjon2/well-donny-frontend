@@ -1,10 +1,10 @@
 import type { Card } from '~/assets/types/card'
 import type { CategoryType } from '~/assets/types/categoriesTypes'
 import type { Category, CreateCategoryDTO, EditCategoryDTO } from '~/assets/types/category'
+import type { UserCategory } from '~/assets/types/usersCategories'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { categoryService } from '~/services/categoryService'
-import type { UserCategory } from '~/assets/types/usersCategories'
 
 export const useCategoryStore = defineStore('category', () => {
   const category = ref<Category | null>(null)

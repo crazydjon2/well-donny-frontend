@@ -151,7 +151,6 @@
 </template>
 
 <script setup lang="ts">
-import type { User } from '~/assets/types/user'
 import { useRouterUtility, useUserStore } from '#imports'
 import { MotionComponent } from '@vueuse/motion'
 import { storeToRefs } from 'pinia'

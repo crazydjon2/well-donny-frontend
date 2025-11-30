@@ -17,6 +17,7 @@ export default defineNuxtPlugin(async () => {
   try {
     const tgIdLc = localStorage.getItem('tgId')
     await useTelegramAuth().init(3000)
+    // eslint-disable-next-line no-restricted-globals
     const tgUserData = global.Telegram.WebApp.initDataUnsafe?.user
 
     const { data: signInData, error, refresh } = await authService.signIn()

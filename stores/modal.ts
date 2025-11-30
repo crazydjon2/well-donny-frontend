@@ -17,7 +17,7 @@ export const useModalStore = defineStore('modal', () => {
   }
 
   function close() {
-        modalData.value = {
+    modalData.value = {
       text: '',
       img: '',
     }

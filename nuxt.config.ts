@@ -25,6 +25,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
+      // eslint-disable-next-line node/prefer-global/process
       baseUrl: process.env.BASE_URL || '/',
     },
   },

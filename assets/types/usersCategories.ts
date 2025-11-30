@@ -17,7 +17,7 @@ export interface CategoryFolder {
 export interface UserCategory {
   id: string
   role: 'creator' | 'viewer'
-  completionСount:number,
-  rate: number,
+  completionСount: number
+  rate: number
   reverseOrder: boolean
 }

@@ -14,18 +14,14 @@
     <ShipProgress v-if="cards" :length="cards.length" :position="slide + 1" class="mt-5" />
     <div v-if="cards && userCategory" class="mt-6">
       <FlashCardsContainer :key="renderKey" v-model="slide" :allow-swipe="false" :is-square="false">
-        <FlashCardsItem v-for="(card, index) in cards" :key="card.id" class="flex flex-col overflow-visible p-1 relative">
+        <FlashCardsItem
+          v-for="(card, index) in cards" :key="card.id"
+          class="flex flex-col overflow-visible p-1 relative"
+        >
           <AppCard
-            v-show="slide + 1 === index ? !isFlipping : true"
-            :text-first="card.original"
-            :text-second="card.translated"
-            :word-id="card.id"
-            :is-favorite-init="card.isFavorite || false"
-            :height="200"
-            :flip-disabled="slide === index ? !allowFlip : false"
-            :error
-            :is-reverse
-            @flip-started="isFlipping = true"
+            v-show="slide + 1 === index ? !isFlipping : true" :text-first="card.original"
+            :text-second="card.translated" :word-id="card.id" :is-favorite-init="card.isFavorite || false" :height="200"
+            :flip-disabled="slide === index ? !allowFlip : false" :error :is-reverse @flip-started="isFlipping = true"
             @flip-ended="isFlipping = false"
           />
 
@@ -52,7 +48,10 @@
 
       <Transition name="fade">
         <div v-if="isEnd" class="w-full text-center mt-5">
-          <span v-if="cards.length" class="text-small font-normal text-center">{{ $t('learnt-text', { length: cards.length }) }}</span>
+          <span v-if="cards.length" class="text-small font-normal text-center">{{ $t('learnt-text', {
+            length:
+              cards.length,
+          }) }}</span>
           <h3 class="font-accent text-[4rem] leading-[4rem]">
             Well donny!
           </h3>
@@ -93,12 +92,18 @@
 
       <Teleport to="body">
         <TransitionGroup name="move-up">
-          <AppDelayedElement v-if="!isMenuVisible && !allowFlip && !isEnd" class="fixed bottom-8 left-0 px-5" @click="showAnswer">
+          <AppDelayedElement
+            v-if="!isMenuVisible && !allowFlip && !isEnd" class="fixed bottom-8 left-0 px-5"
+            @click="showAnswer"
+          >
             <AppButton full outline :type="ButtonTypes.SECONDARY">
               проверить
             </AppButton>
           </AppDelayedElement>
-          <AppDelayedElement v-if="!isMenuVisible && allowFlip && !isEnd" class="fixed bottom-8 left-0 px-5" @click="nextCard">
+          <AppDelayedElement
+            v-if="!isMenuVisible && allowFlip && !isEnd" class="fixed bottom-8 left-0 px-5"
+            @click="nextCard"
+          >
             <h3 class="font-accent text-bold text-[40px] mb-6 text-center text-green" :class="error && 'text-red'">
               {{ pickText() }}
             </h3>
@@ -109,13 +114,17 @@
         </TransitionGroup>
       </Teleport>
     </div>
-    <TestSettingsModal v-if="userCategory" v-model="settingsModal" :title="category?.name" :category-id="category?.id" :isReverse="userCategory?.reverseOrder || false" />
+    <TestSettingsModal
+      v-if="userCategory" v-model="settingsModal" :title="category?.name" :category-id="category?.id"
+      :is-reverse="userCategory?.reverseOrder || false"
+    />
   </div>
 </template>
 
 <script lang="ts" async setup>
+import type { UserCategory } from '~/assets/types/usersCategories'
 import type { Word } from '~/assets/types/word'
-import { pickWords, useGlobalStore, useModalStore, useRouterUtility } from '#imports'
+import { pickWords, useGlobalStore, useRouterUtility } from '#imports'
 import { storeToRefs } from 'pinia'
 import { computed, onBeforeUnmount, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -132,7 +141,6 @@ import { categoryService } from '~/services/categoryService'
 import { testService } from '~/services/testService'
 import { userStrickService } from '~/services/userStrickService'
 import { useCategoryStore } from '~/stores/category'
-import type { UserCategory } from '~/assets/types/usersCategories'
 
 const categoriesProgress = ref(0)
 const router = useRouter()
@@ -186,7 +194,7 @@ function nextCard() {
 const userCategory = ref<UserCategory | null>()
 const isReverse = computed(() => {
   if (userCategory.value) {
-    return  userCategory.value.reverseOrder
+    return userCategory.value.reverseOrder
   }
   return false
 })

@@ -25,8 +25,7 @@
           <div id="folder-container" class="flex h-full gap-4 overflow-x-auto items-center w-[calc(100%-40px)]">
             <AppChip
               v-for="folder in categoryFolders" :id="`folder-${folder.value}`" :key="folder.value"
-              :active="folder.value === activeFolder"
-              @click="setActiveFolder(folder.value)"
+              :active="folder.value === activeFolder" @click="setActiveFolder(folder.value)"
             >
               <div class="flex items-center justify-center">
                 <p class="font-normal text-small">
@@ -36,7 +35,10 @@
                 <!-- TODO
                 ADD tRANSItiON -->
                 <Transition>
-                  <Dropdown v-if="folder.custom && folder.value === activeFolder" :disabled="folderModal || folderDeleteModal" class="ml-1 mb-1">
+                  <Dropdown
+                    v-if="folder.custom && folder.value === activeFolder"
+                    :disabled="folderModal || folderDeleteModal" class="ml-1 mb-1"
+                  >
                     <AppIcon icon="settings" :width="18" :height="18" />
                     <template #popper>
                       <div class="p-5 px-7 gap-3 flex flex-col rounded-xl">
@@ -56,7 +58,7 @@
           <AppButton :type="ButtonTypes.SECONDARY" outline small class="flex items-center justify-center ml-2 mb-1.5">
             <AppIcon
               icon="plus" color="text-dark" class="p-1 cursor-pointer" :width="16" :height="16"
-              @click="folderToEdit = null;folderModal = true"
+              @click="folderToEdit = null; folderModal = true"
             />
           </AppButton>
         </div>
@@ -103,7 +105,12 @@
       :btn-right="isCreator ? $t('button.delete') : $t('button.remove')" @close="modalOpen = false"
       @confirm="deleteCategory"
     />
-    <ConfirmModal v-model="folderDeleteModal" :title="$t('attention')" :btn-left="$t('button.cancel')" :btn-right="$t('button.delete')" description="Папка будет удалена, восстановить её уже не получится. Все добавленные курсы останутся во вкладке «Все курсы»" @close="folderDeleteModal = false" @confirm="deleteFolder" />
+    <ConfirmModal
+      v-model="folderDeleteModal" :title="$t('attention')" :btn-left="$t('button.cancel')"
+      :btn-right="$t('button.delete')"
+      description="Папка будет удалена, восстановить её уже не получится. Bce добавленные курсы останутся во вкладке «Все курсы»"
+      @close="folderDeleteModal = false" @confirm="deleteFolder"
+    />
     <CreateFolderModal v-model="folderModal" :folder-id="folderToEdit" @on-create="onCreate" />
   </div>
 </template>

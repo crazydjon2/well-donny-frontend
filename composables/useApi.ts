@@ -12,11 +12,14 @@ export async function useApi<T = unknown>(
   const config = useRuntimeConfig()
   const token = useCookie('token').value
   const locale = useCookie('locale').value
+  // eslint-disable-next-line node/prefer-global/process
   const tgIdLc = process.client ? localStorage.getItem('tgId') : null
 
   let tgUserData = null
+  // eslint-disable-next-line node/prefer-global/process
   if (process.client) {
     try {
+      // eslint-disable-next-line ts/ban-ts-comment
       // @ts-expect-error
       tgUserData = Telegram?.WebApp?.initDataUnsafe?.user || null
     }
@@ -55,6 +58,7 @@ export async function useApi<T = unknown>(
     pending.value = true
     error.value = null
     try {
+      // eslint-disable-next-line node/prefer-global/process
       const response = process.server
         ? (await useFetch<T>(url, options)).data.value
         : await $fetch<T>(typeof url === 'function' ? url() : url, options)

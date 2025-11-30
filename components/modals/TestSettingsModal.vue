@@ -1,10 +1,10 @@
 <template>
-  <ModalFull
-    v-model="model"
-    @close="emits('close')"
-  >
+  <ModalFull v-model="model" @close="emits('close')">
     <div class="bg-white rounded-3xl w-full flex flex-col items-center p-4 relative">
-      <AppIcon icon="close" :width="20" :height="20" color="text-white" class="z-200 absolute top-8 right-8" @click="model = false" />
+      <AppIcon
+        icon="close" :width="20" :height="20" color="text-white" class="z-200 absolute top-8 right-8"
+        @click="model = false"
+      />
       <PageTop type="secondary" class="w-full" with-decoration>
         <p>настройка теста</p>
       </PageTop>
@@ -25,15 +25,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
+import { categoryService } from '~/services/categoryService'
 import PageTop from '../PageTop.vue'
 import { AppButton, AppCheckbox, AppIcon } from '../ui'
 import ModalFull from './ModalFull.vue'
-import { categoryService } from '~/services/categoryService';
 
 const props = defineProps<{
   title?: string
-	isReverse: boolean
+  isReverse: boolean
   categoryId: string
 }>()
 
@@ -47,9 +47,9 @@ const model = defineModel<boolean>()
 const isReverse = ref(props.isReverse)
 
 function runTest() {
-	categoryService.setOrder(props.categoryId, isReverse.value)
-		.then(() => {
-			window.location.reload()
-		})
+  categoryService.setOrder(props.categoryId, isReverse.value)
+    .then(() => {
+      window.location.reload()
+    })
 }
 </script>

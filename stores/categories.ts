@@ -55,7 +55,7 @@ export const useCategoriesStore = defineStore('categories', () => {
 
   const getCategoryByFolder = async (folder: CategoryFolder) => {
     if (!folder.custom) {
-      const { data, error } = await categoriesService.getAllCategories({
+      const { data } = await categoriesService.getAllCategories({
         userId: user.value?.id,
         role: folder.value === 1 ? 'creator' : undefined,
         sort: folder.value === 2 ? 'DESC' : undefined,
@@ -63,7 +63,7 @@ export const useCategoriesStore = defineStore('categories', () => {
       return data.value || []
     }
     else {
-      const { data, error } = await categoriesService.getAllCategories({
+      const { data } = await categoriesService.getAllCategories({
         userId: user.value?.id,
         folder: folder.value,
       })

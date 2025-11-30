@@ -63,7 +63,7 @@ export const categoryService = {
       method: 'PUT',
       body: {
         categoryId,
-        reverse
+        reverse,
       },
     })
   },
