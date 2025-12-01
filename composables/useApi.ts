@@ -1,5 +1,5 @@
 import type { UseFetchOptions } from '#app'
-import { useCookie, useFetch, useRuntimeConfig } from '#imports'
+import { useCookie, useFetch } from '#imports'
 import { defu } from 'defu'
 import { ref } from 'vue'
 
@@ -9,7 +9,7 @@ export async function useApi<T = unknown>(
   url: string | (() => string),
   userOptions: FetchOptions<T> = {},
 ) {
-  const config = useRuntimeConfig()
+  // const config = useRuntimeConfig()
   const token = useCookie('token').value
   const locale = useCookie('locale').value
   // eslint-disable-next-line node/prefer-global/process
@@ -28,8 +28,11 @@ export async function useApi<T = unknown>(
     }
   }
 
+  const { baseURL } = await $fetch('/api/config')
+  // console.log(config.public.baseUrl, baseURL)
+
   const defaultOptions: FetchOptions<T> = {
-    baseURL: config.public.baseUrl,
+    baseURL,
     method: 'GET',
     retry: 3,
     onRequest({ options }) {
