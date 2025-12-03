@@ -9,9 +9,26 @@ export const categoriesService = {
     return useApi<UsersCategory[]>('/categories')
   },
   getAllCategories(queries: { type?: CategoryType['id'], role?: UserRoles, userId?: string, sort?: 'ASC' | 'DESC', folder?: string | number }) {
-    return useApi<UsersCategory[]>(`/categories/all?type=${queries.type || ''}&role=${queries.role || ''}&userId=${queries.userId || ''}&sort=${queries.sort || ''}&folder=${queries.folder || ''}`)
+    return useApi<UsersCategory[]>('/categories/all', {
+      query: {
+        type: queries.type,
+        role: queries.role,
+        userId: queries.userId,
+        sort: queries.sort,
+        folder: queries.folder,
+      },
+    })
   },
   getByType(typeId: string, name: string) {
-    return useApi<Record<string, { id: string, items: (UsersCategory & { averageRate: number })[] }>>(`/categories/by-type?typeId=${typeId}&name=${name}`)
+    const query: Record<string, any> = { typeId }
+
+    // Добавляем name только если не пустой
+    if (name && name.trim() !== '') {
+      query.name = name
+    }
+
+    return useApi<Record<string, { id: string, items: (UsersCategory & { averageRate: number })[] }>>('/categories/by-type', {
+      query,
+    })
   },
 }

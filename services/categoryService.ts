@@ -19,7 +19,7 @@ export const categoryService = {
     })
   },
   editCategory(categoryId: string, data: EditCategoryDTO) {
-    return useApi<Category>(`categories/${categoryId}`, {
+    return useApi<Category>(`/categories/${categoryId}`, {
       method: 'PUT',
       body: data,
     })
@@ -43,7 +43,11 @@ export const categoryService = {
     })
   },
   getCategoriesTypes(id?: string) {
-    return useApi<CategoryType[]>(`/categories-types?typeId=${id || ''}`)
+    return useApi<CategoryType[]>('/categories-types', {
+      query: {
+        typeId: id,
+      },
+    })
   },
   deleteCategory(id: string) {
     return useApi<any>(`/categories/${id}`, {
