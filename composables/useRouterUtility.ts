@@ -1,14 +1,17 @@
 import { useRouter } from 'vue-router'
+import { useGlobalStore } from '~/stores/global'
 
 export function useRouterUtility() {
   const router = useRouter()
+  const store = useGlobalStore()
 
   function goBack() {
-    if (window.history.state.back) {
-      router.back()
+    if (store.backUrl) {
+      router.push(store.backUrl)
+      store.clear() // опционально
     }
     else {
-      router.push('/')
+      router.push('/') // или router.back()
     }
   }
 

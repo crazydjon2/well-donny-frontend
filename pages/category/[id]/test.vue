@@ -29,7 +29,10 @@
         </FlashCardsItem>
 
         <template #end-slide>
-          <div v-if="!isFlipping" class="w-full bg-grey rounded-3xl h-[200px] mb-auto" />
+          <!-- <div v-if="!isFlipping" class="w-full bg-grey rounded-3xl h-[200px] mb-auto" /> -->
+          <div v-if="!isFlipping" class="w-full h-[200px] flex items-center justify-center mb-auto animation-swim">
+            <img src="@/assets/img/donny.PNG" class="h-full" alt="Donny">
+          </div>
         </template>
       </FlashCardsContainer>
 
@@ -115,7 +118,7 @@
       </Teleport>
     </div>
     <TestSettingsModal
-      v-if="userCategory" v-model="settingsModal" :title="category?.name" :category-id="category?.id"
+      v-if="userCategory && category" v-model="settingsModal" :title="category?.name" :category-id="category.id"
       :is-reverse="userCategory?.reverseOrder || false"
     />
   </div>
@@ -124,7 +127,7 @@
 <script lang="ts" async setup>
 import type { UserCategory } from '~/assets/types/usersCategories'
 import type { Word } from '~/assets/types/word'
-import { pickWords, useGlobalStore, useRouterUtility } from '#imports'
+import { pickWords, useGlobalStore } from '#imports'
 import { storeToRefs } from 'pinia'
 import { computed, onBeforeUnmount, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -150,7 +153,6 @@ const { t } = useI18n()
 const { setMenuVisibility, setLightHouseState } = useGlobalStore()
 const { isMenuVisible } = storeToRefs(useGlobalStore())
 const { category } = storeToRefs(useCategoryStore())
-const { goBack } = useRouterUtility()
 
 setLightHouseState(true)
 const { data: cards, refresh } = await testService.getTestRound(route.params.id as string)
@@ -202,12 +204,16 @@ const isReverse = computed(() => {
 function showAnswer() {
   // pickedWord.value = word
 
+  if (!correctWord.value) {
+    return
+  }
+
   if (correctWord.value) {
     testService.updateWord(route.params.id as string, correctWord.value.id, answer.value.trim() === correctWord.value[!isReverse.value ? 'translated' : 'original'].trim())
   }
 
   allowFlip.value = true
-  if (answer.value.trim() === correctWord.value[!isReverse.value ? 'translated' : 'original'].trim()) {
+  if (answer.value.trim().toLowerCase() === correctWord.value[!isReverse.value ? 'translated' : 'original'].trim().toLowerCase()) {
     ++statistic.value.right
     success.value = ' '
     // nextCard()
@@ -325,6 +331,10 @@ function pickText() {
 }
 
 const settingsModal = ref(false)
+
+function goBack() {
+  router.push(`/category/${route.params.id}`)
+}
 </script>
 
 <style scoped>

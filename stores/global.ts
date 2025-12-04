@@ -18,5 +18,15 @@ export const useGlobalStore = defineStore('global', () => {
     loader.value = bool
   }
 
-  return { isLightHouse, setLightHouseState, setMenuVisibility, isMenuVisible, loader, setLoader }
+  const backUrl = ref<string | null>(null)
+
+  const setBackUrl = (url: string) => {
+    backUrl.value = url
+  }
+
+  const clear = () => {
+    backUrl.value = null
+  }
+
+  return { isLightHouse, setLightHouseState, setMenuVisibility, isMenuVisible, loader, setLoader, backUrl, setBackUrl, clear }
 })

@@ -8,12 +8,12 @@
       </template>
       <template #additional>
         <div class="flex w-full gap-7 px-10">
-          <div class="w-full h-full bg-grey">
-            DONNY
+          <div class="w-full h-full animation-swim">
+            <img src="@/assets/img/donny.PNG" alt="Donny">
           </div>
           <AppDelayedElement
             to="/category/create"
-            class="flex flex-col w-full min-h-[6rem] items-center justify-center bg-white border-primary-2 border-2 rounded-xl shadow-primary-dark"
+            class="flex flex-col w-full h-[6rem] items-center justify-center bg-white border-primary-2 border-2 rounded-xl shadow-primary-dark"
           >
             <span class="text-regular uppercase font-bold">{{ $t('button.create') }}</span>
             <AppIcon icon="add" :width="30" :height="30" />
@@ -181,7 +181,7 @@ function onCreate() {
   getCategories()
 }
 
-const folderToEdit = ref('')
+const folderToEdit = ref()
 function editFolder(folder: CategoryFolder) {
   if (folder.custom) {
     folderToEdit.value = folder.value as string

@@ -48,6 +48,6 @@ defineProps<{
   box-shadow: 0px 0px 4px 4px var(--color-primary) inset;
 
   background-image: url(@/assets/img/wave-bg.svg);
-    background-size: auto 200px;
+    background-size: auto 120px;
 }
 </style>

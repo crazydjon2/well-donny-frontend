@@ -134,6 +134,11 @@ async function getCategories(type?: string, isSubType: boolean = false) {
     }
     loading.value = true
     const { data } = await categoriesService.getByType(isSubType ? activeSubType.value : activeType.value, name.value)
+    // const children = categoryTypes.value.find((t) => t.id === t.id)?.children.map((c) => c.id)
+    // const { data } = await categoriesService.getAllCategories({
+    //   type: children?.join(','),
+    //   role: 'creator',
+    // })
     if (data.value) {
       if (Object.keys(data.value).length !== 0) {
         categories.value = data.value

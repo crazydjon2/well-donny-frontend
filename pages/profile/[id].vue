@@ -8,7 +8,9 @@
     </PageTop>
     <div class="mt-6">
       <div class="flex gap-4">
-        <div class="bg-grey w-full" />
+        <div class="w-full flex items-center">
+          <img src="@/assets/img/donny.PNG" alt="Donny" class="animation-swim">
+        </div>
 
         <div class="flex flex-col gap-4 w-full">
           <div class="flex flex-col justify-center items-center rounded-xl bg-primary aspect-square text-white">
@@ -40,7 +42,7 @@
       </div>
     </Transition>
 
-    <div class="mt-6">
+    <div v-if="userCategories.length" class="mt-6">
       <h3 class="text-[1.5rem] font-bold text-center">
         КУРСЫ
       </h3>
@@ -90,12 +92,12 @@ const pickedLocale = ref({
   type: locale.value,
 })
 
-const calendarConfig: CalendarProps = {
+const calendarConfig: Partial<CalendarProps> = {
   locale: locale.value,
   expanded: true,
 }
 
-const calendarAttributes: AttributeConfig = ref([{
+const calendarAttributes = ref<AttributeConfig[]>([{
   dates: [],
   highlight: true,
 }])
@@ -103,6 +105,9 @@ const calendarAttributes: AttributeConfig = ref([{
 const userCategories = ref<UsersCategory[]>([])
 const userStrickData = ref()
 onMounted(async () => {
+  if (!user.value) {
+    return
+  }
   const [{ data: profileData }, { data: categories }, { data: strickData }] = await Promise.all([
     authService.getProfile(route.params.id === 'me' ? user.value.id : route.params.id as string),
     categoriesService.getAllCategories({

@@ -6,6 +6,7 @@ export interface Category {
   id: string
   name: string
   author: (User & { role: UserRoles, rate: number, completionСount: number })
+  role: UserRoles
   users: number
   avarageRate: number
   description: string

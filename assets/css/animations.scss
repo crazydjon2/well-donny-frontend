@@ -143,3 +143,21 @@
 }
 
 // MOVE-LEFT-SMALL ANIMATION END
+
+.animation-swim {
+  --swim-height: 8px;
+  --swim-duration: 3s;
+  
+  animation: swim var(--swim-duration) ease-in-out infinite;
+  transform-origin: center;
+  will-change: transform;
+}
+
+@keyframes swim {
+  0%, 100% {
+    transform: translateY(calc(var(--swim-height) * -0.5));
+  }
+  50% {
+    transform: translateY(calc(var(--swim-height) * 0.5));
+  }
+}

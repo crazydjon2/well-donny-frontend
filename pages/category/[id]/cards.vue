@@ -28,7 +28,9 @@
         </template>
 
         <template #end-slide>
-          <div class="h-full w-full bg-gray-200 rounded-3xl" />
+          <div class="w-full h-full animation-swim">
+            <img src="@/assets/img/donny.PNG" alt="Donny">
+          </div>
         </template>
 
         <template #actions="{ onAcceptPressed, onRejectPressed }">
@@ -82,7 +84,7 @@
 
 <script setup lang="ts">
 import type { TiltState } from '~/components/ui/flashCards/types'
-import { useGlobalStore, useRouterUtility } from '#imports'
+import { useGlobalStore } from '#imports'
 import { storeToRefs } from 'pinia'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -101,7 +103,6 @@ const route = useRoute()
 const { cards } = storeToRefs(useCategoryStore())
 const { getCategoryCards } = useCategoryStore()
 const { setMenuVisibility } = useGlobalStore()
-const { goBack } = useRouterUtility()
 
 const slide = ref(0)
 const isFlipping = ref(false)
@@ -148,4 +149,8 @@ onMounted(() => {
 onUnmounted(() => {
   setMenuVisibility(true)
 })
+
+function goBack() {
+  router.push(`/category/${route.params.id}`)
+}
 </script>

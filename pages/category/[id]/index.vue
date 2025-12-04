@@ -13,7 +13,7 @@
       <template #right>
         <VDropdown :disabled="modal" placement="bottom-end">
           <AppIcon icon="tuning" :width="22" :height="26" color="text-white cursor-pointer" />
-          <template #popper>
+          <template #popper="{ hide }">
             <div class="p-5 gap-3 flex flex-col rounded-xl">
               <p v-if="isCreator" class="text-small text-center border-b-1" @click="goToEdit">
                 {{ $t('action.edit') }}
@@ -22,7 +22,7 @@
                 {{
                   $t('action.restart') }}
               </p>
-              <p class="text-small text-center border-b-1">
+              <p class="text-small text-center border-b-1" @click="copyLink(); hide()">
                 {{ $t('action.share') }}
               </p>
               <p class="text-small text-center border-b-1" @click="modalState = 'delete'; modal = true">
@@ -78,7 +78,10 @@
     <div class="!mt-3 !-mx-5 max-w-[100vw]">
       <Carousel v-if="cards && cards.length" v-bind="carouselConfig">
         <Slide v-for="card in cards" :key="card.id">
-          <AppCard :text-first="card.word.original" :text-second="card.word.translated" :word-id="card.word.id" :is-favorite-init="card.word.isFavorite" />
+          <AppCard
+            :text-first="card.word.original" :text-second="card.word.translated" :word-id="card.word.id"
+            :is-favorite-init="card.word.isFavorite"
+          />
         </Slide>
       </Carousel>
     </div>
@@ -182,7 +185,7 @@ function addUser() {
   if (user.value && category.value) {
     categoryService.addUserToCategory({ user: user.value, categoryId: category.value?.id })
       .then(() => {
-        useCategoryStore().getCategory(route.params?.id as string)
+        window.location.reload()
       })
   }
 }
@@ -208,7 +211,7 @@ const modelDescription = computed(() => {
   return t('modal.description.delete')
 })
 
-const isCreator = computed(() => category?.value?.author)
+const isCreator = computed(() => category?.value?.role === 'creator')
 async function onConfirm() {
   if (category.value && user.value) {
     if (modalState.value === 'delete') {
@@ -307,6 +310,16 @@ onMounted(async () => {
     rateModal.value = true
   }
 })
+
+async function copyLink() {
+  const fullUrl = window.location.origin + route.fullPath
+  try {
+    await navigator.clipboard.writeText(fullUrl)
+  }
+  catch (err) {
+    console.error('Failed to copy text: ', err)
+  }
+}
 </script>
 
 <style scoped>
