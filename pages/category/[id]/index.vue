@@ -18,14 +18,14 @@
               <p v-if="isCreator" class="text-small text-center border-b-1" @click="goToEdit">
                 {{ $t('action.edit') }}
               </p>
-              <p class="text-small text-center border-b-1" @click="modalState = 'restart'; modal = true">
+              <p v-if="isUserInCategory" class="text-small text-center border-b-1" @click="modalState = 'restart'; modal = true">
                 {{
                   $t('action.restart') }}
               </p>
               <p class="text-small text-center border-b-1" @click="copyLink(); hide()">
                 {{ $t('action.share') }}
               </p>
-              <p class="text-small text-center border-b-1" @click="modalState = 'delete'; modal = true">
+              <p v-if="isUserInCategory" class="text-small text-center border-b-1" @click="modalState = 'delete'; modal = true">
                 {{
                   $t('action.delete') }}
               </p>
@@ -46,7 +46,7 @@
         v-if="myRate" class="ml-auto text-extra-small text-primary w-fit flex"
         @click="isRateModalEdit = true; rate = myRate; rateModal = true"
       >
-        твоя оценка: {{ myRate }}
+        {{ $t('category.rate') }} {{ myRate }}
         <AppIcon icon="star-filled" :width="16" :height="16" color="text-secondary-2" class="ml-[1px]" />
       </div>
     </div>
@@ -88,7 +88,7 @@
 
     <div v-if="category.type" class="flex justify-between mt-5">
       <span class="text-regular">{{ cards?.length }} {{ $t('words') }}</span>
-      <span class="text-regular">{{ $t(`category.type.${category?.type.type}`) }}</span>
+      <span class="text-regular">{{  category.type.name }}</span>
     </div>
 
     <div v-if="isUserInCategory" class="grid grid-cols-2 gap-5">
@@ -112,12 +112,12 @@
       <div class="w-full text-center flex items-center gap-5">
         <div class="flex flex-col w-full p-4 bg-primary text-white rounded-xl">
           <span class="font-accent text-[96px] leading-[90px]">{{ category.users }}</span>
-          <span class="text-regular leading-[16px] font-bold">пользователей</span>
-          <span class="text-[10px] font-bold">добавили этот курс</span>
+          <span class="text-regular leading-[16px] font-bold">{{ $t('category.users') }}</span>
+          <span class="text-[10px] font-bold">{{ $t('category.added') }}</span>
         </div>
         <div v-if="category.avarageRate" class="flex flex-col w-full p-4 bg-secondary text-white rounded-xl">
           <span class="font-accent text-[96px] leading-[90px]">{{ category.avarageRate }}</span>
-          <span class="text-regular leading-[16px] font-bold">средняя оценка курса</span>
+          <span class="text-regular leading-[16px] font-bold">{{ $t('category.rat-ave') }}а</span>
         </div>
       </div>
       <AppButton class="mt-5" :type="ButtonTypes.SECONDARY" outline @click="addUser">
@@ -204,14 +204,18 @@ const modal = ref(false)
 const rateModal = ref(false)
 const isRateModalEdit = ref(false)
 const rate = ref(0)
-const modelDescription = computed(() => {
-  if (modalState.value === 'restart') {
-    return t('modal.description.restart')
-  }
-  return t('modal.description.delete')
+
+const isCreator = computed(() => {
+  return userCategory.value ? userCategory.value.role === 'creator' : false
 })
 
-const isCreator = computed(() => category?.value?.role === 'creator')
+const modelDescription = computed(() => {
+  if (modalState.value === 'restart') {
+    return t('modal.restart.description')
+  }
+  return isCreator.value ? t('modal.delete.description') : t('modal.remove.description')
+})
+
 async function onConfirm() {
   if (category.value && user.value) {
     if (modalState.value === 'delete') {

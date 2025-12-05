@@ -3,7 +3,7 @@
     <div class="bg-white rounded-3xl w-full h-[70vh]">
       <div class="p-4 h-full flex flex-col">
         <h2 class="text-small font-bold">
-          Добавление новой папки
+          {{ $t('folders.new-folder') }}
         </h2>
         <AppInput v-model="name" class="mt-4" outline placeholder="Название папки" :error="errors?.name && errors.name[0]" />
 
@@ -34,12 +34,12 @@
         <div class="mt-auto flex w-full gap-4">
           <AppDelayedElement class="w-full" @click="model = false">
             <AppButton outline :type="ButtonTypes.SECONDARY" full>
-              отмена
+              {{ $t('button.cancel') }}
             </AppButton>
           </AppDelayedElement>
           <AppDelayedElement class="w-full" @click="createFolder">
             <AppButton full>
-              сохранить
+              {{ $t('button.save') }}
             </AppButton>
           </AppDelayedElement>
         </div>

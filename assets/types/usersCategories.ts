@@ -5,6 +5,7 @@ export interface UsersCategory {
   id: string
   role: 'creator' | 'viewer'
   user: User
+  rate: number
   category: Category
 }
 

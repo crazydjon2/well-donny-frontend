@@ -18,10 +18,10 @@
               {{ profile?.strick }}
             </h1>
             <p class="text-regular font-bold">
-              дней
+              {{ $t('profile.days') }}
             </p>
             <p class="text-extra-small text-center font-bold">
-              занимаешься без перерыва
+              {{ $t('profile.study') }}
             </p>
           </div>
           <div class="flex flex-col justify-center items-center rounded-xl bg-secondary aspect-square text-white">
@@ -29,7 +29,7 @@
               {{ profile?.totalCompletionСount }}
             </h1>
             <p class="text-extra-small text-center font-bold">
-              курсов пройдено
+              {{ $t('profile.done') }}
             </p>
           </div>
         </div>
@@ -44,7 +44,7 @@
 
     <div v-if="userCategories.length" class="mt-6">
       <h3 class="text-[1.5rem] font-bold text-center">
-        КУРСЫ
+        {{ $t('courses') }}
       </h3>
       <Carousel v-bind="carouselConfig">
         <Slide v-for="category in userCategories" :key="category.id">

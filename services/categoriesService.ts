@@ -27,7 +27,7 @@ export const categoriesService = {
       query.name = name
     }
 
-    return useApi<Record<string, { id: string, items: (UsersCategory & { averageRate: number })[] }>>('/categories/by-type', {
+    return useApi<{ type: { name: string, id: string, type: string }, items: (UsersCategory & { averageRate: number })[] }[]>('/categories/by-type', {
       query,
     })
   },

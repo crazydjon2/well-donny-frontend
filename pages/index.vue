@@ -79,6 +79,7 @@
                   <AppCategoryCard
                     :category="category.category" :author="category.user"
                     :primary="!(index % 4 === 1 || index % 4 === 2)"
+                    :rate="category.rate"
                   >
                     <template #default>
                       <div class="absolute right-4 bottom-5" @click.stop.prevent="beforeDelete(category.category.id)">
@@ -108,7 +109,7 @@
     <ConfirmModal
       v-model="folderDeleteModal" :title="$t('attention')" :btn-left="$t('button.cancel')"
       :btn-right="$t('button.delete')"
-      description="Папка будет удалена, восстановить её уже не получится. Bce добавленные курсы останутся во вкладке «Все курсы»"
+      :description="isCreator ? $t('modal.delete.description') : $t('modal.remove.description') "
       @close="folderDeleteModal = false" @confirm="deleteFolder"
     />
     <CreateFolderModal v-model="folderModal" :folder-id="folderToEdit" @on-create="onCreate" />

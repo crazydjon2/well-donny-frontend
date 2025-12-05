@@ -5,7 +5,7 @@
         class="border-b-2 border-primary px-3 w-full h-[32px] text-small font-medium placeholder:text-small placeholder:text-hint-gray placeholder:font-medium relative"
         :class="[!model?.type && 'text-hint-gray',  error && '!border-red !text-red']"
       >
-        {{ model?.type || placeholder || '' }}
+        {{ model?.name || placeholder || '' }}
 
         <AppIcon icon="arrow-up" :width="16" :height="16" class="absolute right-2 top-1.5 -rotate-180" />
       </div>
@@ -18,7 +18,7 @@
             v-for="(option, index) in options" :key="index" :value="option" class="text-small w-full"
             @click="onSelect(option)"
           >
-            {{ option.type }}
+            {{ option.name }}
           </div>
         </div>
       </template>

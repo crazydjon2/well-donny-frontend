@@ -37,7 +37,7 @@
               v-for="type in categoryTypes" :key="type.id" :active="activeType === type.id"
               @click="getCategories(type.id)"
             >
-              <span class="text-small font-normal">{{ $t(`category.type.${type.type}`) }}</span>
+              <span class="text-small font-normal">{{ type.name }}</span>
             </AppChip>
           </div>
         </Transition>
@@ -56,24 +56,24 @@
               </div>
             </div>
           </div>
-          <div v-else-if="categories" class="grid grid-cols-1 gap-6 px-5 pt-5 w-full">
+          <div v-else-if="categories.length" class="grid grid-cols-1 gap-6 px-5 pt-5 w-full">
             <MotionComponent
-              v-for="(categoryKey, index) in Object.keys(categories)" :key="index"
+              v-for="(category, index) in categories" :key="index"
               :initial="{ opacity: 0, scale: 0.9 }" :enter="{ opacity: 1, scale: 1 }"
               :leave="{ opacity: 0, scale: 0.8 }" :transition="{ type: 'spring', stiffness: 200, damping: 20 }"
             >
               <div v-if="!activeSubType" class="flex items-center py-2 border-b-[1px] mb-4">
                 <p class="text-small uppercase">
-                  {{ categoryKey }}
+                  {{ category.type.name }}
                 </p>
-                <AppButton :type="ButtonTypes.SECONDARY" outline small class="flex items-center justify-center w-[24px] h-[24px] ml-auto" @click="activeSubTypeName = categoryKey;getCategories(categories[categoryKey].id, true)">
+                <AppButton :type="ButtonTypes.SECONDARY" outline small class="flex items-center justify-center w-[24px] h-[24px] ml-auto" @click="activeSubTypeName = category.type.name;getCategories(category.type.id, true)">
                   <AppIcon icon="chevron-left" :width="16" :height="16" class="rotate-180" />
                 </AppButton>
               </div>
               <div class="flex w-full gap-4 overflow-x-auto p-2" :class="activeSubType && 'grid grid-cols-2'">
-                <div v-for="(category, ind) in categories[categoryKey].items" :key="category.id" class="min-w-[calc(50%-10px)]">
-                  <AppDelayedElement :to="`/category/${category.category.id}`">
-                    <AppCategoryCard :category="category.category" :author="category.user" :rate="category.averageRate" :primary="activeSubType ? !(ind % 4 === 1 || ind % 4 === 2) : ind % 2 === 0" />
+                <div v-for="(c, ind) in category.items" :key="c.category.id" class="min-w-[calc(50%-10px)]">
+                  <AppDelayedElement :to="`/category/${c.category.id}`">
+                    <AppCategoryCard :category="c.category" :author="c.user" :rate="c.rate" :primary="activeSubType ? !(ind % 4 === 1 || ind % 4 === 2) : ind % 2 === 0" />
                   </AppDelayedElement>
                 </div>
               </div>
@@ -121,7 +121,7 @@ onMounted(async () => {
   getCategories(activeType.value)
 })
 
-const categories = ref<Record<string, { id: string, items: (UsersCategory & { averageRate: number })[] }> | null>(null)
+const categories = ref<{ type: { name: string, id: string, type: string }, items: (UsersCategory & { averageRate: number })[] }[]>([])
 const loading = ref<boolean>(true)
 async function getCategories(type?: string, isSubType: boolean = false) {
   if (type) {
@@ -140,12 +140,7 @@ async function getCategories(type?: string, isSubType: boolean = false) {
     //   role: 'creator',
     // })
     if (data.value) {
-      if (Object.keys(data.value).length !== 0) {
-        categories.value = data.value
-      }
-      else {
-        categories.value = null
-      }
+      categories.value = data.value
     }
   }
   loading.value = false

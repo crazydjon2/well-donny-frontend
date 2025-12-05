@@ -4,6 +4,7 @@
   "new-course": "new course",
   "termins": "Terms",
   "library": "Library",
+  "courses": "COURSES",
   "menu": {
     "course": "my courses",
     "library": "library",
@@ -19,9 +20,11 @@
     "dont-know": "don't know",
     "remove": "remove",
     "know": "know",
+    "got-it": "got it",
     "next": "next",
     "rate": "rate",
-    "save": "save"
+    "save": "save",
+    "check": "check"
   },
   "input": {
     "placeholder": {
@@ -31,11 +34,17 @@
     }
   },
   "folders": {
+    "new-folder": "New folder",
     "all": "all",
     "personal": "personal",
     "recent": "recent"
   },
   "category": {
+    "rate": "your rating",
+    "users": "users",
+    "added": "added this course",
+    "rate-av": "course average rating",
+    "edit": "course edditing",
     "type": {
       "language": "Languages",
       "science": "Science"
@@ -53,6 +62,11 @@
     }
   },
   "test-page": {
+    "modal": {
+      "title": "test settings",
+      "reverse-order": "Reverse order",
+      "run": "start test"
+    },
     "errors": {
       "1": "thunder strike me!",
       "2": "a thousand devils!",
@@ -82,7 +96,25 @@
     "rate-edit": {
       "title": "Want to change your rating?",
       "description": "Opinions may change, but they still remain important"
+    },
+    "restart": {
+      "description": "All course progress will be completely erased. You'll be able to start the course from the beginning."
+    },
+    "delete": {
+      "description": "The course and all its progress will be completely deleted (for other users too!)"
+    },
+    "remove": {
+      "description": "The course and all its progress will be completely removed from the 'My Courses' section. You'll be able to add it again from the library."
     }
+  },
+  "profile": {
+    "days": "days",
+    "study": "studying without interruption",
+    "title": "profile settings",
+    "done": "courses completed",
+    "is-public": "Make profile public",
+    "notification": "Receive notifications",
+    "language": "Application language"
   },
   "cards": "Cards",
   "test": "Test",

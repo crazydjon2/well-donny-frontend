@@ -6,5 +6,6 @@ enum CategoryTypeEnum {
 export interface CategoryType {
   id: string
   type: CategoryTypeEnum
+  name: string
   children: CategoryType[]
 }

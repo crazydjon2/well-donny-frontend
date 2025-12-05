@@ -100,7 +100,7 @@
             @click="showAnswer"
           >
             <AppButton full outline :type="ButtonTypes.SECONDARY">
-              проверить
+              {{ $t('button.check') }}
             </AppButton>
           </AppDelayedElement>
           <AppDelayedElement
@@ -111,7 +111,7 @@
               {{ pickText() }}
             </h3>
             <AppButton full :type="ButtonTypes.SECONDARY">
-              {{ error ? 'понял' : 'дальше' }}
+              {{ error ? t('button.got-it') : t('button.next') }}
             </AppButton>
           </AppDelayedElement>
         </TransitionGroup>

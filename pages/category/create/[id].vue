@@ -2,7 +2,7 @@
   <div class="container">
     <PageTop type="secondary" with-decoration class="mb-5 sticky top-5">
       <template #default>
-        <span class="font-accent text-white text-meduim">редактирование курса</span>
+        <span class="font-accent text-white text-meduim">{{ $t('category.edit') }}</span>
       </template>
       <template #right>
         <AppIcon icon="close" color="text-white" class="cursor-pointer" :width="16" :height="16" @click="goBack" />

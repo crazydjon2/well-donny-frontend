@@ -6,19 +6,19 @@
         @click="model = false"
       />
       <PageTop type="secondary" class="w-full" with-decoration>
-        <p>настройка теста</p>
+        <p>{{ $t('text-page.modal.title') }}</p>
       </PageTop>
       <p class="mt-5 border-b-[1px] text-small w-full">
         {{ title }}
       </p>
 
       <div class="flex justify-between w-full mt-5" @click="isReverse = !isReverse">
-        Обратный порядок
+        {{ $t('text-page.modal.reverse-order') }}
         <AppCheckbox :value="isReverse" />
       </div>
 
       <AppButton full class="mt-10" @click="runTest">
-        начать тест
+        {{ $t('text-page.modal.run') }}
       </AppButton>
     </div>
   </ModalFull>

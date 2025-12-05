@@ -5,7 +5,7 @@
         <template #default>
           <div class="w-full relative">
             <p class="font-accent text-[32px] font-bold">
-              настройки профиля
+              {{ $t('profile.title') }}
             </p>
 
             <AppIcon icon="close" :width="18" :height="18" color="text-white absolute top-1.5 right-0" @click="model = false" />
@@ -15,15 +15,15 @@
 
       <div class="mt-4 flex flex-col gap-2">
         <div class="flex items-center justify-center w-full" @click="isProfilePublic = !isProfilePublic">
-          <span class="text-regular">Сделать профиль публичным</span>
+          <span class="text-regular">{{ $t('profile.is-public') }}</span>
           <AppCheckbox :value="isProfilePublic" class="ml-auto" />
         </div>
         <div class="flex items-center justify-center w-full" @click="notification = !notification">
-          <span class="text-regular">Получать уведомления в tg</span>
+          <span class="text-regular">{{ $t('profile.notification') }}</span>
           <AppCheckbox :value="notification" class="ml-auto" />
         </div>
         <div class="flex items-center justify-center w-full">
-          <span class="text-regular">Язык приложения</span>
+          <span class="text-regular">{{ $t('profile.language') }}</span>
           <Dropdown :disabled="select" class="ml-auto" container=".modal">
             <div class="border-primary shadow-small-primary border-[1px] rounded-md px-1 flex items-center">
               <span class="mr-1">{{ localeData }}</span>
@@ -48,10 +48,10 @@
 
       <div class="flex gap-6 mt-8">
         <AppButton full outline :type="ButtonTypes.SECONDARY" @click="model = false">
-          отмена
+          {{ $t('button.cancel') }}
         </AppButton>
         <AppButton full @click="sendData">
-          сохранить
+          {{ $t('button.save') }}
         </AppButton>
       </div>
     </div>
