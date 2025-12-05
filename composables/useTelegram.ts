@@ -117,18 +117,20 @@ export function useTelegramAuth() {
 
   // Инициализация
   // composables/useTelegramAuth.ts
-const init = async (timeout = 5000): Promise<boolean> => {
-  // Если уже готов — ок
-  if (state.isReady && state.user?.id) return true
+  const init = async (timeout = 5000): Promise<boolean> => {
+    // Если уже готов — ок
+    if (state.isReady && state.user?.id) {
+      return true
+    }
 
-  // Если явно не в Telegram окружении — сразу false
-  if (!window.Telegram?.WebApp) {
-    console.warn('Telegram WebApp не найден в window')
-    return false
+    // Если явно не в Telegram окружении — сразу false
+    if (!window.Telegram?.WebApp) {
+      console.warn('Telegram WebApp не найден в window')
+      return false
+    }
+
+    return await waitForTelegramInit(timeout)
   }
-
-  return await waitForTelegramInit(timeout)
-}
 
   // Проверка, запущено ли в Telegram
   const isTelegramWebView = computed(() => {
