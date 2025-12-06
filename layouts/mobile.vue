@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="pb-[200px]">
+    <div>
       <slot />
     </div>
     <Transition name="move-up">

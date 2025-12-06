@@ -23,8 +23,8 @@
         </div>
       </div>
     </template>
-    <template #content-header>
-      <div class="flex h-full gap-4 overflow-auto items-center w-full">
+    <template #content>
+      <div class="flex gap-4 overflow-auto items-center w-full sticky bg-white top-0 z-60 h-[44px] px-4">
         <Transition name="move-down-small">
           <div v-if="activeSubType" class="w-full relative flex">
             <AppIcon icon="chevron-left" :width="24" :height="24" class="left-1 -top-0.5" @click="getCategories(activeType)" />
@@ -42,51 +42,47 @@
           </div>
         </Transition>
       </div>
-    </template>
-    <template #content>
-      <div class="min-h-[100vh]">
-        <Transition name="move-down-small">
-          <div v-if="loading" class="grid grid-cols-1 gap-6 px-5 pt-5 w-full">
-            <div v-for="j in 3" :key="j">
-              <p class="text-small py-2 mb-4 uppercase">
-                <SkeletonLoader height="41px" width="200px" />
-              </p>
-              <div class="flex w-full gap-4 overflow-x-auto p-2">
-                <SkeletonLoader v-for="n in 2" :key="n" class="flex flex-col relative rounded-xl p-4 aspect-square" />
-              </div>
+      <Transition name="move-down-small">
+        <div v-if="loading" class="grid grid-cols-1 gap-6 px-5 pt-5 w-full">
+          <div v-for="j in 3" :key="j">
+            <p class="text-small py-2 mb-4 uppercase">
+              <SkeletonLoader height="41px" width="200px" />
+            </p>
+            <div class="flex w-full gap-4 overflow-x-auto p-2">
+              <SkeletonLoader v-for="n in 2" :key="n" class="flex flex-col relative rounded-xl p-4 aspect-square" />
             </div>
           </div>
-          <div v-else-if="categories.length" class="grid grid-cols-1 gap-6 px-5 pt-5 w-full">
-            <MotionComponent
-              v-for="(category, index) in categories" :key="index"
-              :initial="{ opacity: 0, scale: 0.9 }" :enter="{ opacity: 1, scale: 1 }"
-              :leave="{ opacity: 0, scale: 0.8 }" :transition="{ type: 'spring', stiffness: 200, damping: 20 }"
-            >
-              <div v-if="!activeSubType" class="flex items-center py-2 border-b-[1px] mb-4">
-                <p class="text-small uppercase">
-                  {{ category.type.name }}
-                </p>
-                <AppButton :type="ButtonTypes.SECONDARY" outline small class="flex items-center justify-center w-[24px] h-[24px] ml-auto" @click="activeSubTypeName = category.type.name;getCategories(category.type.id, true)">
-                  <AppIcon icon="chevron-left" :width="16" :height="16" class="rotate-180" />
-                </AppButton>
+        </div>
+        <div v-else-if="categories.length" class="grid grid-cols-1 gap-6 px-5 pt-5 w-full">
+          <MotionComponent
+            v-for="(category, index) in categories" :key="index"
+            :initial="{ opacity: 0, scale: 0.9 }" :enter="{ opacity: 1, scale: 1 }"
+            :leave="{ opacity: 0, scale: 0.8 }" :transition="{ type: 'spring', stiffness: 200, damping: 20 }"
+          >
+            <div v-if="!activeSubType" class="flex items-center py-2 border-b-[1px] mb-4">
+              <p class="text-small uppercase">
+                {{ category.type.name }}
+              </p>
+              <AppButton :type="ButtonTypes.SECONDARY" outline small class="flex items-center justify-center w-[24px] h-[24px] ml-auto" @click="activeSubTypeName = category.type.name;getCategories(category.type.id, true)">
+                <AppIcon icon="chevron-left" :width="16" :height="16" class="rotate-180" />
+              </AppButton>
+            </div>
+            <div class="flex w-full gap-4 overflow-x-auto p-2" :class="activeSubType && 'grid grid-cols-2'">
+              <div v-for="(c, ind) in category.items" :key="c.category.id" class="min-w-[calc(50%-10px)]">
+                <AppDelayedElement :to="`/category/${c.category.id}`">
+                  <AppCategoryCard :category="c.category" :author="c.user" :rate="c.rate" :primary="activeSubType ? !(ind % 4 === 1 || ind % 4 === 2) : ind % 2 === 0" />
+                </AppDelayedElement>
               </div>
-              <div class="flex w-full gap-4 overflow-x-auto p-2" :class="activeSubType && 'grid grid-cols-2'">
-                <div v-for="(c, ind) in category.items" :key="c.category.id" class="min-w-[calc(50%-10px)]">
-                  <AppDelayedElement :to="`/category/${c.category.id}`">
-                    <AppCategoryCard :category="c.category" :author="c.user" :rate="c.rate" :primary="activeSubType ? !(ind % 4 === 1 || ind % 4 === 2) : ind % 2 === 0" />
-                  </AppDelayedElement>
-                </div>
-              </div>
-            </MotionComponent>
-          </div>
-          <div v-else class="w-full">
-            <div class="w-full bg-grey rounded-3xl aspect-square max-w-[300px] mx-auto" />
-            <h2 class="font-accent text-[6rem] w-full text-center">
-              Здесь пусто
-            </h2>
-          </div>
-        </Transition>
-      </div>
+            </div>
+          </MotionComponent>
+        </div>
+        <div v-else class="w-full">
+          <div class="w-full bg-grey rounded-3xl aspect-square max-w-[300px] mx-auto" />
+          <h2 class="font-accent text-[6rem] w-full text-center">
+            Здесь пусто
+          </h2>
+        </div>
+      </Transition>
     </template>
   </PageContainer>
 </template>

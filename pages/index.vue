@@ -20,8 +20,8 @@
           </AppDelayedElement>
         </div>
       </template>
-      <template #content-header>
-        <div class="flex items-center">
+      <template #content>
+        <div class="flex items-center rounded-t-3xl h-[44px] px-4 overflow-hidden sticky bg-white top-0 z-60">
           <div id="folder-container" class="flex h-full gap-4 overflow-x-auto items-center w-[calc(100%-40px)]">
             <AppChip
               v-for="folder in categoryFolders" :id="`folder-${folder.value}`" :key="folder.value"
@@ -62,42 +62,36 @@
             />
           </AppButton>
         </div>
-      </template>
-      <template #content>
-        <div class="min-h-[100vh]">
-          <Transition name="move-down-small">
-            <div v-if="loading" class="grid grid-cols-2 gap-6 px-5 pt-5 w-full">
-              <SkeletonLoader v-for="n in 4" :key="n" class="flex flex-col relative rounded-xl p-4 aspect-square" />
-            </div>
-            <div v-else-if="categories.length" class="grid grid-cols-2 gap-6 px-5 pt-5 w-full">
-              <MotionComponent
-                v-for="(category, index) in categories" :key="category.id"
-                :initial="{ opacity: 0, scale: 0.9 }" :enter="{ opacity: 1, scale: 1 }"
-                :leave="{ opacity: 0, scale: 0.8 }" :transition="{ type: 'spring', stiffness: 200, damping: 20 }"
-              >
-                <AppDelayedElement :to="`/category/${category.category.id}`">
-                  <AppCategoryCard
-                    :category="category.category" :author="category.user"
-                    :primary="!(index % 4 === 1 || index % 4 === 2)"
-                    :rate="category.rate"
-                  >
-                    <template #default>
-                      <div class="absolute right-4 bottom-5" @click.stop.prevent="beforeDelete(category.category.id)">
-                        <AppIcon icon="trash" :width="16" :height="16" />
-                      </div>
-                    </template>
-                  </AppCategoryCard>
-                </AppDelayedElement>
-              </MotionComponent>
-            </div>
-            <div v-else class="w-full">
-              <div class="w-full bg-grey rounded-3xl aspect-square max-w-[300px] mx-auto" />
-              <h2 class="font-accent text-[6rem] w-full text-center">
-                Здесь пусто
-              </h2>
-            </div>
-          </Transition>
-        </div>
+        <Transition name="move-down-small">
+          <div v-if="loading" class="grid grid-cols-2 gap-6 px-5 mt-5 w-full">
+            <SkeletonLoader v-for="n in 4" :key="n" class="flex flex-col relative rounded-xl p-4 aspect-square" />
+          </div>
+          <div v-else-if="categories.length" class="grid grid-cols-2 gap-6 px-5 pt-5 w-full">
+            <template
+              v-for="(category, index) in categories" :key="category.id"
+            >
+              <AppDelayedElement :to="`/category/${category.category.id}`">
+                <AppCategoryCard
+                  :category="category.category" :author="category.user"
+                  :primary="!(index % 4 === 1 || index % 4 === 2)"
+                  :rate="category.rate"
+                >
+                  <template #default>
+                    <div class="absolute right-4 bottom-5" @click.stop.prevent="beforeDelete(category.category.id)">
+                      <AppIcon icon="trash" :width="16" :height="16" />
+                    </div>
+                  </template>
+                </AppCategoryCard>
+              </AppDelayedElement>
+            </template>
+          </div>
+          <div v-else class="w-full">
+            <div class="w-full bg-grey rounded-3xl aspect-square max-w-[300px] mx-auto" />
+            <h2 class="font-accent text-[6rem] w-full text-center">
+              Здесь пусто
+            </h2>
+          </div>
+        </Transition>
       </template>
     </PageContainer>
     <ConfirmModal

@@ -1,26 +1,24 @@
 <template>
-  <div>
+  <div class="max-h-[100vh] h-[100vh] overflow-hidden">
     <div
-      class="background-wave fixed w-full top-0 z-40 transition-all overflow-hidden ease-in-out"
+      class="background-wave w-full top-0 z-40 transition-all overflow-hidden ease-in-out"
       :class="[page === 'library' ? 'bg-secondary' : 'bg-primary']"
-      :style="{ height: isScrollingDown ? '175px' : '295px' }"
     >
-      <slot name="title" />
+      <div>
+        <slot name="title" />
+      </div>
 
-      <transition name="fade">
-        <div v-show="!isScrollingDown" class="flex w-full gap-7 duration-150">
-          <slot name="additional" />
-        </div>
-      </transition>
-      <div class="absolute bottom-[-1px] w-full bg-white rounded-t-3xl h-[44px] px-4 pt-2 overflow-hidden translate-z-10">
-        <slot name="content-header" />
+      <div class="w-full gap-7 min-h-[160px]">
+        <slot name="additional" />
       </div>
     </div>
     <div
-      class="relative z-30 bg-white rounded-t-3xl pt-6 transition-all overflow-auto"
-      :class="!isScrollingDown ? 'mt-[290px]' : 'mt-[174px]'"
+      ref="container" class="relative z-50 bg-white rounded-t-3xl overflow-y-scroll transition-transform ease-in-out duration-250"
+      :class="isScrollingDown ? ['h-[calc(100vh-175px)]', '-translate-y-[175px]'] : ['h-[calc(100vh-295px)]',  '-translate-y-[44px]']"
     >
-      <slot name="content" />
+      <div class="min-h-[100vh]">
+        <slot name="content" />
+      </div>
     </div>
   </div>
 </template>
@@ -36,8 +34,9 @@ defineProps<{ page: 'library' | 'main' }>()
 const isScrollingDown = ref(false)
 const lastStopPoint = ref(0)
 
+const container = ref()
 function handleScroll() {
-  const scrollY = window.scrollY
+  const scrollY = container.value.scrollTop
 
   if (lastStopPoint.value - scrollY > 75 || scrollY === 0) {
     isScrollingDown.value = false
@@ -49,14 +48,12 @@ function handleScroll() {
 }
 
 onMounted(() => {
-  document.addEventListener('scroll', handleScroll)
+  container.value.addEventListener('scroll', handleScroll)
 })
 
 onBeforeUnmount(() => {
-  document.removeEventListener('scroll', handleScroll)
+  container.value.removeEventListener('scroll', handleScroll)
 })
 </script>
 
-<style>
-
-</style>
+<style></style>
