@@ -113,7 +113,6 @@
 <script setup lang="ts">
 import type { CategoryFolder } from '~/assets/types/usersCategories'
 import { useCategoryStore, useUserStore } from '#imports'
-import { MotionComponent } from '@vueuse/motion'
 
 import { Dropdown } from 'floating-vue'
 import { storeToRefs } from 'pinia'
