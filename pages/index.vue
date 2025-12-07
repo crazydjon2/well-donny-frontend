@@ -21,7 +21,7 @@
         </div>
       </template>
       <template #content>
-        <div class="flex items-center rounded-t-3xl h-[44px] px-4 overflow-hidden sticky bg-white top-0 z-60">
+        <div class="flex items-center !rounded-t-3xl h-[44px] px-4 overflow-hidden sticky bg-white top-0 z-60">
           <div id="folder-container" class="flex h-full gap-4 overflow-x-auto items-center w-[calc(100%-40px)]">
             <AppChip
               v-for="folder in categoryFolders" :id="`folder-${folder.value}`" :key="folder.value"
@@ -43,10 +43,10 @@
                     <template #popper>
                       <div class="p-5 px-7 gap-3 flex flex-col rounded-xl">
                         <p class="text-small text-center border-b-1" @click="editFolder(folder)">
-                          редактировать
+                          {{ $t('button.edit') }}
                         </p>
                         <p class="text-small text-center border-b-1" @click="folderDeleteModal = true">
-                          удалить
+                          {{ $t('button.save') }}
                         </p>
                       </div>
                     </template>
@@ -88,7 +88,7 @@
           <div v-else class="w-full">
             <div class="w-full bg-grey rounded-3xl aspect-square max-w-[300px] mx-auto" />
             <h2 class="font-accent text-[6rem] w-full text-center">
-              Здесь пусто
+              {{ $t('empty') }}
             </h2>
           </div>
         </Transition>

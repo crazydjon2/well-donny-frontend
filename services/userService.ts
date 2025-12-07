@@ -28,7 +28,7 @@ export const authService = {
       body: dto,
     })
   },
-  createUser({ name, tgId }: { name: string, tgId: string }) {
+  createUser({ name, tgId }: { name: string, tgId: string, language: string, img?: string }) {
     return useApi<User>('/user', {
       method: 'POST',
       body: {

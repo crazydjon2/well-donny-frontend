@@ -8,7 +8,7 @@
         />
       </template>
       <template #default>
-        <span class="font-accent text-white text-meduim">{{ category?.name }}</span>
+        <span class="font-accent text-white text-meduim text-overflow-2">{{ category?.name }}</span>
       </template>
       <template #right>
         <VDropdown :disabled="modal" placement="bottom-end">
@@ -127,7 +127,7 @@
 
     <ConfirmModal
       v-model="modal" :title="$t('attention')" :description="modelDescription"
-      :btn-left="$t('button.cancel')" :btn-right="$t('button.delete')" @close="modal = false" @confirm="onConfirm"
+      :btn-left="$t('button.cancel')" :btn-right="modalState === 'restart' ? $t('button.restart') : $t('button.delete')" @close="modal = false" @confirm="onConfirm"
     />
 
     <ConfirmModal

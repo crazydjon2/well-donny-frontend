@@ -1,10 +1,14 @@
 <template>
-  <div class="container">
+  <div class="container !pb-30">
     <PageTop type="primary-light">
-      <div class="flex justify-between">
-        {{ profile?.name }}
-        <AppIcon v-if="isMe" icon="settings" color="text-white" :width="36" :height="36" @click="settingsModal = true" />
-      </div>
+      <template #left>
+        <span class="font-accent text-white text-meduim text-center px-2 !max-w-[calc(100%-50px)] w-full">{{ profile?.name }}</span>
+      </template>
+      <template #right>
+        <div class="flex justify-between">
+          <AppIcon v-if="isMe" icon="settings" color="text-white" :width="36" :height="36" @click="settingsModal = true" />
+        </div>
+      </template>
     </PageTop>
     <div class="mt-6">
       <div class="flex gap-4">

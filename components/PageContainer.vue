@@ -14,9 +14,9 @@
     </div>
     <div
       ref="container" class="relative z-50 bg-white rounded-t-3xl overflow-y-scroll transition-transform ease-in-out duration-250"
-      :class="isScrollingDown ? ['h-[calc(100vh-175px)]', '-translate-y-[175px]'] : ['h-[calc(100vh-295px)]',  '-translate-y-[44px]']"
+      :class="isScrollingDown ? ['h-[calc(100vh-105px)]', '-translate-y-[175px]'] : ['h-[calc(100vh-241px)]',  '-translate-y-[44px]']"
     >
-      <div class="min-h-[100vh]">
+      <div class="min-h-[100vh] pb-30">
         <slot name="content" />
       </div>
     </div>

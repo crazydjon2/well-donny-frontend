@@ -142,6 +142,7 @@ watch(() => category.type, async () => {
   if (category.type) {
     const { data } = await categoryService.getCategoriesTypes(category.type.id)
     subTypes.value = data.value ? data.value : []
+    category.subType = null
   }
 })
 

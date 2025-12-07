@@ -51,7 +51,7 @@
       <Transition name="move-up">
         <AppDelayedElement v-if="!isMenuVisible" :disabled="loader" class="fixed bottom-4 left-0 px-5" @click="onCategoryCreate">
           <AppButton full outline :disabled="loader">
-            {{ $t('button.add-course') }}
+            {{ $t('button.save') }}
           </AppButton>
         </AppDelayedElement>
       </Transition>
@@ -155,10 +155,13 @@ async function onCategoryCreate() {
 }
 
 const subTypes = ref<CategoryType[]>([])
-watch(() => categoryToEdit.type, async () => {
+watch(() => categoryToEdit.type, async (newValue, oldValue) => {
   if (categoryToEdit.type) {
     const { data } = await categoryService.getCategoriesTypes(categoryToEdit.type.id)
     subTypes.value = data.value ? data.value : []
+
+    if (oldValue !== null)
+      categoryToEdit.subType = null
   }
 })
 

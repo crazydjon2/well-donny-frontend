@@ -21,7 +21,7 @@ const isDragging = ref(false)
 const allowClick = ref(true)
 const cardStyle = computed(() => {
   return {
-    transform: `translate(${currentPos.value.x / 2}px, ${currentPos.value.y / 15}px) rotate(${currentPos.value.x / 100}deg)`,
+    transform: `translate(${currentPos.value.x / 2}px, ${currentPos.value.y / 15}px) rotate(${currentPos.value.x / 60}deg)`,
     transition: isDragging.value ? 'none' : 'transform 0.7s ease',
   }
 })

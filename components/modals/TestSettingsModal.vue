@@ -8,7 +8,7 @@
       <PageTop type="secondary" class="w-full" with-decoration>
         <p>{{ $t('test-page.modal.title') }}</p>
       </PageTop>
-      <p class="mt-5 border-b-[1px] text-small w-full">
+      <p class="mt-5 border-b-[1px] text-small w-full text-overflow-2">
         {{ title }}
       </p>
 

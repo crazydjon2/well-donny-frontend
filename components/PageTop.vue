@@ -7,7 +7,7 @@
       <div class="">
         <slot name="left" />
       </div>
-      <div class="font-accent text-white text-meduim text-center w-full">
+      <div class="font-accent text-white text-meduim text-center px-2 !max-w-[calc(100%-50px)] w-full">
         <slot />
       </div>
       <div class="justify-self-end">

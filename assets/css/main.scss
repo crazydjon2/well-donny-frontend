@@ -185,3 +185,18 @@ select:focus {
     transform: translateX(5px);
   }
 }
+
+.page-transition-lock {
+  pointer-events: none !important;
+  touch-action: none !important;
+}
+
+.text-overflow-2 {
+    overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  /* Required for -webkit-line-clamp to work */
+  -webkit-box-orient: vertical;
+  /* Required for vertical clamping */
+  -webkit-line-clamp: 2;
+}

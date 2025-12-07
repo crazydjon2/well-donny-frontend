@@ -1,5 +1,5 @@
 <template>
-  <div class="container overflow-hidden min-h-[100vh]">
+  <div class="container overflow-hidden h-[100dvh]">
     <PageTop type="primary">
       <template #left>
         <AppIcon icon="tuning" :width="22" :height="26" color="text-white" @click="settingsModal = true" />
@@ -12,8 +12,8 @@
       </template>
     </PageTop>
     <ShipProgress v-if="cards" :length="cards.length" :position="slide + 1" class="mt-5" />
-    <div v-if="cards && userCategory" class="mt-6">
-      <FlashCardsContainer :key="renderKey" v-model="slide" :allow-swipe="false" :is-square="false">
+    <template v-if="cards && userCategory">
+      <FlashCardsContainer :key="renderKey" v-model="slide" :allow-swipe="false" :is-square="false" class="mt-6">
         <FlashCardsItem
           v-for="(card, index) in cards" :key="card.id"
           class="flex flex-col overflow-visible p-1 relative"
@@ -30,7 +30,7 @@
 
         <template #end-slide>
           <!-- <div v-if="!isFlipping" class="w-full bg-grey rounded-3xl h-[200px] mb-auto" /> -->
-          <div v-if="!isFlipping" class="w-full h-[200px] flex items-center justify-center mb-auto animation-swim">
+          <div v-show="isEnd" class="w-full h-[200px] flex items-center justify-center mb-auto animation-swim">
             <img src="@/assets/img/donny.PNG" class="h-full" alt="Donny">
           </div>
         </template>
@@ -73,7 +73,7 @@
       </Transition>
 
       <Transition name="move-up">
-        <div v-if="isEnd" class="w-full flex justify-center gap-5 fixed bottom-5 px-5 left-0">
+        <div v-if="isEnd" class="w-full flex justify-center gap-5 fixed bottom-5 px-5 left-0 keyboard-safe-bottom">
           <AppDelayedElement v-if="courseDone" @click="restartTest">
             <AppButton full outline :type="ButtonTypes.SECONDARY">
               {{ $t('button.more') }}
@@ -96,7 +96,7 @@
       <Teleport to="body">
         <TransitionGroup name="move-up">
           <AppDelayedElement
-            v-if="!isMenuVisible && !allowFlip && !isEnd" class="fixed bottom-8 left-0 px-5"
+            v-if="!isMenuVisible && !allowFlip && !isEnd" class="fixed bottom-8 left-0 px-5 keyboard-safe-bottom"
             @click="showAnswer"
           >
             <AppButton full outline :type="ButtonTypes.SECONDARY">
@@ -104,7 +104,7 @@
             </AppButton>
           </AppDelayedElement>
           <AppDelayedElement
-            v-if="!isMenuVisible && allowFlip && !isEnd" class="fixed bottom-8 left-0 px-5"
+            v-if="!isMenuVisible && allowFlip && !isEnd" class="fixed bottom-8 left-0 px-5 keyboard-safe-bottom"
             @click="nextCard"
           >
             <h3 class="font-accent text-bold text-[40px] mb-6 text-center text-green" :class="error && 'text-red'">
@@ -116,7 +116,7 @@
           </AppDelayedElement>
         </TransitionGroup>
       </Teleport>
-    </div>
+    </template>
     <TestSettingsModal
       v-if="userCategory && category" v-model="settingsModal" :title="category?.name" :category-id="category.id"
       :is-reverse="userCategory?.reverseOrder || false"

@@ -5,7 +5,7 @@
   >
     <span class="category__name">{{ props.category.name }}</span>
     <div class="flex items-center text-[8px] gap-1">
-      <span>{{ category.type?.name }}</span>
+      <span class="text-[12px]">{{ category.type?.name }}</span>
       <div v-if="rate" class="flex">
         <AppIcon icon="star-filled" color="text-secondary-2" :width="8" :height="8" class="relative top-[0.7px]" />
         {{ rate?.toFixed(1) }}
@@ -45,13 +45,21 @@ function goToProfile() {
   font-size: 14px;
   line-height: 21px;
   letter-spacing: -0.32px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  /* Required for -webkit-line-clamp to work */
+  -webkit-box-orient: vertical;
+  /* Required for vertical clamping */
+  -webkit-line-clamp: 2;
 }
 
 .category__author {
   font-family: Evolventa;
   font-weight: 400;
   font-style: Regular;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 21px;
   letter-spacing: -0.32px;
   color: var(--color-primary);

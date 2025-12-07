@@ -28,6 +28,7 @@ export default defineNuxtPlugin(async () => {
       const { data: user } = await authService.createUser({
         tgId: tgUserData?.id || tgIdLc || 1,
         name: tgUserData?.username || Math.random().toString(36).substring(2, 8),
+        language: tgUserData?.language_code === 'en' ? 'en' : 'ru',
       })
       if (user.value) {
         localeCookie.value = user.value.language

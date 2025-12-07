@@ -5,6 +5,7 @@
   "termins": "Terms",
   "library": "Library",
   "courses": "COURSES",
+  "empty": "It's empty here",
   "menu": {
     "course": "my courses",
     "library": "library",
@@ -24,7 +25,9 @@
     "next": "next",
     "rate": "rate",
     "save": "save",
-    "check": "check"
+    "check": "check",
+    "edit": "edit",
+    "restart": "restart"
   },
   "input": {
     "placeholder": {
