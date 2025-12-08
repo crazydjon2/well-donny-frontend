@@ -73,7 +73,7 @@
       </Transition>
 
       <Transition name="move-up">
-        <div v-if="isEnd" class="w-full flex justify-center gap-5 fixed bottom-5 px-5 left-0 keyboard-safe-bottom">
+        <div v-if="isEnd" class="w-full flex justify-center gap-5 fixed bottom-5 px-5 left-0 keyboard-safe-bottom z-50">
           <AppDelayedElement v-if="courseDone" @click="restartTest">
             <AppButton full outline :type="ButtonTypes.SECONDARY">
               {{ $t('button.more') }}
@@ -96,7 +96,7 @@
       <Teleport to="body">
         <TransitionGroup name="move-up">
           <AppDelayedElement
-            v-if="!isMenuVisible && !allowFlip && !isEnd" class="fixed bottom-8 left-0 px-5 keyboard-safe-bottom"
+            v-if="!isMenuVisible && !allowFlip && !isEnd" class="fixed bottom-8 left-0 px-5 keyboard-safe-bottom z-50"
             @click="showAnswer"
           >
             <AppButton full outline :type="ButtonTypes.SECONDARY">
