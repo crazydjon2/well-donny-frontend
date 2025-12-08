@@ -1,5 +1,5 @@
 <template>
-  <div class="container overflow-hidden min-h-[100vh]">
+  <div class="container min-h-[100vh] pb-30">
     <PageTop type="primary">
       <template #default>
         {{ $t('cards') }}

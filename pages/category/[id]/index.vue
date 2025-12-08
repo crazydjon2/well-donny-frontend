@@ -1,5 +1,5 @@
 <template>
-  <div v-if="category" class="container">
+  <div v-if="category" class="container pb-30">
     <PageTop type="primary" with-decoration class="!z-30">
       <template #left>
         <AppIcon

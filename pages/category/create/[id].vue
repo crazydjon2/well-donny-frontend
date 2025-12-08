@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container pb-30">
     <PageTop type="secondary" with-decoration class="mb-5 sticky top-5">
       <template #default>
         <span class="font-accent text-white text-meduim">{{ $t('category.edit') }}</span>

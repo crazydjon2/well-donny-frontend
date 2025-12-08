@@ -46,7 +46,7 @@
                           {{ $t('button.edit') }}
                         </p>
                         <p class="text-small text-center border-b-1" @click="folderDeleteModal = true">
-                          {{ $t('button.save') }}
+                          {{ $t('button.delete') }}
                         </p>
                       </div>
                     </template>
