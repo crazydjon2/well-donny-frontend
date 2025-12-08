@@ -1,5 +1,5 @@
 <template>
-  <div class="container pb-30">
+  <div class="container !pb-30">
     <PageTop type="primary">
       <template #left>
         <AppIcon icon="tuning" :width="22" :height="26" color="text-white" @click="settingsModal = true" />

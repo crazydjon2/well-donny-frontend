@@ -1,5 +1,5 @@
 <template>
-  <div v-if="category" class="container pb-30">
+  <div v-if="category" class="container !pb-30">
     <PageTop type="primary" with-decoration class="!z-30">
       <template #left>
         <AppIcon
@@ -102,7 +102,7 @@
         class="col-span-2 border-secondary shadow-secondary border-2 rounded-xl"
         @click="onTestPressed"
       >
-        <div class="flex items-center justify-center rounded-xl min-h-[125px]">
+        <div class="flex items-center justify-center rounded-xl min-h-[80px]">
           <span class="text-regular font-bold uppercase">{{ $t('test') }}</span>
         </div>
       </AppDelayedElement>
