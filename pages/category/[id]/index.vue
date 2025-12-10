@@ -70,25 +70,34 @@
           class="absolute left-[-19px] top-4 -translate-y-1/2
                w-0 h-0
                border-y-[6px] border-y-transparent
-               border-r-[22px] border-primary -rotate-[15deg]"
+               border-r-22 border-primary -rotate-15"
         />
       </div>
     </div>
 
-    <div class="!mt-3 !-mx-5 max-w-[100vw]">
-      <Carousel v-if="cards && cards.length" v-bind="carouselConfig">
+    <div class="mt-3">
+      <AppCarousel loop>
+        <AppCarouselSlide v-for="card in cards" :key="card.id" :per-view="1.7">
+          <AppCard
+            :text-first="card.word.original" :text-second="card.word.translated" :word-id="card.word.id"
+            :is-favorite-init="card.word.isFavorite"
+          />
+        </AppCarouselSlide>
+      </AppCarousel>
+
+      <!-- <Carousel v-if="cards && cards.length" v-bind="carouselConfig" class="!mt-3 !-mx-5">
         <Slide v-for="card in cards" :key="card.id">
           <AppCard
             :text-first="card.word.original" :text-second="card.word.translated" :word-id="card.word.id"
             :is-favorite-init="card.word.isFavorite"
           />
         </Slide>
-      </Carousel>
+      </Carousel> -->
     </div>
 
     <div v-if="category.type" class="flex justify-between mt-5">
       <span class="text-regular">{{ cards?.length }} {{ $t('words') }}</span>
-      <span class="text-regular">{{  category.type.name }}</span>
+      <span class="text-regular">{{ category.type.name }}</span>
     </div>
 
     <div v-if="isUserInCategory" class="grid grid-cols-2 gap-5">
@@ -117,7 +126,7 @@
         </div>
         <div v-if="category.avarageRate" class="flex flex-col w-full p-4 bg-secondary text-white rounded-xl">
           <span class="font-accent text-[96px] leading-[90px]">{{ category.avarageRate }}</span>
-          <span class="text-regular leading-[16px] font-bold">{{ $t('category.rat-ave') }}а</span>
+          <span class="text-regular leading-[16px] font-bold">{{ $t('category.rate-av') }}</span>
         </div>
       </div>
       <AppButton class="mt-5" :type="ButtonTypes.SECONDARY" outline @click="addUser">
@@ -126,8 +135,9 @@
     </div>
 
     <ConfirmModal
-      v-model="modal" :title="$t('attention')" :description="modelDescription"
-      :btn-left="$t('button.cancel')" :btn-right="modalState === 'restart' ? $t('button.restart') : $t('button.delete')" @close="modal = false" @confirm="onConfirm"
+      v-model="modal" :title="modalState === 'restart' ? $t('modal.restart.title') : $t('attention')" :description="modelDescription"
+      :btn-left="$t('button.cancel')" :btn-right="modalState === 'restart' ? $t('button.letsgo') : $t('button.delete')" grow @close="modal = false"
+      @confirm="onConfirm"
     />
 
     <ConfirmModal
@@ -158,15 +168,15 @@ import { useRouterUtility, useUserStore } from '#imports'
 import { MotionComponent } from '@vueuse/motion'
 import { storeToRefs } from 'pinia'
 import { computed, onMounted, ref } from 'vue'
-import { Carousel, Slide } from 'vue3-carousel'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { ButtonTypes } from '~/assets/types/ui'
 import ConfirmModal from '~/components/modals/ConfirmModal.vue'
 import PageTop from '~/components/PageTop.vue'
-import { AppButton, AppDelayedElement, AppIcon } from '~/components/ui'
+import { AppButton, AppCarousel, AppCarouselSlide, AppDelayedElement, AppIcon } from '~/components/ui'
 import { categoryService } from '~/services/categoryService'
 import { testService } from '~/services/testService'
+
 import { useCategoryStore } from '~/stores/category'
 
 const { t } = useI18n()
@@ -188,13 +198,6 @@ function addUser() {
         window.location.reload()
       })
   }
-}
-
-const carouselConfig = {
-  itemsToShow: 2.5,
-  wrapAround: true,
-  height: 210,
-  gap: 200,
 }
 
 const percent = ref(0)

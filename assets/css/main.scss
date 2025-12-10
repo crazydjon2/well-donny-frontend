@@ -145,10 +145,6 @@ select:focus {
   outline: none;
 }
 
-.carousel__viewport {
-  padding: 4px 0px !important;
-}
-
 .background-wave {
   background-image: url(../img//wave-bg.svg);
   background-size: auto 160px;
@@ -217,6 +213,7 @@ body {
   position: fixed;
   width: 100%;
   overflow-y: auto;
+  overflow-x: hidden !important;
   -webkit-overflow-scrolling: touch;
 }
 

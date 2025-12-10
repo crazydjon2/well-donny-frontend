@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="ship-container" class="relative">
     <img src="@/assets/img/boat.png" class="w-[62px] h-[62px] translate-y-2.5 relative ship-img" :class="{ 'ship-animation-stop': !animation }" :style="offset">
     <div class="h-[12px] w-full bg-primary rounded-sm" />
   </div>
@@ -11,10 +11,14 @@ import { computed, ref, watch } from 'vue'
 const props = defineProps<{ length: number, position: number }>()
 
 const offset = computed(() => {
-  if (props.length === props.position - 1) {
-    return `left: calc(100% - 70px)`
+  const containerWidth = document.querySelector('#ship-container')?.clientWidth
+  if (props.position === 1) {
+    return `left: 0`
   }
-  return `left: ${Math.min(85, (100 / props.length) * (props.position - 1))}%`
+  else if (containerWidth) {
+    return `left: calc(${((containerWidth - 62) / props.length) * (props.position - 1)}px)`
+  }
+  return ''
 })
 
 const animation = ref(false)

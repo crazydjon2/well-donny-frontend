@@ -1,7 +1,7 @@
 <!-- TODO add first frame form lottie animation -->
 <template>
   <Transition name="fade">
-    <div v-if="isLightHouse" class="w-full h-full fixed top-0 left-0 z-50 bg-dark/70 px-10">
+    <div v-if="isLightHouse" class="w-full h-full fixed top-0 left-0 z-100 bg-dark/70 px-10">
       <Transition name="fade" appear>
         <div v-if="showAnimation" class="flex items-center justify-center w-full h-full">
           <ClientOnly>

@@ -27,7 +27,8 @@
     "save": "save",
     "check": "check",
     "edit": "edit",
-    "restart": "restart"
+    "restart": "restart",
+    "letsgo": "let's go!"
   },
   "input": {
     "placeholder": {
@@ -101,7 +102,8 @@
       "description": "Opinions may change, but they still remain important"
     },
     "restart": {
-      "description": "All course progress will be completely erased. You'll be able to start the course from the beginning."
+      "title": "You've already learned all the words!",
+      "description": "Let's just run the test again (don't worry, your progress will be saved)."
     },
     "delete": {
       "description": "The course and all its progress will be completely deleted (for other users too!)"

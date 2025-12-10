@@ -1,4 +1,6 @@
 export { default as AppButton } from './AppButton.vue'
+export { default as AppCarousel } from './AppCarousel.vue'
+export { default as AppCarouselSlide } from './AppCarouselSlide.vue'
 export { default as AppCheckbox } from './AppCheckbox.vue'
 export { default as AppChip } from './AppChip.vue'
 export { default as AppDelayedElement } from './AppDelayedElement.vue'

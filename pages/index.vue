@@ -7,13 +7,13 @@
         </h2>
       </template>
       <template #additional>
-        <div class="flex w-full gap-7 px-10">
-          <div class="w-full h-full animation-swim">
+        <div class="gap-7 px-10">
+          <!-- <div class="w-full h-full animation-swim">
             <img src="@/assets/img/donny.PNG" alt="Donny">
-          </div>
+          </div> -->
           <AppDelayedElement
             to="/category/create"
-            class="flex flex-col w-full h-[6rem] items-center justify-center bg-white border-primary-2 border-2 rounded-xl shadow-primary-dark"
+            class="flex flex-col ml-auto !w-[160px] h-[6rem] items-center justify-center bg-white border-primary-2 border-2 rounded-xl shadow-primary-dark"
           >
             <span class="text-regular uppercase font-bold">{{ $t('button.create') }}</span>
             <AppIcon icon="add" :width="30" :height="30" />
@@ -197,3 +197,16 @@ watch(activeFolder, () => {
   getCategories()
 }, { immediate: true })
 </script>
+
+<style scoped>
+  .embla {
+    overflow: hidden;
+  }
+  .embla__container {
+    display: flex;
+  }
+  .embla__slide {
+    flex: 0 0 100%;
+    min-width: 0;
+  }
+</style>

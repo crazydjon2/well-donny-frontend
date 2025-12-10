@@ -50,15 +50,17 @@
       <h3 class="text-[1.5rem] font-bold text-center">
         {{ $t('courses') }}
       </h3>
-      <Carousel v-bind="carouselConfig">
-        <Slide v-for="category in userCategories" :key="category.id">
-          <AppDelayedElement :to="`/category/${category.category.id}`">
-            <AppCategoryCard :category="category.category" :author="category.user" class="w-full">
-              <AppIcon icon="chevron-left" :width="20" :height="20" class="absolute right-6 bottom-6 rotate-180" />
-            </AppCategoryCard>
-          </AppDelayedElement>
-        </Slide>
-      </Carousel>
+      <div class="mt-3">
+        <AppCarousel>
+          <AppCarouselSlide v-for="category in userCategories" :key="category.id" :per-view="2">
+            <AppDelayedElement :to="`/category/${category.category.id}`">
+              <AppCategoryCard :category="category.category" :author="category.user" class="w-full">
+                <AppIcon icon="chevron-left" :width="20" :height="20" class="absolute right-6 bottom-6 rotate-180" />
+              </AppCategoryCard>
+            </AppDelayedElement>
+          </AppCarouselSlide>
+        </AppCarousel>
+      </div>
     </div>
     <ProfileSettingsModal v-model="settingsModal" />
   </div>
@@ -72,13 +74,12 @@ import { useCookie } from '#app'
 import { storeToRefs } from 'pinia'
 import { Calendar } from 'v-calendar'
 import { computed, onMounted, ref, watch } from 'vue'
-import { Carousel, Slide } from 'vue3-carousel'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import AppCategoryCard from '~/components/AppCategoryCard.vue'
 import ProfileSettingsModal from '~/components/modals/ProfileSettingsModal.vue'
 import PageTop from '~/components/PageTop.vue'
-import { AppDelayedElement, AppIcon } from '~/components/ui'
+import { AppCarousel, AppCarouselSlide, AppDelayedElement, AppIcon } from '~/components/ui'
 import { categoriesService } from '~/services/categoriesService'
 import { authService } from '~/services/userService'
 import { userStrickService } from '~/services/userStrickService'
@@ -134,11 +135,6 @@ onMounted(async () => {
     userStrickData.value = strickData.value
   }
 })
-
-const carouselConfig = {
-  itemsToShow: 2,
-  gap: 24,
-}
 
 const isMe = computed(() => {
   return route.params.id === 'me' || route.params.id === user.value?.id

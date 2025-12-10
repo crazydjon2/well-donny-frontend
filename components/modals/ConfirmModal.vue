@@ -12,12 +12,12 @@
       </p>
       <slot />
       <div class="flex w-full gap-2 mt-5">
-        <AppDelayedElement @click="emits('close')">
+        <AppDelayedElement :class="grow && '!w-fit'" @click="emits('close')">
           <AppButton class="flex-[1]" :type="ButtonTypes.SECONDARY" outline full>
             {{ btnLeft }}
           </AppButton>
         </AppDelayedElement>
-        <AppDelayedElement @click="emits('confirm')">
+        <AppDelayedElement :class="grow && '!w-full'" @click="emits('confirm')">
           <AppButton class="flex-[2]" full>
             {{ btnRight }}
           </AppButton>
@@ -37,6 +37,7 @@ defineProps<{
   description?: string
   btnLeft?: string
   btnRight?: string
+  grow?: boolean
 }>()
 
 const emits = defineEmits<Emits>()

@@ -7,7 +7,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
   modules: ['@nuxtjs/tailwindcss', '@nuxt/eslint', '@pinia/nuxt', '@nuxtjs/storybook'],
-  css: ['./assets/css/tailwind.css', './assets/css/main.scss', 'vue-final-modal/style.css', 'vue3-carousel/carousel.css'],
+  css: ['./assets/css/tailwind.css', './assets/css/main.scss', 'vue-final-modal/style.css'],
   imports: {
     autoImport: false,
   },
