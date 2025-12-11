@@ -76,7 +76,7 @@
     </div>
 
     <div class="mt-3">
-      <AppCarousel loop>
+      <AppCarousel loop class="-mx-5! p-2">
         <AppCarouselSlide v-for="card in cards" :key="card.id" :per-view="1.7">
           <AppCard
             :text-first="card.word.original" :text-second="card.word.translated" :word-id="card.word.id"
@@ -101,7 +101,7 @@
     </div>
 
     <div v-if="isUserInCategory" class="grid grid-cols-2 gap-5">
-      <CategoryStatusCard :percent="+percent" class="min-h-[125px] h-[calc(100%+4px)]" />
+      <CategoryStatusCard v-if="percent" :percent="+percent" class="min-h-[125px] h-[calc(100%+4px)]" />
       <AppDelayedElement :to="`${route.fullPath}/cards`" class="border-secondary shadow-secondary border-2 rounded-xl">
         <div class="flex items-center justify-center rounded-xl min-h-[125px] h-full">
           <span class="text-regular font-bold uppercase">{{ $t('cards') }}</span>
@@ -200,7 +200,7 @@ function addUser() {
   }
 }
 
-const percent = ref(0)
+const percent = ref<number | null>(null)
 
 const modalState = ref<'edit' | 'delete' | 'restart'>('edit')
 const modal = ref(false)
@@ -237,7 +237,7 @@ async function onConfirm() {
 }
 
 function onTestPressed() {
-  if (+percent.value === 100) {
+  if (percent.value && +percent.value === 100) {
     modalState.value = 'restart'
     modal.value = true
   }
@@ -305,9 +305,13 @@ async function checkTruncation() {
 }
 const isExpanded = ref(false)
 onMounted(async () => {
-  await getCategoryCards(route.params.id as string)
+  const [_, { data }] = await Promise.all([
+    getCategoryCards(route.params.id as string),
+    testService.getProgress(route.params.id as string),
+  ])
+  // await getCategoryCards(route.params.id as string)
   await checkTruncation()
-  const { data } = await testService.getProgress(route.params.id as string)
+  // const { data } = await testService.getProgress(route.params.id as string)
   if (data.value) {
     percent.value = data.value
   }

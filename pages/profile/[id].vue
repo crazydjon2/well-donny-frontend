@@ -53,11 +53,11 @@
       <div class="mt-3">
         <AppCarousel>
           <AppCarouselSlide v-for="category in userCategories" :key="category.id" :per-view="2">
-            <AppDelayedElement :to="`/category/${category.category.id}`">
+            <NuxtLink :to="`/category/${category.category.id}`">
               <AppCategoryCard :category="category.category" :author="category.user" class="w-full">
                 <AppIcon icon="chevron-left" :width="20" :height="20" class="absolute right-6 bottom-6 rotate-180" />
               </AppCategoryCard>
-            </AppDelayedElement>
+            </NuxtLink>
           </AppCarouselSlide>
         </AppCarousel>
       </div>
@@ -79,7 +79,7 @@ import { useRoute } from 'vue-router'
 import AppCategoryCard from '~/components/AppCategoryCard.vue'
 import ProfileSettingsModal from '~/components/modals/ProfileSettingsModal.vue'
 import PageTop from '~/components/PageTop.vue'
-import { AppCarousel, AppCarouselSlide, AppDelayedElement, AppIcon } from '~/components/ui'
+import { AppCarousel, AppCarouselSlide, AppIcon } from '~/components/ui'
 import { categoriesService } from '~/services/categoriesService'
 import { authService } from '~/services/userService'
 import { userStrickService } from '~/services/userStrickService'

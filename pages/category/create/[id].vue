@@ -32,6 +32,7 @@
       <div class="rounded-full bg-secondary shadow-small-secondary">
         <AppIcon icon="plus" color="text-white" @click="addWord" />
       </div>
+      <p v-if="isSizeError" class="text-center text-red">{{ isSizeError }}</p>
       <div class="w-full flex flex-col gap-4">
         <TransitionGroup name="word-item">
           <template v-for="(word, index) in words" :key="getWordKey(word, index)">
@@ -65,7 +66,7 @@ import type { EditWordDTO } from '~/assets/types/word'
 import { CreateWordCard } from '#components'
 import { useGlobalStore } from '#imports'
 import { storeToRefs } from 'pinia'
-import { onMounted, onUnmounted, reactive, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import PageTop from '~/components/PageTop.vue'
 import { AppButton, AppDelayedElement, AppIcon, AppInput, AppSelect } from '~/components/ui'
@@ -131,6 +132,12 @@ function getWordKey(word: any, index: number) {
 }
 
 const errors = ref<{ name?: string, description?: string, type?: string, subType?: string, words?: Record<number, Record<string, string[]>> } | null>(null)
+const isSizeError = computed(() => {
+  if (errors.value && errors.value.words && typeof errors.value.words[0] === 'string') {
+    return errors.value.words[0]
+  }
+  return ''
+})
 async function onCategoryCreate() {
   if (categoryToEdit.type) {
     setLoader(true)

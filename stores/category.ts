@@ -21,7 +21,7 @@ export const useCategoryStore = defineStore('category', () => {
     cards.value = data
   }
 
-  const setUserCategory = (data: UserCategory) => {
+  const setUserCategory = (data: UserCategory | null) => {
     userCategory.value = data
   }
 

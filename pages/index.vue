@@ -70,7 +70,7 @@
             <template
               v-for="(category, index) in categories" :key="category.id"
             >
-              <AppDelayedElement :to="`/category/${category.category.id}`">
+              <NuxtLink :to="`/category/${category.category.id}`">
                 <AppCategoryCard
                   :category="category.category" :author="category.user"
                   :primary="!(index % 4 === 1 || index % 4 === 2)"
@@ -82,7 +82,7 @@
                     </div>
                   </template>
                 </AppCategoryCard>
-              </AppDelayedElement>
+              </NuxtLink>
             </template>
           </div>
           <div v-else class="w-full">

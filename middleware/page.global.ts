@@ -1,6 +1,9 @@
 import { defineNuxtRouteMiddleware } from '#app'
 
 export default defineNuxtRouteMiddleware((to, from) => {
+  // eslint-disable-next-line node/prefer-global/process
+  if (!process.client)
+    return
   const getDepth = (path: string) => {
     return path.split('/').filter(seg => seg.length > 0).length
   }

@@ -4,8 +4,8 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-import { onMounted } from 'vue'
+<script lang="ts" async setup>
+import { onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
 import { categoryService } from '~/services/categoryService'
 
@@ -15,11 +15,15 @@ const route = useRoute()
 const categoryId: string = route.params?.id as string
 const { getCategory, setUserCategory } = useCategoryStore()
 
-onMounted(async () => {
-  getCategory(categoryId)
-  const { data: uc } = await categoryService.getUserCategory(route.params.id as string)
-  if (uc.value) {
-    setUserCategory(uc.value)
-  }
+const [_, { data: uc }] = await Promise.all([
+  getCategory(categoryId),
+  categoryService.getUserCategory(route.params.id as string),
+])
+if (uc.value) {
+  setUserCategory(uc.value)
+}
+
+onBeforeUnmount(() => {
+  setUserCategory(null)
 })
 </script>

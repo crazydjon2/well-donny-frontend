@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 
 const props = defineProps<{
   label?: string
@@ -41,7 +41,7 @@ watch(() => props.error, () => {
 
 const input = ref<HTMLElement>()
 async function onFocus() {
-  await nextTick()
+  await setTimeout(() => {}, 300)
   if (input.value) {
     input.value.scrollIntoView({
       block: 'start',

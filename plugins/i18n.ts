@@ -4,18 +4,31 @@ import { createI18n } from 'vue-i18n'
 import en from '../locales/en.json'
 import ru from '../locales/ru.json'
 
-const locale = useCookie('locale')
-
-export const i18n = createI18n({
-  legacy: false,
-  globalInjection: true,
-  locale: locale.value || 'ru',
-  messages: {
-    en,
-    ru,
-  },
-})
+// Создаем переменную для i18n, но инициализируем позже
+let i18nInstance: ReturnType<typeof createI18n>
 
 export default defineNuxtPlugin(({ vueApp }) => {
-  vueApp.use(i18n)
+  // useCookie() должен вызываться ТОЛЬКО внутри функции плагина
+  const locale = useCookie('locale')
+
+  i18nInstance = createI18n({
+    legacy: false,
+    globalInjection: true,
+    locale: locale.value || 'ru',
+    messages: {
+      en,
+      ru,
+    },
+  })
+
+  vueApp.use(i18nInstance)
+
+  return {
+    provide: {
+      i18n: i18nInstance.global,
+    },
+  }
 })
+
+// Экспортируем getter для i18n instance, если нужно использовать вне компонентов
+export const i18n = () => i18nInstance

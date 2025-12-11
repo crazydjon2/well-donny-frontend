@@ -69,9 +69,9 @@
             </div>
             <div class="flex w-full gap-4 overflow-x-auto p-2" :class="activeSubType && 'grid grid-cols-2'">
               <div v-for="(c, ind) in category.items" :key="c.category.id" class="min-w-[calc(50%-10px)]">
-                <AppDelayedElement :to="`/category/${c.category.id}`">
+                <NuxtLink :to="`/category/${c.category.id}`">
                   <AppCategoryCard :category="c.category" :author="c.user" :rate="c.rate" :primary="activeSubType ? !(ind % 4 === 1 || ind % 4 === 2) : ind % 2 === 0" />
-                </AppDelayedElement>
+                </NuxtLink>
               </div>
             </div>
           </MotionComponent>
@@ -97,7 +97,7 @@ import SkeletonLoader from '@/components/SkeletonLoader.vue'
 import { ButtonTypes } from '~/assets/types/ui'
 import AppCategoryCard from '~/components/AppCategoryCard.vue'
 import PageContainer from '~/components/PageContainer.vue'
-import { AppButton, AppChip, AppDelayedElement, AppIcon, AppInput } from '~/components/ui'
+import { AppButton, AppChip, AppIcon, AppInput } from '~/components/ui'
 import { categoriesService } from '~/services/categoriesService'
 
 const { getCategoryTypes } = useCategoryStore()
@@ -142,7 +142,7 @@ async function getCategories(type?: string, isSubType: boolean = false) {
   loading.value = false
 }
 
-let timer: NodeJS.Timeout
+let timer: number
 watch(name, () => {
   clearTimeout(timer)
   timer = setTimeout(() => {
