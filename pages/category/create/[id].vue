@@ -1,6 +1,6 @@
 <template>
   <div class="container !pb-30">
-    <PageTop type="secondary" with-decoration class="mb-5 sticky top-5">
+    <PageTop type="secondary" with-decoration class="mb-5">
       <template #default>
         <span class="font-accent text-white text-meduim">{{ $t('category.edit') }}</span>
       </template>
@@ -152,7 +152,7 @@ async function onCategoryCreate() {
     })
 
     if (!error.value) {
-      router.push('/')
+      router.push(`/category/${categoryId}`)
     }
     else {
       errors.value = error.value.data.errors

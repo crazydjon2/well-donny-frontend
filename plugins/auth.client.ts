@@ -1,7 +1,7 @@
 import { defineNuxtPlugin, useCookie } from '#app'
+
 import { useTelegramAuth } from '#imports'
 import { nextTick } from 'vue'
-
 import { authService } from '~/services/userService'
 import { useGlobalStore } from '~/stores/global'
 import { useUserStore } from '~/stores/user'
@@ -15,10 +15,13 @@ export default defineNuxtPlugin(async () => {
   setLoader(true)
 
   try {
-    const tgIdLc = localStorage.getItem('tgId')
+    let tgIdLc = ''
+    if (process.client) {
+      tgIdLc = localStorage.getItem('tgId') || ''
+    }
     await useTelegramAuth().init(3000)
     // eslint-disable-next-line no-restricted-globals
-    const tgUserData = global.Telegram.WebApp.initDataUnsafe?.user
+    const tgUserData = global?.Telegram?.WebApp.initDataUnsafe?.user
 
     const { data: signInData, error, refresh } = await authService.signIn()
 
@@ -53,9 +56,9 @@ export default defineNuxtPlugin(async () => {
       }
     }
   }
-  catch (e) {
-    console.error('[auth plugin]', e)
-  }
+  // catch (e) {
+  //   console.error('[auth plugin]', e)
+  // }
   finally {
     setLoader(false)
   }

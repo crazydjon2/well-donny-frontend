@@ -84,6 +84,13 @@
       "3": "excellent!",
       "4": "you're on fire!",
       "5": "good job!"
+    },
+    "warning": {
+      "1": "wow, almost hit the bullseye!",
+      "2": "warm, very warm...",
+      "3": "almost perfect, check the spelling",
+      "4": "you guessed it, but a typo crept in",
+      "5": "looks similar, but there's a nuance"
     }
   },
   "action": {
@@ -130,5 +137,6 @@
   "learnt-text": "You've learned {length} cards",
   "learnt-all": "You've learned all cards",
   "delete-description": "The course and all its progress will be completely deleted (for other users too!)",
-  "remove-description": "The course and its progress will be removed from your profile"
+  "remove-description": "The course and its progress will be removed from your profile",
+  "answer": "Answer"
 }

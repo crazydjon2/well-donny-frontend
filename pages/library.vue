@@ -70,14 +70,15 @@
             <div class="flex w-full gap-4 overflow-x-auto p-2" :class="activeSubType && 'grid grid-cols-2'">
               <div v-for="(c, ind) in category.items" :key="c.category.id" class="min-w-[calc(50%-10px)]">
                 <NuxtLink :to="`/category/${c.category.id}`">
-                  <AppCategoryCard :category="c.category" :author="c.user" :rate="c.rate" :primary="activeSubType ? !(ind % 4 === 1 || ind % 4 === 2) : ind % 2 === 0" />
+                  <AppCategoryCard :category="c.category" :author="c?.author" :rate="c.rate" :primary="activeSubType ? !(ind % 4 === 1 || ind % 4 === 2) : ind % 2 === 0" />
                 </NuxtLink>
               </div>
             </div>
           </MotionComponent>
         </div>
         <div v-else class="w-full">
-          <div class="w-full bg-grey rounded-3xl aspect-square max-w-[300px] mx-auto" />
+          <!-- <div class="w-full bg-grey rounded-3xl aspect-square max-w-[300px] mx-auto" /> -->
+          <img src="/assets//img//donny-sad.jpg" alt="Sad Donny" class="max-h-[250px] mx-auto mt-6 animation-swim" />
           <h2 class="font-accent text-[6rem] w-full text-center">
             Здесь пусто
           </h2>
@@ -129,12 +130,7 @@ async function getCategories(type?: string, isSubType: boolean = false) {
       activeSubType.value = type
     }
     loading.value = true
-    const { data } = await categoriesService.getByType(isSubType ? activeSubType.value : activeType.value, name.value)
-    // const children = categoryTypes.value.find((t) => t.id === t.id)?.children.map((c) => c.id)
-    // const { data } = await categoriesService.getAllCategories({
-    //   type: children?.join(','),
-    //   role: 'creator',
-    // })
+    const { data } = await categoriesService.getByType(isSubType ? activeSubType.value : activeType.value, name.value, 0, 5)
     if (data.value) {
       categories.value = data.value
     }

@@ -51,10 +51,10 @@
         {{ $t('courses') }}
       </h3>
       <div class="mt-3">
-        <AppCarousel>
+        <AppCarousel class="py-1 -mx-5!">
           <AppCarouselSlide v-for="category in userCategories" :key="category.id" :per-view="2">
             <NuxtLink :to="`/category/${category.category.id}`">
-              <AppCategoryCard :category="category.category" :author="category.user" class="w-full">
+              <AppCategoryCard :category="category.category" :author="category.author" class="w-full">
                 <AppIcon icon="chevron-left" :width="20" :height="20" class="absolute right-6 bottom-6 rotate-180" />
               </AppCategoryCard>
             </NuxtLink>

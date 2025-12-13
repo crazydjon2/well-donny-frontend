@@ -18,7 +18,7 @@ const [emblaRef] = emblaCarouselVue({ loop: props.loop, align: 'center' }, [Clas
 <style scoped>
 .embla {
     overflow-x: hidden;
-  max-width: 48rem;
+  /* max-width: 48rem; */
   margin: auto;
   --slide-height: 19rem;
   --slide-spacing: 1rem;

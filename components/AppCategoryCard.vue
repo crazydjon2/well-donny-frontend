@@ -11,7 +11,7 @@
         {{ rate?.toFixed(1) }}
       </div>
     </div>
-    <span class="category__author mt-auto w-fit" @click.stop.prevent="goToProfile">@{{ props.author.name }}</span>
+    <span v-if="author" class="category__author mt-auto w-fit" @click.stop.prevent="goToProfile">@{{ props.author.name }}</span>
 
     <slot />
   </div>

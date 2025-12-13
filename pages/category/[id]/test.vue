@@ -45,7 +45,7 @@
             <span class="text font-light">{{ word.translated }}</span>
           </AppButton>
         </TransitionGroup> -->
-        <AppInput v-model="answer" :error :success placeholder="Ответ" />
+        <AppInput v-model="answer" :error :success :warning :placeholder="$t('answer')" />
       </div>
       <div v-if="!wordsPool.length && !isEnd" class="w-full h-[200px]" />
 
@@ -107,7 +107,7 @@
             v-if="!isMenuVisible && allowFlip && !isEnd" class="fixed bottom-8 left-0 px-5 keyboard-safe-bottom"
             @click="nextCard"
           >
-            <h3 class="font-accent text-bold text-[40px] mb-6 text-center text-green" :class="error && 'text-red'">
+            <h3 class="font-accent text-bold text-[40px] mb-6 text-center text-green" :class="[error && 'text-red', warning && 'text-warning']">
               {{ pickText() }}
             </h3>
             <AppButton full :type="ButtonTypes.SECONDARY">
@@ -125,9 +125,10 @@
 </template>
 
 <script lang="ts" async setup>
+import type { AnswerResult } from '#imports'
 import type { UserCategory } from '~/assets/types/usersCategories'
 import type { Word } from '~/assets/types/word'
-import { pickWords, useGlobalStore } from '#imports'
+import { checkAnswer, pickWords, useGlobalStore } from '#imports'
 import { storeToRefs } from 'pinia'
 import { computed, onBeforeUnmount, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -175,6 +176,7 @@ const wordsPool = computed<Word[]>(() => {
 
 const error = ref('')
 const success = ref('')
+const warning = ref('')
 const statistic = ref<{ wrong: number, right: number }>({ wrong: 0, right: 0 })
 const delay = 0
 const allowFlip = ref(false)
@@ -189,6 +191,7 @@ function nextCard() {
       answer.value = ''
       error.value = ''
       success.value = ''
+      warning.value = ''
     }, 100)
   }, delay)
 }
@@ -208,14 +211,23 @@ function showAnswer() {
     return
   }
 
+  // const isAnswered = answer.value.trim().toLowerCase() === correctWord.value[!isReverse.value ? 'translated' : 'original'].trim().toLowerCase()
+  const answerStatus: AnswerResult = checkAnswer(answer.value, correctWord.value[!isReverse.value ? 'translated' : 'original'])
+  const isAnswered = answerStatus !== 'wrong'
+
   if (correctWord.value) {
-    testService.updateWord(route.params.id as string, correctWord.value.id, answer.value.trim() === correctWord.value[!isReverse.value ? 'translated' : 'original'].trim())
+    testService.updateWord(route.params.id as string, correctWord.value.id, isAnswered)
   }
 
   allowFlip.value = true
-  if (answer.value.trim().toLowerCase() === correctWord.value[!isReverse.value ? 'translated' : 'original'].trim().toLowerCase()) {
+  if (isAnswered) {
     ++statistic.value.right
-    success.value = ' '
+    if (answerStatus === 'perfect') {
+      success.value = ' '
+    }
+    else {
+      warning.value = ' '
+    }
     // nextCard()
   }
   else {
@@ -326,6 +338,9 @@ function pickText() {
   const random = Math.floor(Math.random() * 5) + 1
   if (error.value) {
     return t(`test-page.errors.${random}`)
+  }
+  else if (warning.value) {
+    return t(`test-page.warning.${random}`)
   }
   return t(`test-page.success.${random}`)
 }

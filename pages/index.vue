@@ -72,7 +72,7 @@
             >
               <NuxtLink :to="`/category/${category.category.id}`">
                 <AppCategoryCard
-                  :category="category.category" :author="category.user"
+                  :category="category.category" :author="category.author"
                   :primary="!(index % 4 === 1 || index % 4 === 2)"
                   :rate="category.rate"
                 >
@@ -86,7 +86,8 @@
             </template>
           </div>
           <div v-else class="w-full">
-            <div class="w-full bg-grey rounded-3xl aspect-square max-w-[300px] mx-auto" />
+            <!-- <div class="w-full bg-grey rounded-3xl aspect-square max-w-[300px] mx-auto" /> -->
+            <img src="/assets//img//donny-sad.jpg" alt="Sad Donny" class="max-h-[250px] mx-auto mt-6 animation-swim" />
             <h2 class="font-accent text-[6rem] w-full text-center">
               {{ $t('empty') }}
             </h2>

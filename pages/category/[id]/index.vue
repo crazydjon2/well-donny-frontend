@@ -18,7 +18,7 @@
               <p v-if="isCreator" class="text-small text-center border-b-1" @click="goToEdit">
                 {{ $t('action.edit') }}
               </p>
-              <p v-if="isUserInCategory" class="text-small text-center border-b-1" @click="modalState = 'restart'; modal = true">
+              <p v-if="isUserInCategory" class="text-small text-center border-b-1" @click="modalState = 'restart';toTest = false; modal = true">
                 {{
                   $t('action.restart') }}
               </p>
@@ -54,7 +54,7 @@
     <div v-if="category.description" class="flex mt-2">
       <div class="rounded-full max-w-[2.75rem] max-h-[2.75rem] min-w-[2.75rem] min-h-[2.75rem] bg-grey" />
       <div class="w-full ml-6 bg-primary text-regular p-2 text-white rounded-xl relative">
-        <p ref="description" :class="isExpanded ? '' : 'truncate-text'" class="break-all">
+        <p ref="description" :class="isExpanded ? '' : 'truncate-text'" class="break-word">
           {{ category.description }}
         </p>
         <div
@@ -219,6 +219,18 @@ const modelDescription = computed(() => {
   return isCreator.value ? t('modal.delete.description') : t('modal.remove.description')
 })
 
+const toTest = ref(false)
+function onTestPressed() {
+  if (percent.value && +percent.value === 100) {
+    modalState.value = 'restart'
+    toTest.value = true
+    modal.value = true
+  }
+  else {
+    router.push(`${route.path}/test`)
+  }
+}
+
 async function onConfirm() {
   if (category.value && user.value) {
     if (modalState.value === 'delete') {
@@ -232,17 +244,12 @@ async function onConfirm() {
     else {
       await testService.restartCourse(category.value?.id)
     }
-    router.go(0)
-  }
-}
-
-function onTestPressed() {
-  if (percent.value && +percent.value === 100) {
-    modalState.value = 'restart'
-    modal.value = true
-  }
-  else {
-    router.push(`${route.path}/test`)
+    if (toTest.value) {
+      router.push(`/category/${category.value.id}/test`)
+    }
+    else {
+      router.go(0)
+    }
   }
 }
 

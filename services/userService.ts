@@ -5,9 +5,8 @@ import { useApi } from '~/composables/useApi'
 export const authService = {
   async signIn() {
     const tgIdLc = localStorage.getItem('tgId')
-    // eslint-disable-next-line ts/ban-ts-comment
-    // @ts-expect-error
-    const tgUserData = Telegram.WebApp.initDataUnsafe.user
+    // eslint-disable-next-line no-restricted-globals
+    const tgUserData = global?.Telegram?.WebApp.initDataUnsafe.user
     // const config = useRuntimeConfig()
 
     return useApi<{ token: string }>('/signIn', {

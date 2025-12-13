@@ -1,14 +1,14 @@
 <template>
   <ModalFull v-model="model" class="modal" @close="model = false">
     <div class="p-5 bg-white rounded-3xl">
-      <PageTop type="secondary" with-decoration>
+      <PageTop type="secondary" with-decoration class="w-full">
         <template #default>
-          <div class="w-full relative">
+          <div class="w-full">
             <p class="font-accent text-[32px] font-bold">
               {{ $t('profile.title') }}
             </p>
 
-            <AppIcon icon="close" :width="18" :height="18" color="text-white absolute top-1.5 right-0" @click="model = false" />
+            <AppIcon icon="close" :width="18" :height="18" color="text-white absolute top-5 right-3" @click="model = false" />
           </div>
         </template>
       </PageTop>
@@ -46,7 +46,7 @@
         </div> -->
       </div>
 
-      <div class="flex gap-6 mt-8">
+      <div class="flex gap-3 mt-8">
         <AppButton full outline :type="ButtonTypes.SECONDARY" @click="model = false">
           {{ $t('button.cancel') }}
         </AppButton>

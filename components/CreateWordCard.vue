@@ -3,7 +3,7 @@
     <AppInput v-model="original" label="термин" white :error="error?.original && error?.original[0]" />
     <AppInput v-model="translated" label="определение" white :error="error?.translated && error?.translated[0]" />
 
-    <AppIcon icon="trash" color="text-white" :width="16" :height="16" class="cursor-pointer ml-3 mt-1" @click="$emit('onDelete')" />
+    <AppIcon icon="trash" color="text-white" :width="16" :height="16" class="cursor-pointer ml-3 mt-1 w-fit" @click="$emit('onDelete')" />
   </div>
 </template>
 
