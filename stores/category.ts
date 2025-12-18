@@ -48,6 +48,13 @@ export const useCategoryStore = defineStore('category', () => {
     }
   }
 
+  const changeWordFavorite = (wordId: string, isFavorite: boolean) => {
+    const word = cards.value?.find((c: Card) => c.word.id === wordId)
+    if (word) {
+      word.word.isFavorite = isFavorite
+    }
+  }
+
   const getCategory = async (id: string) => {
     loading.value = true
     const { data } = await categoryService.getCategory(id)
@@ -65,5 +72,5 @@ export const useCategoryStore = defineStore('category', () => {
     }
   }
 
-  return { category, setCategory, cards, setCategoryCards, createCategory, getCategoryTypes, deleteCategory, categoryTypes, getCategory, removeUserFromCategory, getCategoryCards, editWord, setUserCategory, userCategory }
+  return { category, setCategory, cards, setCategoryCards, createCategory, getCategoryTypes, deleteCategory, categoryTypes, getCategory, removeUserFromCategory, getCategoryCards, editWord, setUserCategory, userCategory, changeWordFavorite }
 })

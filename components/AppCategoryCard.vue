@@ -6,9 +6,9 @@
     <span class="category__name">{{ props.category.name }}</span>
     <div class="flex items-center text-[8px] gap-1">
       <span class="text-[12px]">{{ category.type?.name }}</span>
-      <div v-if="rate" class="flex">
+      <div v-if="category.avgRate" class="flex">
         <AppIcon icon="star-filled" color="text-secondary-2" :width="8" :height="8" class="relative top-[0.7px]" />
-        {{ rate?.toFixed(1) }}
+        {{ category.avgRate?.toFixed(1) }}
       </div>
     </div>
     <span v-if="author" class="category__author mt-auto w-fit" @click.stop.prevent="goToProfile">@{{ props.author.name }}</span>

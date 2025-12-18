@@ -18,7 +18,7 @@
           </AppChip>
         </div>
 
-        <div class="flex flex-col gap-3 mt-4 max-h-[45%] overflow-y-auto overflow-x-hidden">
+        <div class="flex flex-col gap-3 mt-4 overflow-y-auto overflow-x-hidden">
           <MotionComponent
             v-for="category in categories" :key="category.id" class="w-full" :initial="{ opacity: 0.2, scale: 0.9 }" :enter="{ opacity: 1, scale: 1 }"
             :leave="{ opacity: 0, scale: 0.8 }" :transition="{ type: 'spring', stiffness: 200, damping: 20 }" :duration="300"

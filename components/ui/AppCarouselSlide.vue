@@ -1,5 +1,5 @@
 <template>
-  <div class="embla__slide">
+  <div class="embla__slide" :class="opacity && 'opacity'">
     <slot />
   </div>
 </template>
@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const props = defineProps <{ perView?: number }> ()
+const props = defineProps <{ perView?: number, opacity?: boolean }> ()
 
 const slideSize = ref(`${100 / (props.perView || 1)}%`)
 </script>
@@ -20,7 +20,7 @@ const slideSize = ref(`${100 / (props.perView || 1)}%`)
   padding-left: var(--slide-spacing);
 
   transition: opacity 0.5s;
-  &:not(.is-snapped) {
+  &.opacity:not(.is-snapped) {
     opacity: 0.7;
   }
 }

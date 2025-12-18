@@ -5,7 +5,7 @@
         {{ $t('cards') }}
       </template>
       <template #right>
-        <AppIcon icon="close" color="text-white" class="cursor-pointer" :width="16" :height="16" @click="goBack" />
+        <AppIcon icon="close" color="text-white" class="cursor-pointer" :width="24" :height="24" @click="goBack" />
       </template>
     </PageTop>
 

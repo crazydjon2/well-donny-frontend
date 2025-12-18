@@ -40,8 +40,8 @@ export default defineComponent({
     const colorClass = computed(() => props.color)
 
     const sizeStyle = computed(() => ({
-      width: props.width ? `${props.width}px` : props.small ? '20px' : props.big ? '40px' : undefined,
-      height: props.height ? `${props.height}px` : props.small ? '20px' : props.big ? '40px' : undefined,
+      width: props.width ? `${props.width / 16}rem` : props.small ? '20px' : props.big ? '40px' : undefined,
+      height: props.height ? `${props.height / 16}rem` : props.small ? '20px' : props.big ? '40px' : undefined,
     }))
 
     const renderKey = ref(0)

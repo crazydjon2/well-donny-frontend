@@ -10,9 +10,11 @@
 import ClassNames from 'embla-carousel-class-names'
 import emblaCarouselVue from 'embla-carousel-vue'
 
-const props = defineProps<{ loop?: boolean }>()
+const props = withDefaults(defineProps<{ loop?: boolean, align?: 'start' | 'end' | 'center' }>(), {
+  align: 'center',
+})
 
-const [emblaRef] = emblaCarouselVue({ loop: props.loop, align: 'center' }, [ClassNames()])
+const [emblaRef] = emblaCarouselVue({ loop: props.loop, align: props.align }, [ClassNames()])
 </script>
 
 <style scoped>

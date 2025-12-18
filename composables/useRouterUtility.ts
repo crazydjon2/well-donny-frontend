@@ -1,18 +1,19 @@
+import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useGlobalStore } from '~/stores/global'
 
 export function useRouterUtility() {
   const router = useRouter()
-  const store = useGlobalStore()
+  const { backUrl } = storeToRefs(useGlobalStore())
 
   function goBack() {
-    if (store.backUrl) {
-      router.push(store.backUrl)
-      store.clear() // опционально
+    if (backUrl.value.length) {
+      router.push(backUrl.value[backUrl.value.length - 1])
     }
     else {
-      router.push('/') // или router.back()
+      goHome()
     }
+    useGlobalStore().clear()
   }
 
   function goHome() {

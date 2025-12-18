@@ -2,7 +2,7 @@
   <ModalFull v-model="model" @close="emits('close')">
     <div class="bg-white rounded-3xl w-full flex flex-col items-center p-4 relative">
       <AppIcon
-        icon="close" :width="20" :height="20" color="text-white" class="z-200 absolute top-8 right-8"
+        icon="close" :width="24" :height="24" color="text-white" class="z-200 absolute top-8 right-8"
         @click="model = false"
       />
       <PageTop type="secondary" class="w-full" with-decoration>

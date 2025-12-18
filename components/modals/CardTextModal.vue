@@ -12,7 +12,7 @@
       {{ modalData.text }}
     </div>
 
-    <AppIcon icon="close" :width="18" :height="18" class="absolute right-2 top-2" @click="close" />
+    <AppIcon icon="close" :width="24" :height="24" class="absolute right-2 top-2" @click="close" />
   </VueFinalModal>
 </template>
 

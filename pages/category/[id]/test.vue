@@ -8,7 +8,7 @@
         {{ $t('test') }}
       </template>
       <template #right>
-        <AppIcon icon="close" color="text-white" class="cursor-pointer" :width="16" :height="16" @click="goBack" />
+        <AppIcon icon="close" color="text-white" class="cursor-pointer" :width="24" :height="24" @click="goBack" />
       </template>
     </PageTop>
     <ShipProgress v-if="cards" :length="cards.length" :position="slide + 1" class="mt-5" />

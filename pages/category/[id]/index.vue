@@ -1,5 +1,5 @@
 <template>
-  <div v-if="category" class="container !pb-30">
+  <div v-if="category" class="container !pb-40">
     <PageTop type="primary" with-decoration class="!z-30">
       <template #left>
         <AppIcon
@@ -51,7 +51,7 @@
       </div>
     </div>
 
-    <div v-if="category.description" class="flex mt-2">
+    <!-- <div v-if="category.description" class="flex mt-2">
       <div class="rounded-full max-w-[2.75rem] max-h-[2.75rem] min-w-[2.75rem] min-h-[2.75rem] bg-grey" />
       <div class="w-full ml-6 bg-primary text-regular p-2 text-white rounded-xl relative">
         <p ref="description" :class="isExpanded ? '' : 'truncate-text'" class="break-word">
@@ -73,11 +73,11 @@
                border-r-22 border-primary -rotate-15"
         />
       </div>
-    </div>
+    </div> -->
 
     <div class="mt-3">
       <AppCarousel loop class="-mx-5! p-2">
-        <AppCarouselSlide v-for="card in cards" :key="card.id" :per-view="1.7">
+        <AppCarouselSlide v-for="card in cards" :key="card.id" :per-view="1.7" opacity>
           <AppCard
             :text-first="card.word.original" :text-second="card.word.translated" :word-id="card.word.id"
             :is-favorite-init="card.word.isFavorite"
@@ -101,18 +101,18 @@
     </div>
 
     <div v-if="isUserInCategory" class="grid grid-cols-2 gap-5">
-      <CategoryStatusCard v-if="percent" :percent="+percent" class="min-h-[125px] h-[calc(100%+4px)]" />
+      <CategoryStatusCard v-if="percent" :percent="+percent" class="" />
       <AppDelayedElement :to="`${route.fullPath}/cards`" class="border-secondary shadow-secondary border-2 rounded-xl">
-        <div class="flex items-center justify-center rounded-xl min-h-[125px] h-full">
-          <span class="text-regular font-bold uppercase">{{ $t('cards') }}</span>
+        <div class="flex items-center justify-center rounded-xl h-full">
+          <span class="text-small font-bold uppercase">{{ $t('cards') }}</span>
         </div>
       </AppDelayedElement>
       <AppDelayedElement
         class="col-span-2 border-secondary shadow-secondary border-2 rounded-xl"
         @click="onTestPressed"
       >
-        <div class="flex items-center justify-center rounded-xl min-h-[80px]">
-          <span class="text-regular font-bold uppercase">{{ $t('test') }}</span>
+        <div class="flex items-center justify-center rounded-xl min-h-[5rem]">
+          <span class="text-small font-bold uppercase">{{ $t('test') }}</span>
         </div>
       </AppDelayedElement>
     </div>
@@ -120,12 +120,12 @@
     <div v-else class="flex flex-col mt-5">
       <div class="w-full text-center flex items-center gap-5">
         <div class="flex flex-col w-full p-4 bg-primary text-white rounded-xl">
-          <span class="font-accent text-[96px] leading-[90px]">{{ category.users }}</span>
+          <span class="text-[6rem] font-accent leading-[6rem]">{{ category.users }}</span>
           <span class="text-regular leading-[16px] font-bold">{{ $t('category.users') }}</span>
           <span class="text-[10px] font-bold">{{ $t('category.added') }}</span>
         </div>
-        <div v-if="category.avarageRate" class="flex flex-col w-full p-4 bg-secondary text-white rounded-xl">
-          <span class="font-accent text-[96px] leading-[90px]">{{ category.avarageRate }}</span>
+        <div v-if="category.avgRate" class="flex flex-col w-full p-4 bg-secondary text-white rounded-xl">
+          <span class="text-[6rem] font-accent leading-[6rem]">{{ category.avgRate }}</span>
           <span class="text-regular leading-[16px] font-bold">{{ $t('category.rate-av') }}</span>
         </div>
       </div>
@@ -133,6 +133,22 @@
         {{ $t('button.add-course') }}
       </AppButton>
     </div>
+
+    <template v-if="cards">
+      <h3 class="text-h3 text-center mt-8">
+        {{ $t('termins') }}
+      </h3>
+      <div v-if="isUserInCategory" class="flex gap-4 overflow-x-auto mt-2">
+        <AppChip v-for="chip in cardChips" :key="chip.value" :active="pickedCardFilter === chip.value" @click="pickedCardFilter = chip.value">
+          <span class="text-small font-normal">{{ $t(`words-chip.${chip.text}`) }}</span>
+        </AppChip>
+      </div>
+      <div class="mt-6 flex flex-col gap-4">
+        <TransitionGroup name="fade">
+          <CreateWordCard v-for="card in cardFiltered" :key="card.id" :original="card.word.original" :translated="card.word.translated" disabled />
+        </TransitionGroup>
+      </div>
+    </template>
 
     <ConfirmModal
       v-model="modal" :title="modalState === 'restart' ? $t('modal.restart.title') : $t('attention')" :description="modelDescription"
@@ -164,6 +180,7 @@
 </template>
 
 <script setup lang="ts">
+import type { Card } from '~/assets/types/card'
 import { useRouterUtility, useUserStore } from '#imports'
 import { MotionComponent } from '@vueuse/motion'
 import { storeToRefs } from 'pinia'
@@ -171,9 +188,10 @@ import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { ButtonTypes } from '~/assets/types/ui'
+import CreateWordCard from '~/components/CreateWordCard.vue'
 import ConfirmModal from '~/components/modals/ConfirmModal.vue'
 import PageTop from '~/components/PageTop.vue'
-import { AppButton, AppCarousel, AppCarouselSlide, AppDelayedElement, AppIcon } from '~/components/ui'
+import { AppButton, AppCarousel, AppCarouselSlide, AppChip, AppDelayedElement, AppIcon } from '~/components/ui'
 import { categoryService } from '~/services/categoryService'
 import { testService } from '~/services/testService'
 
@@ -208,6 +226,31 @@ const rateModal = ref(false)
 const isRateModalEdit = ref(false)
 const rate = ref(0)
 
+const cardChips = [
+  {
+    text: 'all',
+    value: 'all',
+  },
+  {
+    text: 'favorite',
+    value: 'favorite',
+  },
+  {
+    text: 'unlearned',
+    value: 'unlearned',
+  },
+]
+const pickedCardFilter = ref<'all' | 'favorite' | 'unleraned'>('all')
+const cardFiltered = computed(() => {
+  if (pickedCardFilter.value === 'all') {
+    return cards.value
+  }
+  else if (pickedCardFilter.value === 'favorite') {
+    return cards.value?.filter((c: Card) => c.word.isFavorite)
+  }
+  return cards.value?.filter((c: Card) => !c.stats.isAnswered)
+})
+
 const isCreator = computed(() => {
   return userCategory.value ? userCategory.value.role === 'creator' : false
 })
@@ -236,19 +279,21 @@ async function onConfirm() {
     if (modalState.value === 'delete') {
       if (!isCreator.value) {
         await categoryService.removeUserFromCategory(user.value?.id, category.value?.id)
+        router.go(0)
       }
       else {
         await categoryService.deleteCategory(category.value?.id)
+        router.push('/')
       }
     }
     else {
       await testService.restartCourse(category.value?.id)
-    }
-    if (toTest.value) {
-      router.push(`/category/${category.value.id}/test`)
-    }
-    else {
-      router.go(0)
+      if (toTest.value) {
+        router.push(`/category/${category.value.id}/test`)
+      }
+      else {
+        router.go(0)
+      }
     }
   }
 }
@@ -310,7 +355,7 @@ async function checkTruncation() {
     isDescriptionOverflow.value = fullHeight > clampedHeight
   }, 100) // Ждём, пока Vue обновит DOM
 }
-const isExpanded = ref(false)
+// const isExpanded = ref(false)
 onMounted(async () => {
   const [_, { data }] = await Promise.all([
     getCategoryCards(route.params.id as string),

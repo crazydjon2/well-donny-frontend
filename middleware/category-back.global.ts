@@ -1,11 +1,9 @@
 import { defineNuxtRouteMiddleware } from '#app'
 import { useGlobalStore } from '~/stores/global'
 
-// middleware/category-back.global.ts
 export default defineNuxtRouteMiddleware((to, from) => {
-  if (to.path.startsWith('/category/') && !from.path.startsWith('/category/')) {
-    // Мы впервые зашли на категорию извне → сохраняем откуда пришли
+  if (!to.path.includes('/test') && !to.path.includes('/cards') && !from.path.includes('/test') && !from.path.includes('/cards') && to.fullPath !== from.fullPath) {
     const store = useGlobalStore()
-    store.setBackUrl(from.fullPath)
+    store.pushBackUrl(from.fullPath)
   }
 })

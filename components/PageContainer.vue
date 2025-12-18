@@ -8,15 +8,15 @@
         <slot name="title" />
       </div>
 
-      <div class="w-full gap-7 min-h-[160px]">
+      <div class="w-full gap-7 min-h-[10rem]">
         <slot name="additional" />
       </div>
     </div>
     <div
       ref="container" class="relative z-50 bg-white rounded-t-3xl overflow-y-scroll transition-transform ease-in-out duration-250"
-      :class="isScrollingDown ? ['h-[calc(100vh-105px)]', '-translate-y-[175px]'] : ['h-[calc(100vh-241px)]',  '-translate-y-[44px]']"
+      :class="isScrollingDown ? ['h-[calc(100vh-6rem)]', '-translate-y-[11rem]'] : ['h-[calc(100vh-14rem)]',  '-translate-y-[2.5rem]']"
     >
-      <div class="min-h-[100vh] pb-30">
+      <div class="min-h-screen pb-30 rounded-t-3xl!">
         <slot name="content" />
       </div>
     </div>

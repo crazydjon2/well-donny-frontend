@@ -18,15 +18,21 @@ export const useGlobalStore = defineStore('global', () => {
     loader.value = bool
   }
 
-  const backUrl = ref<string | null>(null)
+  const backUrl = ref<string[]>([])
 
-  const setBackUrl = (url: string) => {
-    backUrl.value = url
+  let timer: number
+  const pushBackUrl = (url: string) => {
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      backUrl.value.push(url)
+    }, 100)
   }
 
   const clear = () => {
-    backUrl.value = null
+    if (backUrl.value.length) {
+      backUrl.value.length = backUrl.value.length - 1
+    }
   }
 
-  return { isLightHouse, setLightHouseState, setMenuVisibility, isMenuVisible, loader, setLoader, backUrl, setBackUrl, clear }
+  return { isLightHouse, setLightHouseState, setMenuVisibility, isMenuVisible, loader, setLoader, backUrl, pushBackUrl, clear }
 })

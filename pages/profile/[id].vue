@@ -2,11 +2,19 @@
   <div class="container !pb-30">
     <PageTop type="primary-light">
       <template #left>
-        <span class="font-accent text-white text-meduim text-center px-2 !max-w-[calc(100%-50px)] w-full">{{ profile?.name }}</span>
+        <div class="flex flex-col">
+          <span class="text-white uppercase text-[12px] font-bold">{{ $t('hello') }}</span>
+          <span class="font-accent text-white text-meduim text-center !max-w-[calc(100%-50px)] w-full">{{
+            profile?.name }}!</span>
+        </div>
       </template>
       <template #right>
         <div class="flex justify-between">
-          <AppIcon v-if="isMe" icon="settings" color="text-white" :width="36" :height="36" @click="settingsModal = true" />
+          <AppIcon
+            v-if="isMe" icon="settings" color="text-white" :width="36" :height="36"
+            @click="settingsModal = true"
+          />
+          <AppIcon v-else icon="close" color="text-white" :width="24" :height="24" @click="goBack" />
         </div>
       </template>
     </PageTop>
@@ -51,7 +59,7 @@
         {{ $t('courses') }}
       </h3>
       <div class="mt-3">
-        <AppCarousel class="py-1 -mx-5!">
+        <AppCarousel class="p-1" align="start">
           <AppCarouselSlide v-for="category in userCategories" :key="category.id" :per-view="2">
             <NuxtLink :to="`/category/${category.category.id}`">
               <AppCategoryCard :category="category.category" :author="category.author" class="w-full">
@@ -80,6 +88,7 @@ import AppCategoryCard from '~/components/AppCategoryCard.vue'
 import ProfileSettingsModal from '~/components/modals/ProfileSettingsModal.vue'
 import PageTop from '~/components/PageTop.vue'
 import { AppCarousel, AppCarouselSlide, AppIcon } from '~/components/ui'
+import { useRouterUtility } from '~/composables/useRouterUtility'
 import { categoriesService } from '~/services/categoriesService'
 import { authService } from '~/services/userService'
 import { userStrickService } from '~/services/userStrickService'
@@ -92,6 +101,8 @@ const route = useRoute()
 
 const { setProfile } = useUserStore()
 const { user, profile } = storeToRefs(useUserStore())
+
+const { goBack } = useRouterUtility()
 
 const pickedLocale = ref({
   type: locale.value,

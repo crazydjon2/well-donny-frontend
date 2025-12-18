@@ -6,6 +6,7 @@
   "library": "Library",
   "courses": "COURSES",
   "empty": "It's empty here",
+  "hello": "hello",
   "menu": {
     "course": "my courses",
     "library": "library",
@@ -118,6 +119,11 @@
     "remove": {
       "description": "The course and all its progress will be completely removed from the 'My Courses' section. You'll be able to add it again from the library."
     }
+  },
+  "words-chip": {
+    "all": "ALL",
+    "favorite": "FAVORITES",
+    "unlearned": "STILL LEARNING"
   },
   "profile": {
     "days": "days",

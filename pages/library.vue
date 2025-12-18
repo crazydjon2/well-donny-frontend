@@ -9,30 +9,30 @@
     </template>
     <template #additional>
       <!-- class="bg-white border-secondary-3 border-2 rounded-xl shadow-small-secondary-dark !shadow-secondary-4 w-full" -->
-      <div class="w-full px-5 flex gap-4">
+      <div class="w-full px-5 flex gap-4 translate-y-7">
         <AppInput
           v-model="name"
           secondary
           placeholder="Текст"
-          class="w-full h-[38px]"
+          class="w-full h-[2.5rem]"
         />
         <div
-          class="bg-white flex items-center justify-center border-secondary-3 border-2 rounded-xl shadow-small-secondary-dark !shadow-secondary-4"
+          class="bg-white flex items-center justify-center border-secondary-3 border-2 rounded-xl w-[2.6rem] shadow-small-secondary-dark !shadow-secondary-4"
         >
           <AppIcon icon="sort" :width="32" :height="16" />
         </div>
       </div>
     </template>
     <template #content>
-      <div class="flex gap-4 overflow-auto items-center w-full sticky bg-white top-0 z-60 h-[44px] px-4">
+      <div class="flex gap-4 overflow-auto items-center w-full sticky bg-white top-0 left-0 z-60 py-2.5">
         <Transition name="move-down-small">
-          <div v-if="activeSubType" class="w-full relative flex">
+          <div v-if="activeSubType" class="relative flex overflow-hidden px-4">
             <AppIcon icon="chevron-left" :width="24" :height="24" class="left-1 -top-0.5" @click="getCategories(activeType)" />
             <p class="text-small font-bold ml-2" @click="getCategories(activeType)">
               {{ activeSubTypeName }}
             </p>
           </div>
-          <div v-else class="flex h-full gap-4 overflow-auto items-center w-full">
+          <div v-else class="flex h-full gap-4 overflow-auto items-center w-full px-4">
             <AppChip
               v-for="type in categoryTypes" :key="type.id" :active="activeType === type.id"
               @click="getCategories(type.id)"
@@ -63,12 +63,12 @@
               <p class="text-small uppercase">
                 {{ category.type.name }}
               </p>
-              <AppButton :type="ButtonTypes.SECONDARY" outline small class="flex items-center justify-center w-[24px] h-[24px] ml-auto" @click="activeSubTypeName = category.type.name;getCategories(category.type.id, true)">
+              <AppButton :type="ButtonTypes.SECONDARY" outline small class="flex items-center justify-center w-6 h-6 ml-auto" @click="activeSubTypeName = category.type.name;getCategories(category.type.id, true)">
                 <AppIcon icon="chevron-left" :width="16" :height="16" class="rotate-180" />
               </AppButton>
             </div>
-            <div class="flex w-full gap-4 overflow-x-auto p-2" :class="activeSubType && 'grid grid-cols-2'">
-              <div v-for="(c, ind) in category.items" :key="c.category.id" class="min-w-[calc(50%-10px)]">
+            <div class="flex w-full gap-4 overflow-x-auto p-1" :class="activeSubType && 'grid grid-cols-2'">
+              <div v-for="(c, ind) in category.items" :key="c.category.id" class="flex-none w-[calc(50%-0.5rem)]" :class="activeSubType && 'w-full'">
                 <NuxtLink :to="`/category/${c.category.id}`">
                   <AppCategoryCard :category="c.category" :author="c?.author" :rate="c.rate" :primary="activeSubType ? !(ind % 4 === 1 || ind % 4 === 2) : ind % 2 === 0" />
                 </NuxtLink>

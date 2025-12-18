@@ -8,7 +8,7 @@
               {{ $t('profile.title') }}
             </p>
 
-            <AppIcon icon="close" :width="18" :height="18" color="text-white absolute top-5 right-3" @click="model = false" />
+            <AppIcon icon="close" :width="24" :height="24" color="text-white absolute top-5 right-3" @click="model = false" />
           </div>
         </template>
       </PageTop>

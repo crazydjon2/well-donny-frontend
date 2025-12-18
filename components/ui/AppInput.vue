@@ -1,11 +1,10 @@
 <template>
   <div :class="startAnimation && 'error-animation'">
     <input
-      ref="input"
       v-model="model" :placeholder="placeholder" type="text" required
-      class="app-input border-b-2 border-primary px-3 w-full h-full text-small font-medium placeholder:text-small placeholder:text-hint-gray placeholder:font-medium"
+      :disabled="disabled"
+      class="app-input border-b-2 border-primary px-3 w-full h-full text-small font-meduim placeholder:text-small placeholder:text-hint-gray placeholder:font-medium"
       :class="[outline && 'border-primary !border-2 rounded-xl !p-3 min-h-[48px]', secondary && 'border-secondary shadow-secondary bg-white rounded-xl', white && 'text-white border-white', error && '!border-red !text-red placeholder:text-red', success && '!border-green !text-green placeholder:text-green', warning && '!border-warning !text-warning placeholder:text-warning']"
-      @focus="onFocus"
     >
     <label class="text-[10px] pl-3 text-hint-gray" :class="[white && 'text-white']">{{ props.label }}</label>
     <p v-if="error" class="text-red text-regular">
@@ -26,6 +25,7 @@ const props = defineProps<{
   warning?: string
   secondary?: boolean
   white?: boolean
+  disabled?: boolean
 }>()
 
 const model = defineModel()
@@ -39,17 +39,6 @@ watch([() => props.error, () => props.warning], () => {
     }, 300)
   }
 })
-
-const input = ref<HTMLElement>()
-async function onFocus() {
-  await setTimeout(() => {}, 500)
-  if (input.value) {
-    input.value.scrollIntoView({
-      block: 'start',
-      behavior: 'smooth',
-    })
-  }
-}
 </script>
 
 <style scoped>

@@ -66,7 +66,7 @@
 </template>
 
 <script lang="ts">
-import { useModalStore } from '#imports'
+import { useCategoriesStore, useCategoryStore, useModalStore } from '#imports'
 import { computed, defineComponent, ref, watch } from 'vue'
 import { authService } from '~/services/userService'
 import AppIcon from './ui/AppIcon.vue'
@@ -125,6 +125,7 @@ export default defineComponent({
   emits: ['flipStarted', 'flipEnded', 'onBackPressed'],
   setup(props, ctx) {
     const { open } = useModalStore()
+    const { changeWordFavorite } = useCategoryStore()
     const size = computed(() => {
       return props.height ? `h-[${props.height}px]` : 'h-full'
     })
@@ -159,6 +160,7 @@ export default defineComponent({
         try {
           await authService.addWordToFavorite(props.wordId)
           isFavorite.value = true
+          changeWordFavorite(props.wordId, true)
         }
         catch (e) {
           console.error(e)
@@ -168,6 +170,7 @@ export default defineComponent({
         try {
           await authService.removeWordToFavorite(props.wordId)
           isFavorite.value = false
+          changeWordFavorite(props.wordId, false)
         }
         catch (e) {
           console.error(e)

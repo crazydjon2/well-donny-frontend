@@ -13,7 +13,7 @@
           </div> -->
           <AppDelayedElement
             to="/category/create"
-            class="flex flex-col ml-auto !w-[160px] h-[6rem] items-center justify-center bg-white border-primary-2 border-2 rounded-xl shadow-primary-dark"
+            class="flex flex-col ml-auto w-40! py-3  items-center justify-center bg-white border-primary-2 border-2 rounded-xl shadow-primary-dark"
           >
             <span class="text-regular uppercase font-bold">{{ $t('button.create') }}</span>
             <AppIcon icon="add" :width="30" :height="30" />
@@ -21,7 +21,7 @@
         </div>
       </template>
       <template #content>
-        <div class="flex items-center !rounded-t-3xl h-[44px] px-4 overflow-hidden sticky bg-white top-0 z-60">
+        <div class="flex items-center px-4 py-1.5 overflow-hidden sticky bg-white top-0 z-60">
           <div id="folder-container" class="flex h-full gap-4 overflow-x-auto items-center w-[calc(100%-40px)]">
             <AppChip
               v-for="folder in categoryFolders" :id="`folder-${folder.value}`" :key="folder.value"

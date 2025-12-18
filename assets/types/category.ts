@@ -8,7 +8,7 @@ export interface Category {
   author: (User & { role: UserRoles, rate: number, completionСount: number })
   role: UserRoles
   users: number
-  avarageRate: number
+  avgRate: number
   description: string
   // TODO ADD ENUM!!!!!!!!!!!
   type: CategoryType & { parent?: CategoryType }

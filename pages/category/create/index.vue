@@ -5,7 +5,7 @@
         <span class="font-accent text-white text-meduim">{{ $t('new-course') }}</span>
       </template>
       <template #right>
-        <AppIcon icon="close" color="text-white" class="cursor-pointer" :width="16" :height="16" @click="goBack" />
+        <AppIcon icon="close" color="text-white" class="cursor-pointer" :width="24" :height="24" @click="goBack" />
       </template>
     </PageTop>
     <div class="flex flex-col gap-4">
@@ -14,7 +14,7 @@
       <Transition name="move-down-small">
         <AppSelect v-if="subTypes.length" v-model="category.subType" :options="subTypes" :placeholder="$t('input.placeholder.category')" :error="errors?.subType && errors?.subType[0]" />
       </Transition>
-      <AppInput v-model="category.description" :placeholder="$t('input.placeholder.description')" :error="errors?.description" />
+      <!-- <AppInput v-model="category.description" :placeholder="$t('input.placeholder.description')" :error="errors?.description" /> -->
     </div>
     <div class="mt-8 flex flex-col gap-4 items-center w-full">
       <p class="text-h3 uppercase">
@@ -40,7 +40,7 @@
     </div>
     <Teleport to="body">
       <Transition name="move-up">
-        <AppDelayedElement v-if="!isMenuVisible" :disabled="loader" class="fixed bottom-4 left-0 px-5" @click="onCategoryCreate">
+        <AppDelayedElement v-if="!isMenuVisible" :disabled="loader" class="fixed bottom-6 left-0 px-5" @click="onCategoryCreate">
           <AppButton full outline :disabled="loader">
             {{ $t('button.add-course') }}
           </AppButton>
@@ -154,6 +154,9 @@ watch(() => category.type, async () => {
 })
 
 function deleteCard(position: number) {
+  if (words.value.length === 1) {
+    return
+  }
   words.value = words.value.filter((_, index) => index !== position)
 }
 </script>
