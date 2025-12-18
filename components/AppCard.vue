@@ -66,7 +66,7 @@
 </template>
 
 <script lang="ts">
-import { useCategoriesStore, useCategoryStore, useModalStore } from '#imports'
+import { useCategoryStore, useModalStore } from '#imports'
 import { computed, defineComponent, ref, watch } from 'vue'
 import { authService } from '~/services/userService'
 import AppIcon from './ui/AppIcon.vue'
