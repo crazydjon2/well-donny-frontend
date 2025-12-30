@@ -21,7 +21,8 @@
     <div class="mt-6">
       <div class="flex gap-4">
         <div class="w-full flex items-center">
-          <img src="@/assets/img/donny.PNG" alt="Donny" class="animation-swim">
+          <img v-if="profile?.strick > 0" src="@/assets/img/donny.PNG" alt="Donny" class="animation-swim">
+          <img v-if="profile?.strick === 0" src="@/assets/img/donny-sad.jpg" alt="Donny" class="animation-swim">
         </div>
 
         <div class="flex flex-col gap-4 w-full">
@@ -62,7 +63,7 @@
         <AppCarousel class="p-1" align="start">
           <AppCarouselSlide v-for="category in userCategories" :key="category.id" :per-view="2">
             <NuxtLink :to="`/category/${category.category.id}`">
-              <AppCategoryCard :category="category.category" :author="category.author" class="w-full">
+              <AppCategoryCard :category="category.category" :author="category.author" :rate="category.avgRate" class="w-full">
                 <AppIcon icon="chevron-left" :width="20" :height="20" class="absolute right-6 bottom-6 rotate-180" />
               </AppCategoryCard>
             </NuxtLink>
@@ -128,8 +129,6 @@ onMounted(async () => {
     authService.getProfile(route.params.id === 'me' ? user.value.id : route.params.id as string),
     categoriesService.getAllCategories({
       userId: route.params.id === 'me' ? user.value.id : route.params.id as string,
-      type: '',
-      role: 'creator',
     }),
     userStrickService.getStrick(new Date()),
   ])

@@ -308,7 +308,7 @@ async function rateCategory() {
       await categoryService.rateCategory(category.value?.id, rate.value)
       rateModal.value = false
       rate.value = 0
-      getCategory(category.value.id)
+      router.go(0)
     }
     catch {
 

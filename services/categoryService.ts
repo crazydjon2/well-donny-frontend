@@ -71,6 +71,15 @@ export const categoryService = {
       },
     })
   },
+  setCardPosition(categoryId: string, position: number) {
+    return useApi('/user-categories/set-cards-position', {
+      method: 'PUT',
+      body: {
+        categoryId,
+        position,
+      },
+    })
+  },
   rateCategory(categoryId: string, rate: number) {
     return useApi('/user-categories/rate', {
       method: 'PUT',

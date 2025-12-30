@@ -10,6 +10,7 @@ export interface Category {
   users: number
   avgRate: number
   description: string
+  cardsPosition: number
   // TODO ADD ENUM!!!!!!!!!!!
   type: CategoryType & { parent?: CategoryType }
   createdAt: string

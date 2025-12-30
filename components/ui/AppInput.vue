@@ -1,8 +1,10 @@
 <template>
   <div :class="startAnimation && 'error-animation'">
     <input
-      v-model="model" :placeholder="placeholder" type="text" required
+      v-model="model" :placeholder="placeholder"
+      required
       :disabled="disabled"
+      :type
       class="app-input border-b-2 border-primary px-3 w-full h-full text-small font-meduim placeholder:text-small placeholder:text-hint-gray placeholder:font-medium"
       :class="[outline && 'border-primary !border-2 rounded-xl !p-3 min-h-[48px]', secondary && 'border-secondary shadow-secondary bg-white rounded-xl', white && 'text-white border-white', error && '!border-red !text-red placeholder:text-red', success && '!border-green !text-green placeholder:text-green', warning && '!border-warning !text-warning placeholder:text-warning']"
     >
@@ -16,7 +18,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   label?: string
   outline?: boolean
   placeholder?: string
@@ -26,7 +28,11 @@ const props = defineProps<{
   secondary?: boolean
   white?: boolean
   disabled?: boolean
-}>()
+  type?: 'text' | 'submit' | 'number'
+}>(), {
+  disabled: false,
+  type: 'text',
+})
 
 const model = defineModel()
 

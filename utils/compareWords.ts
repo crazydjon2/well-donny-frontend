@@ -72,7 +72,7 @@ export function checkAnswer(
     const distance = levenshtein.get(userNorm, correctNorm)
 
     // возвращаем прежнюю разумную формулу: минимум 1 ошибка + по 1 на каждые 5 символов
-    const allowedErrors = Math.max(1, Math.floor(correctNorm.length / 5))
+    const allowedErrors = Math.floor(correctNorm.length / 5)
 
     if (distance === 0)
       return 'perfect'

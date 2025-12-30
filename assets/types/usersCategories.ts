@@ -4,7 +4,7 @@ import type { User } from './user'
 export interface UsersCategory {
   id: string
   role: 'creator' | 'viewer'
-  rate: number
+  avgRate: number
   author: User
   category: Category
 }
@@ -21,4 +21,5 @@ export interface UserCategory {
   completionСount: number
   rate: number
   reverseOrder: boolean
+  cardPosition: number
 }

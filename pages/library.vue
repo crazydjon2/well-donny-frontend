@@ -63,14 +63,14 @@
               <p class="text-small uppercase">
                 {{ category.type.name }}
               </p>
-              <AppButton :type="ButtonTypes.SECONDARY" outline small class="flex items-center justify-center w-6 h-6 ml-auto" @click="activeSubTypeName = category.type.name;getCategories(category.type.id, true)">
+              <AppButton :type="ButtonTypes.SECONDARY" outline small class="flex items-center justify-center w-6 h-6 ml-auto" @click="getCategories(activeType, category.type.id)">
                 <AppIcon icon="chevron-left" :width="16" :height="16" class="rotate-180" />
               </AppButton>
             </div>
             <div class="flex w-full gap-4 overflow-x-auto p-1" :class="activeSubType && 'grid grid-cols-2'">
               <div v-for="(c, ind) in category.items" :key="c.category.id" class="flex-none w-[calc(50%-0.5rem)]" :class="activeSubType && 'w-full'">
                 <NuxtLink :to="`/category/${c.category.id}`">
-                  <AppCategoryCard :category="c.category" :author="c?.author" :rate="c.rate" :primary="activeSubType ? !(ind % 4 === 1 || ind % 4 === 2) : ind % 2 === 0" />
+                  <AppCategoryCard :category="c.category" :author="c?.author" :rate="c.avgRate" :primary="activeSubType ? !(ind % 4 === 1 || ind % 4 === 2) : ind % 2 === 0" />
                 </NuxtLink>
               </div>
             </div>
@@ -78,9 +78,9 @@
         </div>
         <div v-else class="w-full">
           <!-- <div class="w-full bg-grey rounded-3xl aspect-square max-w-[300px] mx-auto" /> -->
-          <img src="/assets//img//donny-sad.jpg" alt="Sad Donny" class="max-h-[250px] mx-auto mt-6 animation-swim" />
+          <img src="/assets//img//donny-sad.jpg" alt="Sad Donny" class="max-h-[250px] mx-auto mt-6 animation-swim">
           <h2 class="font-accent text-[6rem] w-full text-center">
-            Здесь пусто
+            {{ $t('empty') }}
           </h2>
         </div>
       </Transition>
@@ -90,10 +90,11 @@
 
 <script setup lang="ts">
 import type { UsersCategory } from '~/assets/types/usersCategories'
-import { useCategoryStore } from '#imports'
+import { useCategoryStore, useRouter } from '#imports'
 import { MotionComponent } from '@vueuse/motion'
 import { storeToRefs } from 'pinia'
-import { onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
 import { ButtonTypes } from '~/assets/types/ui'
 import AppCategoryCard from '~/components/AppCategoryCard.vue'
@@ -106,31 +107,54 @@ const { categoryTypes } = storeToRefs(useCategoryStore())
 
 const activeType = ref('')
 const activeSubType = ref('')
-const activeSubTypeName = ref('')
+const activeSubTypeName = computed(() => {
+  if (activeSubType.value && categoryTypes.value.length) {
+    const type = categoryTypes.value.find(ct => ct.id === activeType.value)
+    if (activeSubType.value === activeType.value) {
+      return type?.name
+    }
+    if (type && type.children.length) {
+      return type.children.find(cct => cct.id === activeSubType.value)?.name
+    }
+  }
+  return ''
+})
 
 const name = ref('')
 
+const router = useRouter()
+const route = useRoute()
 onMounted(async () => {
   await getCategoryTypes()
   if (categoryTypes.value && categoryTypes.value[0]) {
-    activeType.value = categoryTypes && categoryTypes.value ? categoryTypes.value[0].id : ''
+    activeType.value = route.query.type ? route.query.type as string : categoryTypes && categoryTypes.value ? categoryTypes.value[0].id : ''
   }
-  getCategories(activeType.value)
+  if (route.query.subType) {
+    activeSubType.value = route.query.subType as string
+  }
+  if (route.query.name) {
+    name.value = route.query.name as string
+  }
+  getCategories(activeType.value, activeSubType.value)
 })
 
 const categories = ref<{ type: { name: string, id: string, type: string }, items: (UsersCategory & { averageRate: number })[] }[]>([])
 const loading = ref<boolean>(true)
-async function getCategories(type?: string, isSubType: boolean = false) {
+async function getCategories(type: string, subType?: string) {
   if (type) {
-    if (!isSubType) {
-      activeType.value = type
-      activeSubType.value = ''
-    }
-    else {
-      activeSubType.value = type
-    }
+    activeType.value = type
+    activeSubType.value = subType || ''
+
+    router.replace({
+      path: route.path,
+      query: {
+        type: activeType.value,
+        subType: activeSubType.value,
+        name: name.value,
+      },
+    })
     loading.value = true
-    const { data } = await categoriesService.getByType(isSubType ? activeSubType.value : activeType.value, name.value, 0, 5)
+    const { data } = await categoriesService.getByType(subType ? activeSubType.value : activeType.value, name.value, 0, 5)
     if (data.value) {
       categories.value = data.value
     }
@@ -142,7 +166,11 @@ let timer: number
 watch(name, () => {
   clearTimeout(timer)
   timer = setTimeout(() => {
-    getCategories(activeSubType.value ? activeSubType.value : activeType.value, !!activeSubType.value)
+    getCategories(activeSubType.value ? activeSubType.value : activeType.value, activeSubType.value)
   }, 300)
 })
+
+if (route.query.type) {
+  activeType.value = route.query.type as string
+}
 </script>

@@ -1,6 +1,6 @@
 <template>
   <ModalFull v-model="model" @close="model = false">
-    <div class="bg-white rounded-3xl w-full h-[70vh]">
+    <div class="bg-white rounded-3xl w-full h-[70dvh]">
       <div class="p-4 h-full flex flex-col">
         <h2 class="text-small font-bold">
           {{ $t('folders.new-folder') }}

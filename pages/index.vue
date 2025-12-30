@@ -74,7 +74,7 @@
                 <AppCategoryCard
                   :category="category.category" :author="category.author"
                   :primary="!(index % 4 === 1 || index % 4 === 2)"
-                  :rate="category.rate"
+                  :rate="category.avgRate"
                 >
                   <template #default>
                     <div class="absolute right-4 bottom-5" @click.stop.prevent="beforeDelete(category.category.id)">

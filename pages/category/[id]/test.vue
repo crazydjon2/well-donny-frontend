@@ -1,5 +1,5 @@
 <template>
-  <div class="container !pb-30">
+  <div class="container h-[100dvh] flex flex-col">
     <PageTop type="primary">
       <template #left>
         <AppIcon icon="tuning" :width="22" :height="26" color="text-white" @click="settingsModal = true" />
@@ -45,21 +45,23 @@
             <span class="text font-light">{{ word.translated }}</span>
           </AppButton>
         </TransitionGroup> -->
-        <AppInput v-model="answer" :error :success :warning :placeholder="$t('answer')" />
+        <form @submit.prevent="error || success || warning ? nextCard() : showAnswer()">
+          <AppInput v-model="answer" :error :success :warning :placeholder="$t('answer')" />
+        </form>
       </div>
       <div v-if="!wordsPool.length && !isEnd" class="w-full h-[200px]" />
 
       <Transition name="fade">
         <div v-if="isEnd" class="w-full text-center mt-5">
-          <span v-if="cards.length" class="text-small font-normal text-center">{{ $t('learnt-text', {
+          <!-- <span v-if="cards.length" class="text-small font-normal text-center">{{ $t('learnt-text', {
             length:
               cards.length,
-          }) }}</span>
+          }) }}</span> -->
           <h3 class="font-accent text-[4rem] leading-[4rem]">
             Well donny!
           </h3>
 
-          <div class="mt-8 text-small gap-2">
+          <div class="text-small gap-2">
             <div v-if="cards.length" class="flex justify-between">
               <span>{{ $t('correct-answers') }}</span>
               <span>{{ statistic.right }}/{{ cards.length }}</span>
@@ -72,31 +74,11 @@
         </div>
       </Transition>
 
-      <Transition name="move-up">
-        <div v-if="isEnd" class="w-full flex justify-center gap-5 fixed bottom-5 px-5 left-0 keyboard-safe-bottom z-50">
-          <AppDelayedElement v-if="courseDone" @click="restartTest">
-            <AppButton full outline :type="ButtonTypes.SECONDARY">
-              {{ $t('button.more') }}
-            </AppButton>
-          </AppDelayedElement>
-          <AppDelayedElement v-if="courseDone" @click="onCardsEnd">
-            <AppButton full>
-              {{ $t('button.finish') }}
-            </AppButton>
-          </AppDelayedElement>
-
-          <AppDelayedElement v-if="!courseDone" @click="nextRound">
-            <AppButton full :type="ButtonTypes.SECONDARY">
-              {{ $t('button.next') }}
-            </AppButton>
-          </AppDelayedElement>
-        </div>
-      </Transition>
-
-      <Teleport to="body">
+      <div class="min-h-[1px] mt-auto">
         <TransitionGroup name="move-up">
           <AppDelayedElement
-            v-if="!isMenuVisible && !allowFlip && !isEnd" class="fixed bottom-8 left-0 px-5 keyboard-safe-bottom z-50"
+            v-if="!isMenuVisible && !allowFlip && !isEnd" class="mt-auto left-0 keyboard-safe-bottom z-50"
+            key="1"
             @click="showAnswer"
           >
             <AppButton full outline :type="ButtonTypes.SECONDARY">
@@ -104,7 +86,8 @@
             </AppButton>
           </AppDelayedElement>
           <AppDelayedElement
-            v-if="!isMenuVisible && allowFlip && !isEnd" class="fixed bottom-8 left-0 px-5 keyboard-safe-bottom"
+            v-if="!isMenuVisible && allowFlip && !isEnd" class="mt-auto left-0 keyboard-safe-bottom"
+            key="2"
             @click="nextCard"
           >
             <h3 class="font-accent text-bold text-[40px] mb-6 text-center text-green" :class="[error && 'text-red', warning && 'text-warning']">
@@ -114,8 +97,27 @@
               {{ error ? t('button.got-it') : t('button.next') }}
             </AppButton>
           </AppDelayedElement>
+
+          <div v-if="isEnd && courseDone" class="w-full flex mt-auto gap-5 left-0 keyboard-safe-bottom z-50" key="3">
+            <AppDelayedElement @click="restartTest">
+              <AppButton full outline :type="ButtonTypes.SECONDARY">
+                {{ $t('button.more') }}
+              </AppButton>
+            </AppDelayedElement>
+            <AppDelayedElement @click="onCardsEnd">
+              <AppButton full>
+                {{ $t('button.finish') }}
+              </AppButton>
+            </AppDelayedElement>
+          </div>
+
+          <AppDelayedElement v-if="!courseDone && isEnd" class="mt-auto" @click="nextRound" key="4">
+            <AppButton full :type="ButtonTypes.SECONDARY">
+              {{ $t('button.next') }}
+            </AppButton>
+          </AppDelayedElement>
         </TransitionGroup>
-      </Teleport>
+      </div>
     </template>
     <TestSettingsModal
       v-if="userCategory && category" v-model="settingsModal" :title="category?.name" :category-id="category.id"
@@ -252,6 +254,9 @@ watch(isEnd, async () => {
         categoryService.markAsDone(category.value?.id)
       }
     }
+    else {
+      courseDone.value = false
+    }
     userStrickService.updateStrick()
     setMenuVisibility(false)
   }
@@ -275,6 +280,7 @@ async function restartTest() {
   try {
     if (category.value) {
       await testService.restartCourse(category.value?.id)
+      // courseDone.value = false
       nextRound()
     }
   }

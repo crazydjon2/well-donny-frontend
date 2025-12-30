@@ -13,7 +13,7 @@
       <ShipProgress :length="cards.length" :position="slide + 1" class="mt-1" />
     </template>
 
-    <div v-if="cards" class="mt-4">
+    <div v-if="cards && slide !== null" class="mt-4">
       <FlashCardsContainer v-model="slide">
         <template v-for="(card, index) in cards" :key="card.id">
           <FlashCardsItem v-show="isFlipping ? slide === index : true" @on-tilt="tiltState = $event">
@@ -95,16 +95,17 @@ import { AppButton, AppDelayedElement, AppIcon } from '~/components/ui'
 // import { Carousel, Slide } from 'vue3-carousel'
 import FlashCardsContainer from '~/components/ui/flashCards/FlashCardsContainer.vue'
 import FlashCardsItem from '~/components/ui/flashCards/FlashCardsItem.vue'
+import { categoryService } from '~/services/categoryService'
 import { useCategoryStore } from '~/stores/category'
 
 const router = useRouter()
 const route = useRoute()
 
-const { cards } = storeToRefs(useCategoryStore())
+const { cards, userCategory } = storeToRefs(useCategoryStore())
 const { getCategoryCards } = useCategoryStore()
 const { setMenuVisibility } = useGlobalStore()
 
-const slide = ref(0)
+const slide = ref()
 const isFlipping = ref(false)
 
 const isEnd = computed(() => {
@@ -142,12 +143,17 @@ const cardClasses = computed(() => (index: number) => {
   }
 })
 
-onMounted(() => {
-  getCategoryCards(route.params?.id as string)
+onMounted(async () => {
+  await getCategoryCards(route.params?.id as string)
+  slide.value = userCategory.value?.cardPosition || 0
 })
 
 onUnmounted(() => {
   setMenuVisibility(true)
+})
+
+watch(slide, () => {
+  categoryService.setCardPosition(route.params.id as string, slide.value)
 })
 
 function goBack() {
