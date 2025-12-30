@@ -205,7 +205,7 @@ const { goBack } = useRouterUtility()
 const { category, cards, userCategory } = storeToRefs(useCategoryStore())
 const { user } = storeToRefs(useUserStore())
 
-const { getCategoryCards, getCategory } = useCategoryStore()
+const { getCategoryCards } = useCategoryStore()
 
 const isUserInCategory = computed(() => userCategory.value)
 
